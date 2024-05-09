@@ -1,4 +1,4 @@
--------------------USERS-------------------------------
+------------------- USERS -------------------------------
 
 CREATE TABLE USERS(
     UserId INT NOT NULL PRIMARY KEY,
@@ -16,11 +16,15 @@ CREATE TABLE USERS(
 EXEC  sp_rename "USERS.UserName", "Name", "COLUMN"
 EXEC  sp_rename "USERS.UserSurname", "Surname", "COLUMN"
 
-------------------ACCOUNT AND ACCOUNT TYPES----------------------------------
+------------------ ACCOUNT AND ACCOUNT TYPES ----------------------------------
 
 CREATE TABLE ACCOUNT(
     ProfileId INT PRIMARY KEY NOT NULL,
 )
+
+--- ProfileId changed into AccountId
+
+--Added new attributes
 
 ALTER TABLE ACCOUNT
 ADD Username NVARCHAR(50)
@@ -37,12 +41,14 @@ ADD userLevel INT
 ALTER TABLE ACCOUNT
 ADD AccountTypeId INT NOT NULL REFERENCES ACCOUNT_TYPES(AccountTypeId)
 
+--------------- ACOUNT_TYPES ----------------------------------------------
+
 CREATE TABLE ACCOUNT_TYPES(
     AccountTypeId INT NOT NULL PRIMARY KEY,
     UserType VARCHAR
 )
 
---------DESTINATIONS--------------------------
+----------- DESTINATIONS --------------------------
 
 CREATE TABLE DESTINATIONS(
     DestinationId INT NOT NULL PRIMARY KEY,
@@ -50,7 +56,7 @@ CREATE TABLE DESTINATIONS(
     DestinationName NVARCHAR(50) NOT NULL,
     DestinationImage IMAGE,
 )
------ TOUR_PACKAGES-------------------------
+---------- TOUR_PACKAGES -------------------------
 
 CREATE TABLE TOUR_PACKAGES(
     PackageId INT NOT NULL PRIMARY KEY,
@@ -68,7 +74,7 @@ ADD DestinationId INT NOT NULL REFERENCES DESTINATIONS(DestinationId)
 ALTER TABLE TOUR_PACKAGES
 ALTER COLUMN Price MONEY
 
--------------- RESERVATIONS -------------------------------------------------
+-------------------- RESERVATIONS -------------------------------------------------
 
 CREATE TABLE RESERVATIONS(
     ReservationId INT NOT NULL PRIMARY KEY,
@@ -90,7 +96,7 @@ ADD PackageId INT NOT NULL REFERENCES TOUR_PACKAGES(PackageId)
 ALTER TABLE RESERVATIONS
 ADD ReservationStatus VARCHAR NOT NULL 
 
-------------------- PSYMENTS ---------------------------------------
+------------------- PAYMENTS ---------------------------------------
 
 CREATE TABLE PAYMENTS(
     PaymentId INT PRIMARY KEY NOT NULL,
