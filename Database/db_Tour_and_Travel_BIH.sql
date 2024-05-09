@@ -11,6 +11,7 @@ CREATE TABLE USERS(
     UserEmail NVARCHAR(50) NOT NULL,
 )
 
+---edited attribute name ---------------
 
 EXEC  sp_rename "USERS.UserName", "Name", "COLUMN"
 EXEC  sp_rename "USERS.UserSurname", "Surname", "COLUMN"
