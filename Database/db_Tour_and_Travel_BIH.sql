@@ -1,3 +1,5 @@
+-------------------USERS-------------------------------
+
 CREATE TABLE USERS(
     UserId INT NOT NULL PRIMARY KEY,
     UserType VARCHAR(50) NOT NULL,
@@ -7,8 +9,18 @@ CREATE TABLE USERS(
     DateOfBirth date,
     Contact NVARCHAR(15),
     UserEmail NVARCHAR(50) NOT NULL,
-    UserPassword NVARCHAR(50) NOT NULL,
 )
+
+ALTER TABLE USERS
+ADD Username NVARCHAR(50)
+
+ALTER TABLE USERS
+ADD UserPassword NVARCHAR(50)
+
+EXEC  sp_rename "USERS.UserName", "Name", "COLUMN"
+EXEC  sp_rename "USERS.UserSurname", "Surname", "COLUMN"
+
+------------------ACCOUNT AND ACCOUNT TYPES----------------------------------
 
 CREATE TABLE ACCOUNT(
     ProfileId INT PRIMARY KEY NOT NULL,
@@ -17,8 +29,18 @@ CREATE TABLE ACCOUNT(
 ALTER TABLE ACCOUNT
 ADD UserId INT NOT NULL REFERENCES USERS(UserId)
 
+ALTER TABLE ACCOUNT 
+ADD userLevel INT 
 
+ALTER TABLE ACCOUNT
+ADD AccountTypeId INT NOT NULL REFERENCES ACCOUNT_TYPES(AccountTypeId)
 
+CREATE TABLE ACCOUNT_TYPES(
+    AccountTypeId INT NOT NULL PRIMARY KEY,
+    UserType VARCHAR
+)
+
+--------DESTINATIONS--------------------------
 
 CREATE TABLE DESTINATIONS(
     DestinationId INT NOT NULL PRIMARY KEY,
@@ -26,6 +48,7 @@ CREATE TABLE DESTINATIONS(
     DestinationName NVARCHAR(50) NOT NULL,
     DestinationImage IMAGE,
 )
+----- TOUR_PACKAGES-------------------------
 
 CREATE TABLE TOUR_PACKAGES(
     PackageId INT NOT NULL PRIMARY KEY,
@@ -40,6 +63,8 @@ CREATE TABLE TOUR_PACKAGES(
 ALTER TABLE TOUR_PACKAGES
 ADD DestinationId INT NOT NULL REFERENCES DESTINATIONS(DestinationId)
 
+-------------- RESERVATIONS -------------------------------------------------
+
 CREATE TABLE RESERVATIONS(
     ReservationId INT NOT NULL PRIMARY KEY,
     TotalTravelers INT NOT NULL,
@@ -49,6 +74,9 @@ CREATE TABLE RESERVATIONS(
 )
 
 ALTER TABLE RESERVATIONS
+ALTER COLUMN TotalPrice MONEY
+
+ALTER TABLE RESERVATIONS
 ADD UserId INT NOT NULL REFERENCES USERS(UserId)
 
 ALTER TABLE RESERVATIONS
@@ -56,6 +84,8 @@ ADD PackageId INT NOT NULL REFERENCES TOUR_PACKAGES(PackageId)
 
 ALTER TABLE RESERVATIONS
 ADD ReservationStatus VARCHAR NOT NULL 
+
+------------------- PSYMENTS ---------------------------------------
 
 CREATE TABLE PAYMENTS(
     PaymentId INT PRIMARY KEY NOT NULL,
@@ -67,7 +97,12 @@ CREATE TABLE PAYMENTS(
 )
 
 ALTER TABLE PAYMENTS
+ALTER COLUMN TotalCost MONEY
+
+ALTER TABLE PAYMENTS
 ADD ReservationId INT NOT NULL REFERENCES RESERVATIONS(ReservationId)
+
+------------------- FAVORITES --------------------------------------------
 
 CREATE TABLE FAVORITES(
     FavoriteItemId INT NOT NULL PRIMARY KEY,
@@ -79,6 +114,7 @@ ADD PackageId INT NOT NULL REFERENCES TOUR_PACKAGES(PackageId)
 ALTER TABLE FAVORITES
 ADD UserId INT NOT NULL REFERENCES USERS(UserId)
 
+---------------------- REVIEWS -----------------------------------------
 CREATE TABLE REVIEWS(
     ReviewId INT NOT NULL PRIMARY KEY,
     PostDate DATE,
