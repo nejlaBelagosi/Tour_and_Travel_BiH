@@ -15,6 +15,7 @@ CREATE TABLE USERS(
 
 EXEC  sp_rename "USERS.UserName", "Name", "COLUMN"
 EXEC  sp_rename "USERS.UserSurname", "Surname", "COLUMN"
+EXEC sp_rename "USERS.UserEmail", "Email", "COLUMN"
 
 ------------------ ACCOUNT AND ACCOUNT TYPES ----------------------------------
 
