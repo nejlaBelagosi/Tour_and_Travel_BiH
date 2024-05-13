@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "TourAndTravelBiH.Controllers.UsersController",
+    "Method": "GetUSERS",
+    "RelativePath": "api/Users/GetUSERS",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
