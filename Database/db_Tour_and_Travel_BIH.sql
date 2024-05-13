@@ -55,6 +55,9 @@ CREATE TABLE DESTINATIONS(
     DestinationName NVARCHAR(50) NOT NULL,
     DestinationImage IMAGE,
 )
+
+ALTER TABLE DESTINATIONS
+ALTER COLUMN DestinationImage NVARCHAR(50)
 ---------- TOUR_PACKAGES -------------------------
 
 CREATE TABLE TOUR_PACKAGES(
