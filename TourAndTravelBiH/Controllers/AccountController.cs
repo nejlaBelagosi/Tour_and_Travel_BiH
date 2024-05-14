@@ -60,7 +60,7 @@ namespace TourAndTravelBiH.Controllers
         }
         //Brisanje accounta. Admin i user moze.
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteAccount([FromBody] int id)
+        public IActionResult DeleteAccount( int id)
         {
             Account accountData = _db.Accounts.Where(a => a.AccountId == id).FirstOrDefault();
             if (accountData == null)

@@ -17,7 +17,7 @@ namespace TourAndTravelBiH.Controllers
         [HttpGet]
         public IActionResult GetReservation() 
         {
-            var reservation = _db.Reservations.FirstOrDefault();
+            var reservation = _db.Reservations.ToList();
             return Ok(reservation);
         }
 
@@ -66,7 +66,7 @@ namespace TourAndTravelBiH.Controllers
             return Ok("Reservation edited");
         }
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteReservation([FromBody] int id)
+        public IActionResult DeleteReservation( int id)
         {
             Reservation reservationData = _db.Reservations.Where(a => a.ReservationId == id).FirstOrDefault();
             if (reservationData == null)

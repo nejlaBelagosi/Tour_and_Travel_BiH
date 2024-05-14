@@ -40,7 +40,7 @@ namespace TourAndTravelBiH.Controllers
 
         //Brisanje favorite sa stranice. User
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteFavorite([FromBody] int id)
+        public IActionResult DeleteFavorite( int id)
         {
             Favorite favoriteData = _db.Favorites.Where(a => a.FavoriteItemId == id).FirstOrDefault();
             if (favoriteData == null)

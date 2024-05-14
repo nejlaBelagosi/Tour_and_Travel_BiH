@@ -88,7 +88,7 @@ namespace TourAndTravelBiH.Controllers
 
         // brisanje korisnika. Admin uloga. ali i korisnik ce moci da izbrise svoj nalog.
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteUser([FromBody] int id)
+        public IActionResult DeleteUser( int id)
         {
             User userData = _db.Users.Where(a => a.UserId == id).FirstOrDefault();
             if(userData == null)

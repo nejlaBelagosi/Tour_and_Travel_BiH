@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ctxJOstZEoOlXhSieIaKt5G6DT9VJR1uhFJXKveHAetOmXJ0ObKcEGYq0sG0w8D2tziJzdn1WrPs0s55t1WTxQ==",
+  "dgSpecHash": "HxLmEmljiGrKbKZuTDgXQGkIOlHk7W9YXvdBkP9bz/i6GUT0yUnRsyNSZxghhTJsYduSW2SP0QwmjMbMn9+1kA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\TourAndTravelBiH.csproj",
+  "projectFilePath": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\TourAndTravelBiH.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\BLGS HP\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\BLGS HP\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

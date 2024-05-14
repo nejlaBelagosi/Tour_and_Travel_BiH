@@ -4642,11 +4642,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\TourAndTravelBiH.csproj",
+      "projectUniqueName": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\TourAndTravelBiH.csproj",
       "projectName": "TourAndTravelBiH",
-      "projectPath": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\TourAndTravelBiH.csproj",
+      "projectPath": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\TourAndTravelBiH.csproj",
       "packagesPath": "C:\\Users\\BLGS HP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\obj\\",
+      "outputPath": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -62,7 +62,7 @@ namespace TourAndTravelBiH.Controllers
         }
         // Uklanjanje TOUR paketa, samo Admin ima dozvolu za uklanjanje.
         [HttpDelete("{id:int}")]
-        public IActionResult DeletePackage([FromBody] int id)
+        public IActionResult DeletePackage( int id)
         {
             TourPackage packageData = _db.TourPackages.Where(a => a.PackageId == id).FirstOrDefault();
             if (packageData == null)

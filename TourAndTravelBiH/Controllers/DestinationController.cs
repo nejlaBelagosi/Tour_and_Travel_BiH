@@ -56,7 +56,7 @@ namespace TourAndTravelBiH.Controllers
         }
         //Brisanje destinacija. Admin samo moze.
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteDestination([FromBody] int id)
+        public IActionResult DeleteDestination( int id)
         {
             Destination destinationData = _db.Destinations.Where(a => a.DestinationId == id).FirstOrDefault();
             if (destinationData == null)

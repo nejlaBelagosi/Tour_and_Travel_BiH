@@ -67,7 +67,7 @@ namespace TourAndTravelBiH.Controllers
         }
         //Brisanje review-a. Admin i user moze.
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteReview([FromBody] int id)
+        public IActionResult DeleteReview( int id)
         {
             Review reviewData = _db.Reviews.Where(a => a.ReviewId == id).FirstOrDefault();
             if (reviewData == null)
