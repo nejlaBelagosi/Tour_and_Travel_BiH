@@ -41,113 +41,113 @@ public partial class DbTourAndTravelBiHContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.AccountId).HasName("PK__ACCOUNT__290C88E4651B14FD");
+            entity.HasKey(e => e.AccountId).HasName("PK__ACCOUNT__290C88E4D80AE82F");
 
             entity.ToTable("ACCOUNT");
 
             entity.Property(e => e.AccountId).ValueGeneratedNever();
-            entity.Property(e => e.UserImage)
-                .HasMaxLength(50)
-                .HasColumnName("userImage");
+            entity.Property(e => e.UserImage).HasColumnName("userImage");
             entity.Property(e => e.UserPassword).HasMaxLength(50);
             entity.Property(e => e.Username).HasMaxLength(50);
 
             entity.HasOne(d => d.AccountType).WithMany(p => p.Accounts)
                 .HasForeignKey(d => d.AccountTypeId)
-                .HasConstraintName("FK__ACCOUNT__Account__66603565");
+                .HasConstraintName("FK__ACCOUNT__Account__6B24EA82");
 
             entity.HasOne(d => d.User).WithMany(p => p.Accounts)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__ACCOUNT__UserId__59063A47");
+                .HasConstraintName("FK__ACCOUNT__UserId__6C190EBB");
         });
 
         modelBuilder.Entity<AccountType>(entity =>
         {
-            entity.HasKey(e => e.AccountTypeId).HasName("PK__ACCOUNT___8F9585AFAEA957E1");
+            entity.HasKey(e => e.AccountTypeId).HasName("PK__ACCOUNT___8F9585AF2BCC6FB9");
 
-            entity.ToTable("ACCOUNT_TYPES");
+            entity.ToTable("ACCOUNT_TYPE");
 
             entity.Property(e => e.AccountTypeId).ValueGeneratedNever();
             entity.Property(e => e.UserType)
-                .HasMaxLength(1)
+                .HasMaxLength(200)
                 .IsUnicode(false);
         });
 
         modelBuilder.Entity<Destination>(entity =>
         {
-            entity.HasKey(e => e.DestinationId).HasName("PK__DESTINAT__DB5FE4CCE486B4F2");
+            entity.HasKey(e => e.DestinationId).HasName("PK__tmp_ms_x__DB5FE4CC6FF5A221");
 
-            entity.ToTable("DESTINATIONS");
+            entity.ToTable("DESTINATION");
 
             entity.Property(e => e.DestinationId).ValueGeneratedNever();
-            entity.Property(e => e.DestinationImage).HasMaxLength(50);
+            entity.Property(e => e.DestinationDetails)
+                .HasMaxLength(200)
+                .IsUnicode(false);
             entity.Property(e => e.DestinationLocation).HasMaxLength(50);
             entity.Property(e => e.DestinationName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Favorite>(entity =>
         {
-            entity.HasKey(e => e.FavoriteItemId).HasName("PK__FAVORITE__19436E00D5EF7759");
+            entity.HasKey(e => e.FavoriteItemId).HasName("PK__FAVORITE__19436E00D7409E29");
 
-            entity.ToTable("FAVORITES");
+            entity.ToTable("FAVORITE");
 
             entity.Property(e => e.FavoriteItemId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Package).WithMany(p => p.Favorites)
                 .HasForeignKey(d => d.PackageId)
-                .HasConstraintName("FK__FAVORITES__Packa__59FA5E80");
+                .HasConstraintName("FK__FAVORITE__Packag__693CA210");
 
             entity.HasOne(d => d.User).WithMany(p => p.Favorites)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__FAVORITES__UserI__5AEE82B9");
+                .HasConstraintName("FK__FAVORITE__UserId__6A30C649");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__PAYMENTS__9B556A385A67FD97");
+            entity.HasKey(e => e.PaymentId).HasName("PK__PAYMENT__9B556A388B90A0D9");
 
-            entity.ToTable("PAYMENTS");
+            entity.ToTable("PAYMENT");
 
             entity.Property(e => e.PaymentId).ValueGeneratedNever();
             entity.Property(e => e.PaymentMethod)
-                .HasMaxLength(1)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.PaymentStatus)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.TotalCost).HasColumnType("money");
 
             entity.HasOne(d => d.Reservation).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.ReservationId)
-                .HasConstraintName("FK__PAYMENTS__Reserv__5BE2A6F2");
+                .HasConstraintName("FK__PAYMENT__Reserva__68487DD7");
         });
 
         modelBuilder.Entity<Reservation>(entity =>
         {
-            entity.HasKey(e => e.ReservationId).HasName("PK__RESERVAT__B7EE5F24A698ECC0");
+            entity.HasKey(e => e.ReservationId).HasName("PK__RESERVAT__B7EE5F24C32EDD5B");
 
-            entity.ToTable("RESERVATIONS");
+            entity.ToTable("RESERVATION");
 
             entity.Property(e => e.ReservationId).ValueGeneratedNever();
-            entity.Property(e => e.PaymentStatus)
-                .HasMaxLength(1)
-                .IsUnicode(false);
             entity.Property(e => e.ReservationStatus)
-                .HasMaxLength(1)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.TotalPrice).HasColumnType("money");
 
             entity.HasOne(d => d.Package).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.PackageId)
-                .HasConstraintName("FK__RESERVATI__Packa__5CD6CB2B");
+                .HasConstraintName("FK__RESERVATI__Packa__66603565");
 
             entity.HasOne(d => d.User).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__RESERVATI__UserI__5DCAEF64");
+                .HasConstraintName("FK__RESERVATI__UserI__6754599E");
         });
 
         modelBuilder.Entity<Review>(entity =>
         {
-            entity.HasKey(e => e.ReviewId).HasName("PK__REVIEWS__74BC79CE14C95ED4");
+            entity.HasKey(e => e.ReviewId).HasName("PK__REVIEW__74BC79CE573C5518");
 
-            entity.ToTable("REVIEWS");
+            entity.ToTable("REVIEW");
 
             entity.Property(e => e.ReviewId).ValueGeneratedNever();
             entity.Property(e => e.ReviewComment)
@@ -156,40 +156,43 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.HasOne(d => d.Reservation).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.ReservationId)
-                .HasConstraintName("FK__REVIEWS__Reserva__628FA481");
+                .HasConstraintName("FK__REVIEW__Reservat__6477ECF3");
 
             entity.HasOne(d => d.User).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__REVIEWS__UserId__5FB337D6");
+                .HasConstraintName("FK__REVIEW__UserId__656C112C");
         });
 
         modelBuilder.Entity<TourPackage>(entity =>
         {
-            entity.HasKey(e => e.PackageId).HasName("PK__TOUR_PAC__322035CCED8F4B64");
+            entity.HasKey(e => e.PackageId).HasName("PK__TOUR_PAC__322035CC5CAAC1B5");
 
-            entity.ToTable("TOUR_PACKAGES");
+            entity.ToTable("TOUR_PACKAGE");
 
             entity.Property(e => e.PackageId).ValueGeneratedNever();
             entity.Property(e => e.Accomodation)
-                .HasMaxLength(1)
+                .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.PackageDescription).HasMaxLength(300);
             entity.Property(e => e.Price).HasColumnType("money");
 
             entity.HasOne(d => d.Destination).WithMany(p => p.TourPackages)
                 .HasForeignKey(d => d.DestinationId)
-                .HasConstraintName("FK__TOUR_PACK__Desti__60A75C0F");
+                .HasConstraintName("FK__TOUR_PACK__Desti__6FE99F9F");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__USERS__1788CC4C418B6030");
+            entity.HasKey(e => e.UserId).HasName("PK__USER__1788CC4C460408AA");
 
-            entity.ToTable("USERS");
+            entity.ToTable("USER");
 
             entity.Property(e => e.UserId).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(50);
             entity.Property(e => e.Contact).HasMaxLength(15);
+            entity.Property(e => e.DateOfBirth)
+                .HasMaxLength(200)
+                .IsUnicode(false);
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Name)
                 .HasMaxLength(50)

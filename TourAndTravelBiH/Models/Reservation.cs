@@ -7,11 +7,9 @@ public partial class Reservation
 {
     public int ReservationId { get; set; }
 
-    public int TotalTravelers { get; set; }
+    public int? TotalTravelers { get; set; }
 
-    public DateOnly DateOfReservation { get; set; }
-
-    public string? PaymentStatus { get; set; }
+    public DateOnly? DateOfReservation { get; set; }
 
     public decimal? TotalPrice { get; set; }
 
@@ -19,7 +17,7 @@ public partial class Reservation
 
     public int? PackageId { get; set; }
 
-    public string ReservationStatus { get; set; } = null!;
+    public string? ReservationStatus { get; set; }
 
     public virtual TourPackage? Package { get; set; }
 

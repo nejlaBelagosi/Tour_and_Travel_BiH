@@ -30,21 +30,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "Controllers\\UsersController.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAxwBgAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-13T20:26:36.088Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -53,9 +40,22 @@
               "RelativeDocumentMoniker": "Models\\DbTourAndTravelBiHContext.cs",
               "ToolTip": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\Models\\DbTourAndTravelBiHContext.cs",
               "RelativeToolTip": "Models\\DbTourAndTravelBiHContext.cs",
-              "ViewState": "AQIAABAAAAAAzczMzMwUwAAAAAAAAAAA",
+              "ViewState": "AQIAAB0AAAAAAAAAAAAAwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-13T20:25:42.195Z",
+              "WhenOpened": "2024-05-14T20:11:12.965Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\BLGS HP\\Desktop\\MASTER STUDIJ\\I godina\\I-godina (II semestar)\\WP\\TourAndTravelBiH\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AQIAADgAAAAAAAAAAAAIwEUAAABJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-13T20:26:36.088Z",
               "EditorCaption": ""
             },
             {

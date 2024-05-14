@@ -9,9 +9,9 @@ public partial class Review
 
     public DateOnly? PostDate { get; set; }
 
-    public string ReviewComment { get; set; } = null!;
+    public string? ReviewComment { get; set; }
 
-    public int Rating { get; set; }
+    public int? Rating { get; set; }
 
     public int? UserId { get; set; }
 
