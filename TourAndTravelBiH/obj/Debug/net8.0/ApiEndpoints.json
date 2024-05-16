@@ -188,32 +188,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TourAndTravelBiH.Controllers.RadniController",
-    "Method": "Delete",
-    "RelativePath": "api/Radni/Delete/{parametar}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "parametar",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TourAndTravelBiH.Controllers.RadniController",
-    "Method": "prikazi_sve_Pakete",
-    "RelativePath": "api/Radni/prikazi_sve_Pakete",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "TourAndTravelBiH.Controllers.ReservationController",
     "Method": "DeleteReservation",
     "RelativePath": "api/Reservation/DeleteReservation/{id}",

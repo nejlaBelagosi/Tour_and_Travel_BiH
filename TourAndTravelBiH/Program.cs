@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 
 
@@ -10,6 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHttpContextAccessor(); //dodatnog zbog autorizacije
+builder.Services.AddTransient<MyAuthService>(); //dodatnog zbog autorizacije
+builder.Services.AddSwaggerGen(x => x.OperationFilter<AutorizacijaSwaggerHeader>()); //dodatnog zbog autorizacije
 
 builder.Services.AddDbContext<DbTourAndTravelBiHContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
