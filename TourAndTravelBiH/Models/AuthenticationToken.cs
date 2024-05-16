@@ -11,9 +11,9 @@ public partial class AuthenticationToken
 
     public DateTime? RecordingTime { get; set; }
 
-    public string? Username { get; set; }
-
     public int? AccountId { get; set; }
+
+    public string? Username { get; set; }
 
     public virtual Account? Account { get; set; }
 }
