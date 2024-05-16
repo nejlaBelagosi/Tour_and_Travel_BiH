@@ -24,6 +24,12 @@ namespace TourAndTravelBiH.Controllers
         [HttpPost]
         public IActionResult PostDestination([FromBody] Destination destination)
         {
+            // provjera da li destinacija vec postoji
+            var existingDestination = _db.Destinations.FirstOrDefault(a => a.DestinationName == destination.DestinationName);
+            if (existingDestination != null)
+            {
+                return BadRequest("Destinacija već postoji.");
+            }
             Destination newDestination = new Destination();
             // newDestination.DestinationId = destination.DestinationId; => Id se generise automatski
             newDestination.DestinationLocation = destination.DestinationLocation;
@@ -41,7 +47,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult UpdateDestination([FromBody] Destination data, int id)
         {
             var editDestination = _db.Destinations.Find(id);
-            if (data == null)
+            if (editDestination == null)
             {
                 return BadRequest("Destination not found!");
             }
@@ -56,7 +62,7 @@ namespace TourAndTravelBiH.Controllers
         }
         //Brisanje destinacija. Admin samo moze.
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteDestination( int id)
+        public IActionResult DeleteDestination([FromRoute] int id)
         {
             Destination destinationData = _db.Destinations.Where(a => a.DestinationId == id).FirstOrDefault();
             if (destinationData == null)

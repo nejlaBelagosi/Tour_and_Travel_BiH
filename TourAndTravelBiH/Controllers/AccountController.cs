@@ -26,6 +26,13 @@ namespace TourAndTravelBiH.Controllers
         [HttpPost]
         public IActionResult PostAccount([FromBody] Account account)
         {
+            // Provjera postojanja korisničkog imena
+            var existingAccount = _db.Accounts.FirstOrDefault(a => a.Username == account.Username);
+            if (existingAccount != null)
+            {
+                return BadRequest("Korisničko ime već postoji.");
+            }
+
             Account newAccount= new Account();
             //newAccount.AccountId = account.AccountId;
             newAccount.AccountTypeId = account.AccountTypeId;
@@ -44,7 +51,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult UpdateAccount([FromBody] Account data, int id)
         {
             var editAccount = _db.Accounts.Find(id);
-            if (data == null)
+            if (editAccount == null)
             {
                 return BadRequest("Account not found!");
             }

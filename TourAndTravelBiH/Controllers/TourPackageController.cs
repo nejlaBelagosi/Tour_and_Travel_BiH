@@ -24,6 +24,12 @@ namespace TourAndTravelBiH.Controllers
         [HttpPost]
         public IActionResult PostPackage([FromBody] TourPackage package)
         {
+            // provjera da li paket vec postoji
+            var existingPackage = _db.TourPackages.FirstOrDefault(a => a.PackageId == package.PackageId);
+            if (existingPackage != null)
+            {
+                return BadRequest("Paket već postoji.");
+            }
             TourPackage newPackage = new TourPackage();
            // newPackage.PackageId = package.PackageId; => id se automatski generise
             newPackage.PackageAvailability = package.PackageAvailability;
@@ -44,7 +50,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult UpdatePackage([FromBody] TourPackage data, int id)
         {
             var editPackage = _db.TourPackages.Find(id);
-            if (data == null)
+            if (editPackage == null)
             {
                 return BadRequest("Package not found!");
             }
@@ -62,7 +68,7 @@ namespace TourAndTravelBiH.Controllers
         }
         // Uklanjanje TOUR paketa, samo Admin ima dozvolu za uklanjanje.
         [HttpDelete("{id:int}")]
-        public IActionResult DeletePackage( int id)
+        public IActionResult DeletePackage([FromRoute] int id)
         {
             TourPackage packageData = _db.TourPackages.Where(a => a.PackageId == id).FirstOrDefault();
             if (packageData == null)

@@ -47,7 +47,8 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult UpdateUser([FromBody] User data, int id)
         {
             var editUser = _db.Users.Find(id);
-            if (data == null)
+            // provjera da li korisnik postoji
+            if (editUser == null)
             {
                 return BadRequest("User not found!");
             }
@@ -88,7 +89,7 @@ namespace TourAndTravelBiH.Controllers
 
         // brisanje korisnika. Admin uloga. ali i korisnik ce moci da izbrise svoj nalog.
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteUser( int id)
+        public IActionResult DeleteUser([FromRoute] int id)
         {
             User userData = _db.Users.Where(a => a.UserId == id).FirstOrDefault();
             if(userData == null)

@@ -43,7 +43,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult UpdateUser([FromBody] Reservation data, int id)
         {
             var editReservation = _db.Reservations.Find(id);
-            if (data == null)
+            if (editReservation == null)
             {
                 return BadRequest("Reservation not found!");
             }            
@@ -66,7 +66,7 @@ namespace TourAndTravelBiH.Controllers
             return Ok("Reservation edited");
         }
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteReservation( int id)
+        public IActionResult DeleteReservation([FromRoute] int id)
         {
             Reservation reservationData = _db.Reservations.Where(a => a.ReservationId == id).FirstOrDefault();
             if (reservationData == null)

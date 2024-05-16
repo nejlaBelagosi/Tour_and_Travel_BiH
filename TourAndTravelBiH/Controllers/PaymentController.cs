@@ -17,7 +17,7 @@ namespace TourAndTravelBiH.Controllers
         // dohvacanje odredjenih atributa iz paymenta, koje kaasnije treba modifikovati tako da se dodaju 
         // automatski 
         [HttpGet]
-        public IActionResult GetPaymentStatus()
+        public IActionResult GetPayments()
         {
             var payments = _db.Payments
                     .Select(p => new
@@ -36,7 +36,7 @@ namespace TourAndTravelBiH.Controllers
 
         // dodavanje korisnika od strane Admina. Ali ovaj post ce se modifikovati tako da se dodaju registrovani korisnici.
         [HttpPost]
-        public IActionResult PostPayment([FromBody] Payment data)
+        public IActionResult PostPayment([FromRoute] Payment data)
         {
             _db.Payments.Add(new Payment
             {

@@ -25,18 +25,31 @@ namespace TourAndTravelBiH.Controllers
         //rezervacije je zavrsen i uplacen
         [HttpPost]
         public IActionResult PostReview([FromBody] Review review)
-        {
-            Review newReview = new Review();
-           // newReview.ReviewId = review.ReviewId; => id se automatski generise
-            newReview.PostDate = review.PostDate;
-            newReview.ReviewComment = review.ReviewComment;
-            newReview.Rating = review.Rating;
-            newReview.UserId = review.UserId;
-            newReview.ReservationId = review.ReservationId;
 
-            _db.Add(newReview);
-            _db.SaveChanges();
-            return Ok(newReview);
+        {
+            // Dohvati rezervaciju povezanu s recenzijom
+            var reservation = _db.Reservations.FirstOrDefault(r => r.ReservationId == review.ReservationId);
+
+            // Provjeri je li rezervacija pronađena i je li njezin status "završen" i je li uplata uplaćena
+            if (reservation != null && reservation.ReservationStatus ==  "zavrseno")
+            {
+                Review newReview = new Review();
+                // newReview.ReviewId = review.ReviewId; => id se automatski generise
+                newReview.PostDate = review.PostDate;
+                newReview.ReviewComment = review.ReviewComment;
+                newReview.Rating = review.Rating;
+                newReview.UserId = review.UserId;
+                newReview.ReservationId = review.ReservationId;
+
+                _db.Add(newReview);
+                _db.SaveChanges();
+                return Ok(newReview);
+            }
+            else
+            {
+                // Ako rezervacija nije pronađena, ili nije završena ili uplata nije uplaćena, vrati odgovarajući odgovor
+                return BadRequest("Recenziju nije moguće dodati. Provjerite status rezervacije.");
+            }
 
         }
         //Uredjivanje review.Registrovani user nakon sto postavi review moze ga i urediti.
@@ -44,7 +57,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult UpdateReview([FromBody] Review data, int id)
         {
             var editReview = _db.Reviews.Find(id);
-            if (data == null)
+            if (editReview == null)
             {
                 return BadRequest("Review not found!");
             }
