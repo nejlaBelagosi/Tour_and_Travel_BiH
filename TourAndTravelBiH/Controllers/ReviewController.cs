@@ -27,7 +27,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult PostReview([FromBody] Review review)
         {
             Review newReview = new Review();
-            newReview.ReviewId = review.ReviewId;
+           // newReview.ReviewId = review.ReviewId; => id se automatski generise
             newReview.PostDate = review.PostDate;
             newReview.ReviewComment = review.ReviewComment;
             newReview.Rating = review.Rating;

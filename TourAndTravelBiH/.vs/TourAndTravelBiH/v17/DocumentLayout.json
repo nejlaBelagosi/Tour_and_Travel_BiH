@@ -3,20 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\favoritecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\favoritecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\tourpackagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\tourpackagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\reservationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\reservationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\reservationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\reservationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\favoritecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\favoritecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\models\\dbtourandtravelbihcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,38 +55,64 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "TourPackageController.cs",
+              "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\TourPackageController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TourPackageController.cs",
+              "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\TourPackageController.cs",
+              "RelativeToolTip": "Controllers\\TourPackageController.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAAowBsAAABUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-16T14:57:46.392Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AQIAAFoAAAAAmpmZmZkwwB8AAABEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-16T12:35:38.033Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "FavoriteController.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\FavoriteController.cs",
               "RelativeDocumentMoniker": "Controllers\\FavoriteController.cs",
               "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\FavoriteController.cs",
               "RelativeToolTip": "Controllers\\FavoriteController.cs",
-              "ViewState": "AQIAACgAAAAAAAAAAAAYwDQAAAAAAAAA",
+              "ViewState": "AQIAABUAAAAAAAAAAAAowB4AAABhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-14T21:06:31.798Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "PaymentController.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\PaymentController.cs",
               "RelativeDocumentMoniker": "Controllers\\PaymentController.cs",
               "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\PaymentController.cs",
               "RelativeToolTip": "Controllers\\PaymentController.cs",
-              "ViewState": "AQIAACgAAAAAAAAAAAAkwDsAAAAAAAAA",
+              "ViewState": "AQIAACMAAAAAAAAAAAAYwCoAAABKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-14T21:06:27.361Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "ReservationController.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\ReservationController.cs",
               "RelativeDocumentMoniker": "Controllers\\ReservationController.cs",
               "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\ReservationController.cs",
               "RelativeToolTip": "Controllers\\ReservationController.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAA4wBMAAAA1AAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAAmwBsAAABlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-14T21:06:17.808Z",
               "EditorCaption": ""
@@ -91,27 +125,26 @@
               "RelativeDocumentMoniker": "Controllers\\ReviewController.cs",
               "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\ReviewController.cs",
               "RelativeToolTip": "Controllers\\ReviewController.cs",
-              "ViewState": "AQIAAEMAAAAAAAAAAAAYwFUAAAAAAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAAuwB0AAABQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-14T21:06:04.169Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "DbTourAndTravelBiHContext.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Models\\DbTourAndTravelBiHContext.cs",
               "RelativeDocumentMoniker": "Models\\DbTourAndTravelBiHContext.cs",
               "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Models\\DbTourAndTravelBiHContext.cs",
               "RelativeToolTip": "Models\\DbTourAndTravelBiHContext.cs",
-              "ViewState": "AQIAAB0AAAAAAAAAAAAuwAAAAAAAAAAA",
+              "ViewState": "AQIAACkAAAAAZmZmZmYOwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-14T20:11:12.965Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-14T20:11:12.965Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -123,7 +156,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -135,7 +168,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "TourAndTravelBiH.http",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\TourAndTravelBiH.http",
               "RelativeDocumentMoniker": "TourAndTravelBiH.http",

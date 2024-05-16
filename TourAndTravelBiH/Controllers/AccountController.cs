@@ -27,7 +27,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult PostAccount([FromBody] Account account)
         {
             Account newAccount= new Account();
-            newAccount.AccountId = account.AccountId;
+            //newAccount.AccountId = account.AccountId;
             newAccount.AccountTypeId = account.AccountTypeId;
             newAccount.UserId = account.UserId;
             newAccount.Username = account.Username;

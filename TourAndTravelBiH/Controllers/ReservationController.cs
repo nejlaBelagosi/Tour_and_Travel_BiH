@@ -25,7 +25,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult PostReservation([FromBody] Reservation reservation)
         {
             Reservation newReservation = new Reservation();
-            newReservation.ReservationId = reservation.ReservationId;
+            // newReservation.ReservationId = reservation.ReservationId; => id se automatski generise
             newReservation.TotalTravelers = reservation.TotalTravelers;
             newReservation.DateOfReservation = reservation.DateOfReservation;
             newReservation.TotalPrice = reservation.TotalPrice;

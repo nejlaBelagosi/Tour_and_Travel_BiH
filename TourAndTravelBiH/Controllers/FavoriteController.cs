@@ -28,7 +28,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult PostFavorite([FromBody] Favorite favorite)
         {
             Favorite newFavorite = new Favorite();
-            newFavorite.FavoriteItemId = favorite.FavoriteItemId;
+            // newFavorite.FavoriteItemId = favorite.FavoriteItemId; => id se automatski generise
             newFavorite.PackageId = favorite.PackageId;
             newFavorite.UserId = favorite.UserId;
 

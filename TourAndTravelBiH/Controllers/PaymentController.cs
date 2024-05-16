@@ -40,7 +40,7 @@ namespace TourAndTravelBiH.Controllers
         {
             _db.Payments.Add(new Payment
             {
-                PaymentId = data.PaymentId,
+               // PaymentId = data.PaymentId, => id se automatski generise
                 PaymentMethod = data.PaymentMethod,
                 TotalCost = data.TotalCost,
                 TransactionDate = data.TransactionDate,

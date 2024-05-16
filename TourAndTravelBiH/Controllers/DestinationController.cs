@@ -25,7 +25,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult PostDestination([FromBody] Destination destination)
         {
             Destination newDestination = new Destination();
-            newDestination.DestinationId = destination.DestinationId;
+            // newDestination.DestinationId = destination.DestinationId; => Id se generise automatski
             newDestination.DestinationLocation = destination.DestinationLocation;
             newDestination.DestinationName = destination.DestinationName;
             newDestination.DestinationDetails = destination.DestinationDetails;

@@ -178,6 +178,8 @@ ADD UserId INT NOT NULL REFERENCES [USER](UserId)
 ALTER TABLE REVIEW
 ADD ReservationId INT NOT NULL REFERENCES RESERVATION(ReservationId)
 
+------- AUTENTHICATION---------------
+
 ---------INSERTS----------
 
 ---- USER-----

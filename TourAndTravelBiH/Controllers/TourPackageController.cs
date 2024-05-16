@@ -25,7 +25,7 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult PostPackage([FromBody] TourPackage package)
         {
             TourPackage newPackage = new TourPackage();
-            newPackage.PackageId = package.PackageId;
+           // newPackage.PackageId = package.PackageId; => id se automatski generise
             newPackage.PackageAvailability = package.PackageAvailability;
             newPackage.StartDate = package.StartDate;
             newPackage.EndDate = package.EndDate;

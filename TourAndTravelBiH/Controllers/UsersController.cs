@@ -29,7 +29,7 @@ namespace TourAndTravelBiH.Controllers
         {
             _db.Users.Add(new User
             {
-                UserId = data.UserId,
+               // UserId = data.UserId, => id se automatski generise
                 Name = data.Name,
                 Surname = data.Surname,
                 Address = data.Address,
