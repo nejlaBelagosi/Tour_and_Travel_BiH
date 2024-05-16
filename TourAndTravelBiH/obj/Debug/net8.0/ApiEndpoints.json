@@ -169,8 +169,8 @@
   },
   {
     "ContainingType": "TourAndTravelBiH.Controllers.PaymentController",
-    "Method": "GetPaymentStatus",
-    "RelativePath": "api/Payment/GetPaymentStatus",
+    "Method": "GetPayments",
+    "RelativePath": "api/Payment/GetPayments",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -184,13 +184,33 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TourAndTravelBiH.Controllers.RadniController",
+    "Method": "Delete",
+    "RelativePath": "api/Radni/Delete/{parametar}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
     "Parameters": [
       {
-        "Name": "data",
-        "Type": "TourAndTravelBiH.Models.Payment",
+        "Name": "parametar",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TourAndTravelBiH.Controllers.RadniController",
+    "Method": "prikazi_sve_Pakete",
+    "RelativePath": "api/Radni/prikazi_sve_Pakete",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -444,5 +464,47 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TourAndTravelBiH.Controllers.AuthController",
+    "Method": "DeleteToken",
+    "RelativePath": "auth/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TourAndTravelBiH.Controllers.AuthController",
+    "Method": "Obradi",
+    "RelativePath": "auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "TourAndTravelBiH.Controllers.AuthLoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "TourAndTravelBiH.Helper.MyAuthInfo",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

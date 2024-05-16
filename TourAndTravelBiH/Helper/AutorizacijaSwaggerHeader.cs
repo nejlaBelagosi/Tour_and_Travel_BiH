@@ -1,4 +1,4 @@
-﻿/*using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace TourAndTravelBiH.Helper
@@ -15,4 +15,4 @@ namespace TourAndTravelBiH.Helper
             });
         }
     }
-}*/
+}

@@ -1,4 +1,4 @@
-﻿/*using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -44,10 +44,26 @@ namespace TourAndTravelBiH.Controllers
             return new MyAuthInfo(noviToken);
 
         }
-        public class AuthLoginRequest
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteToken(int id)
+        {
+            AuthenticationToken tokenData = _db.AuthenticationTokens.Where(a => a.AuthenticationId == id).FirstOrDefault();
+            if (tokenData == null)
+            {
+                return NotFound("Token is not found in Database.");
+            }
+
+            _db.Remove(tokenData);
+            _db.SaveChanges();
+
+            return Ok(tokenData);
+
+        }
+    }
+    public class AuthLoginRequest
         {
             public string Username { get; set; }
             public string UserPassword { get; set; }
         }
     }
-}*/
+

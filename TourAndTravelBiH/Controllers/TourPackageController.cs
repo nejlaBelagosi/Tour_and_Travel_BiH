@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -8,10 +9,13 @@ namespace TourAndTravelBiH.Controllers
     [ApiController]
     public class TourPackageController : ControllerBase
     {
-        private readonly DbTourAndTravelBiHContext _db;
-        public TourPackageController(DbTourAndTravelBiHContext db)
+        private readonly MyAuthService _authService;
+        DbTourAndTravelBiHContext _db = new DbTourAndTravelBiHContext();
+        public TourPackageController( MyAuthService authService)
         {
-            _db = db;
+           
+            _authService = authService;
+
         }
         // dohvacanje svih paketa. 
         [HttpGet]
@@ -67,9 +71,13 @@ namespace TourAndTravelBiH.Controllers
             return Ok("Package edited");
         }
         // Uklanjanje TOUR paketa, samo Admin ima dozvolu za uklanjanje.
-        [HttpDelete("{id:int}")]
+       [HttpDelete("{id:int}")]
         public IActionResult DeletePackage([FromRoute] int id)
         {
+
+            if (_authService.AccountTypeId != 0)
+                throw new UnauthorizedAccessException();
+
             TourPackage packageData = _db.TourPackages.Where(a => a.PackageId == id).FirstOrDefault();
             if (packageData == null)
             {

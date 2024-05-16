@@ -77,8 +77,8 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.ToTable("AUTHENTICATION_TOKEN");
 
-            entity.Property(e => e.AuthenticationValue).HasMaxLength(50);
             entity.Property(e => e.RecordingTime).HasColumnType("datetime");
+            entity.Property(e => e.TokenValue).HasMaxLength(50);
             entity.Property(e => e.Username).HasMaxLength(50);
 
             entity.HasOne(d => d.Account).WithMany(p => p.AuthenticationTokens)

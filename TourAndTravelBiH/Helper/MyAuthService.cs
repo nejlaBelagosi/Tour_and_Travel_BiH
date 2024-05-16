@@ -1,4 +1,4 @@
-﻿/*using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 using TourAndTravelBiH.Helper;
 
@@ -52,4 +52,4 @@ namespace TourAndTravelBiH.Helper
         public bool isLogiran => AccountId != null;
 
     }
-}*/
+}

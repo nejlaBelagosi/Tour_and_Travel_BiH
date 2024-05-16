@@ -1,10 +1,10 @@
-﻿//using System.Security.Cryptography;
-//using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 
-//namespace TourAndTravelBiH.Helper;
+namespace TourAndTravelBiH.Helper;
 
 //https://gist.github.com/wadeschulz/20822570b27159813db8
-/*public class TokenGenerator
+public class TokenGenerator
 {
     public static string Generate(int size)
     {
@@ -46,4 +46,4 @@
         var s =result.ToString();
         return "S" + result;
     }
-}*/
+}
