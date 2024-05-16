@@ -19,5 +19,7 @@ public partial class Account
 
     public virtual AccountType? AccountType { get; set; }
 
+    public virtual ICollection<AuthenticationToken> AuthenticationTokens { get; set; } = new List<AuthenticationToken>();
+
     public virtual User? User { get; set; }
 }

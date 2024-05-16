@@ -19,6 +19,8 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
     public virtual DbSet<AccountType> AccountTypes { get; set; }
 
+    public virtual DbSet<AuthenticationToken> AuthenticationTokens { get; set; }
+
     public virtual DbSet<Destination> Destinations { get; set; }
 
     public virtual DbSet<Favorite> Favorites { get; set; }
@@ -67,6 +69,21 @@ public partial class DbTourAndTravelBiHContext : DbContext
             entity.Property(e => e.UserType)
                 .HasMaxLength(200)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<AuthenticationToken>(entity =>
+        {
+            entity.HasKey(e => e.AuthenticationId).HasName("PK__tmp_ms_x__81919C7B6AFDE529");
+
+            entity.ToTable("AUTHENTICATION_TOKEN");
+
+            entity.Property(e => e.AuthenticationValue).HasMaxLength(50);
+            entity.Property(e => e.RecordingTime).HasColumnType("datetime");
+            entity.Property(e => e.Username).HasMaxLength(50);
+
+            entity.HasOne(d => d.Account).WithMany(p => p.AuthenticationTokens)
+                .HasForeignKey(d => d.AccountId)
+                .HasConstraintName("FK__AUTHENTIC__Accou__2A164134");
         });
 
         modelBuilder.Entity<Destination>(entity =>
