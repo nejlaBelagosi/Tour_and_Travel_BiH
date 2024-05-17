@@ -13,90 +13,13 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from '@mui/x-data-grid-generator';
-
-import {useEffect} from 'react';
-
-// fetchevi
-
-// getUser fetch
-
-//function get
-
-
-// const getUser = async () => {
-//   try {
-//     const response = await fetch(getLink, {
-//       method: 'GET',
-//       mode: 'cors',
-//     });
-//     const data = await response.json();
-//     setUser(data);  // Corrected the function name and syntax
-//   } catch (error) {
-//     console.error('Error fetching user data:', error);
-//   }
-// }; 
-
-// useEffect(() => {
-//   getUser()
-// }, [])
-
-// ---------------------------------------------------
-
-const roles = ['Market', 'Finance', 'Development'];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-
-const initialRows = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-];
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
   const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    const id = Math.random().toString(36).substring(2, 9); // Generiše nasumičan ID
+    setRows((oldRows) => [...oldRows, { id, name: '', surname: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -113,8 +36,26 @@ function EditToolbar(props) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState(initialRows);
+  const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
+// getUser
+  React.useEffect(() => {
+    fetch('http://localhost:5278/api/Users/GetUsers') // link za dohvacanje korisnika
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map((user) => ({
+          id: user.userId,   
+          name: user.name,
+          surname: user.surname,
+          address: user.address,
+          dateOfBirth: user.dateOfBirth,
+          contact: user.contact,
+          email: user.email,
+        }));
+        setRows(formattedData);
+      })
+      .catch((error) => console.error('Error fetching user data:', error));
+  }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -158,30 +99,11 @@ export default function FullFeaturedCrudGrid() {
 
   const columns = [
     { field: 'name', headerName: 'Name', width: 180, editable: true },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 80,
-      align: 'left',
-      headerAlign: 'left',
-      editable: true,
-    },
-    {
-      field: 'joinDate',
-      headerName: 'Join date',
-      type: 'date',
-      width: 180,
-      editable: true,
-    },
-    {
-      field: 'role',
-      headerName: 'Department',
-      width: 220,
-      editable: true,
-      type: 'singleSelect',
-      valueOptions: ['Market', 'Finance', 'Development'],
-    },
+    { field: 'surname', headerName: 'Surname', width: 180, editable: true },
+    { field: 'address', headerName: 'Address', width: 180, editable: true },
+    { field: 'dateOfBirth', headerName: 'Date of Birth', width: 150, editable: true },
+    { field: 'contact', headerName: 'Contact', width: 150, editable: true },
+    { field: 'email', headerName: 'Email', width: 200, editable: true },
     {
       field: 'actions',
       type: 'actions',
@@ -196,9 +118,7 @@ export default function FullFeaturedCrudGrid() {
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
+              sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem

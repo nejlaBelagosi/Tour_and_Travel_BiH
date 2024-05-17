@@ -84,7 +84,7 @@ namespace TourAndTravelBiH.Controllers
             }
 
             _db.SaveChanges();
-            return Ok("User edited");
+            return Ok(editUser);
         }
 
         // brisanje korisnika. Admin uloga. ali i korisnik ce moci da izbrise svoj nalog.
