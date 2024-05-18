@@ -35,6 +35,7 @@ function EditToolbar(props) {
   );
 }
 
+
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -57,6 +58,61 @@ export default function FullFeaturedCrudGrid() {
       .catch((error) => console.error('Error fetching user data:', error));
   }, []);
 
+  //brisanje korisnika
+  const deleteUser = async (id) => {
+    const response = await fetch(`http://localhost:5278/api/Users/DeleteUser/${id}`, {
+        method: 'DELETE',
+        mode: 'cors'
+    });
+    if (response.ok) {
+        setRows((rows) => rows.filter((row) => row.id !== id));
+    } else {
+        console.error('Error deleting user:', response.statusText);
+    }
+};
+
+// edit korisnika
+const updateUser = async (updatedRow) => {
+  const response = await fetch(`http://localhost:5278/api/Users/UpdateUser/${updatedRow.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedRow),
+    mode: 'cors',
+  });
+
+  if (!response.ok) {
+    console.error('Error updating user:', response.statusText);
+  }
+  return response.ok;
+};
+
+// add user 
+// const addUser = async (user) => {
+//   const response = await fetch('http://localhost:5278/api/Users/PostUser', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(user),
+//     mode: 'cors',
+//   });
+
+//   if (!response.ok) {
+//     console.error('Error adding user:', response.statusText);
+//     return null;
+//   }
+
+//   const newUser = await response.json();
+//     return {
+//       ...newUser,
+//       id: newUser.userId,  // Osiguravamo da novi red ima id postavljen na userId
+//     };
+// };
+
+// ------------------------------- Handle ------------------------------
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -67,13 +123,20 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  // samo za edit
+  const handleSaveClick = (id) => async () => {
+    const updatedRow = rows.find((row) => row.id === id);
+    if (await updateUser(updatedRow)) {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    }
   };
 
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
+  //add + edit
+
+  
+  const handleDeleteClick = (id) => async () => {
+    await deleteUser(id);
+};
 
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -87,11 +150,23 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  // const processRowUpdate = (newRow) => {
+  //   const updatedRow = { ...newRow, isNew: false };
+  //   setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  //   return updatedRow;
+  // };
+
+  //samo za edit
+  const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    if (await updateUser(updatedRow)) {
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    }
     return updatedRow;
   };
+
+  // i za add i za edit korisnika
+ 
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);

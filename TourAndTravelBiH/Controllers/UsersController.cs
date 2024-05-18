@@ -39,7 +39,7 @@ namespace TourAndTravelBiH.Controllers
             });
 
             _db.SaveChanges();
-            return Ok("Korisnik je uspjesno dodan");
+            return Ok(data);
         }
         // Uredjivanje korisnika. Ako vec postoje podaci za odredjeni Id u BP, a zelimo izmijeniti jedan podatak, taj podatak ce se 
         // zamijeniti, a ostali podaci koji se vec nalaze u BP ce se zadrzati.
