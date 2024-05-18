@@ -89,27 +89,7 @@ const updateUser = async (updatedRow) => {
 };
 
 // add user 
-// const addUser = async (user) => {
-//   const response = await fetch('http://localhost:5278/api/Users/PostUser', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(user),
-//     mode: 'cors',
-//   });
 
-//   if (!response.ok) {
-//     console.error('Error adding user:', response.statusText);
-//     return null;
-//   }
-
-//   const newUser = await response.json();
-//     return {
-//       ...newUser,
-//       id: newUser.userId,  // Osiguravamo da novi red ima id postavljen na userId
-//     };
-// };
 
 // ------------------------------- Handle ------------------------------
 
