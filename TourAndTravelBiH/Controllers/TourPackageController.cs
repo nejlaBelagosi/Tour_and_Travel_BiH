@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 
@@ -19,10 +20,26 @@ namespace TourAndTravelBiH.Controllers
         }
         // dohvacanje svih paketa. 
         [HttpGet]
+        //public IActionResult GetPackage()
+        //{
+        //    var package = _db.TourPackages.ToList();
+        //    return Ok(package);
+        //}
         public IActionResult GetPackage()
         {
-            var package = _db.TourPackages.ToList();
-            return Ok(package);
+            var packages = _db.TourPackages.Include(p => p.Destination).ToList();
+            var result = packages.Select(p => new
+            {
+                p.PackageId,
+                p.PackageAvailability,
+                p.StartDate,
+                p.EndDate,
+                p.Accomodation,
+                p.PackageDescription,
+                p.Price,
+                DestinationName = p.Destination.DestinationName
+            });
+            return Ok(result);
         }
         //dodavanje paketa na stranicu. SAMO ADMIN.
         [HttpPost]
@@ -68,7 +85,7 @@ namespace TourAndTravelBiH.Controllers
             editPackage.DestinationId = data.DestinationId;
 
             _db.SaveChanges();
-            return Ok("Package edited");
+            return Ok(editPackage);
         }
         // Uklanjanje TOUR paketa, samo Admin ima dozvolu za uklanjanje.
        [HttpDelete("{id:int}")]
