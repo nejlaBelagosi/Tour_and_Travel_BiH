@@ -1,9 +1,40 @@
+/* Filename: styles.css */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root::-webkit-scrollbar {
+  display: none;
+}
+
+:root {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.parent-container {
+  width: 100%; /* Možete prilagoditi širinu po potrebi */
+  height: 100vh;
+}
+.parent-container::-webkit-scrollbar {
+  display: none; /* Sakriva scroll bar za Chrome, Safari i Opera */
+}
+
 .welcome-container {
   background-image: url("../img/landingpageImg.jpg"); /* Proveri putanju do slike */
   background-size: cover;
   background-position: center;
   height: 100vh; /* 100% visine preglednika */
   display: flex;
+  flex-direction: column; /* Dodaj ovo */
   justify-content: center;
   align-items: center;
   color: white;
@@ -12,4 +43,10 @@
 
 .welcome-text {
   font-size: 4rem; /* Veličina fonta natpisa */
+  margin-bottom: 20px; /* Dodaj razmak ispod teksta */
+  font-family: "Roboto";
+}
+
+.additional-content {
+  color: black;
 }
