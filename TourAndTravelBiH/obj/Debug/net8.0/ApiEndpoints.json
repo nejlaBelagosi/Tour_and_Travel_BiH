@@ -231,8 +231,8 @@
   },
   {
     "ContainingType": "TourAndTravelBiH.Controllers.ReservationController",
-    "Method": "UpdateUser",
-    "RelativePath": "api/Reservation/UpdateUser/{id}",
+    "Method": "UpdateReservation",
+    "RelativePath": "api/Reservation/UpdateReservation/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,

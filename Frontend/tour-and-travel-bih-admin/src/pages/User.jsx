@@ -14,6 +14,7 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
+
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
@@ -29,12 +30,11 @@ function EditToolbar(props) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+        Add user
       </Button>
     </GridToolbarContainer>
   );
 }
-
 
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);

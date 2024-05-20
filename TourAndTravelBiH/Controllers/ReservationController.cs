@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -17,8 +18,23 @@ namespace TourAndTravelBiH.Controllers
         [HttpGet]
         public IActionResult GetReservation() 
         {
-            var reservation = _db.Reservations.ToList();
-            return Ok(reservation);
+            var reservations = _db.Reservations
+                .Include(p => p.User)
+                .Include(p => p.Package)
+                .ToList();
+                
+          
+            var result = reservations.Select(p => new
+            {
+                p.ReservationId,
+                p.TotalTravelers,
+                p.DateOfReservation,
+                p.TotalPrice,
+                p.ReservationStatus,            
+                username = p.User.Name + ' ' + p.User.Surname,
+                packageDescription = p.Package.PackageDescription
+            });
+            return Ok(result);
         }
 
         [HttpPost]
@@ -40,7 +56,7 @@ namespace TourAndTravelBiH.Controllers
 
         // korisnik moze editovati ukupan broj putnika, total price se automatski mijenja, status
         [HttpPut("{id:int}")]
-        public IActionResult UpdateUser([FromBody] Reservation data, int id)
+        public IActionResult UpdateReservation([FromBody] Reservation data, int id)
         {
             var editReservation = _db.Reservations.Find(id);
             if (editReservation == null)
@@ -81,4 +97,5 @@ namespace TourAndTravelBiH.Controllers
 
         }
     }
+
 }

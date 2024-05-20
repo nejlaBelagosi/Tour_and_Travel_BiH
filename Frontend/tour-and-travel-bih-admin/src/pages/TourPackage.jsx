@@ -68,7 +68,7 @@ export default function FullFeaturedCrudGrid() {
   //     .catch((error) => console.error('Error fetching package data:', error));
   // }, [destinations]);
   React.useEffect(() => {
-    const token = localStorage.getItem('authToken'); // Pretpostavljamo da je token pohranjen u localStorage
+    const token = localStorage.getItem('TokenValue'); // Pretpostavljamo da je token pohranjen u localStorage
     fetch('http://localhost:5278/api/TourPackage/GetPackage', { // link za dohvacanje paketa
       headers: {
         'Authorization': `Bearer ${token}`

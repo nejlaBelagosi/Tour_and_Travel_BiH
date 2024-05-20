@@ -51,14 +51,26 @@ namespace TourAndTravelBiH.Controllers
             {
                 return BadRequest("Destination not found!");
             }
-           
-            editDestination.DestinationLocation = data.DestinationLocation;
-            editDestination.DestinationName= data.DestinationName;
+
+            if(data.DestinationLocation != null && data.DestinationLocation != "string")
+            {
+                editDestination.DestinationLocation= data.DestinationLocation;
+            }
+            if (data.DestinationName != null && data.DestinationName != "string")
+            {
+                editDestination.DestinationName = data.DestinationName;
+            }
+            if (data.DestinationDetails != null && data.DestinationDetails != "string")
+            {
             editDestination.DestinationDetails= data.DestinationDetails;
-            editDestination.DestinationImage= data.DestinationImage;
+            }
+            if (data.DestinationImage != null && data.DestinationImage != "string")
+            {
+           editDestination.DestinationImage= data.DestinationImage;
+            }
 
             _db.SaveChanges();
-            return Ok("Destination edited");
+            return Ok(editDestination);
         }
         //Brisanje destinacija. Admin samo moze.
         [HttpDelete("{id:int}")]
