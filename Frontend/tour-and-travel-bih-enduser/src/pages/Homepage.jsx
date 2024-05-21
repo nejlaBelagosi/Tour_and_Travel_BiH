@@ -2,6 +2,7 @@
 import React from 'react';
 import '../styles/Homepage.css';
 import SearchBar from '../components/SearchBar';
+import ImgMediaCard from '../components/Cards';
 
 const Homepage = () => {
   return (
@@ -13,7 +14,8 @@ const Homepage = () => {
       </div>
     </div>
       <div className="additional-content">
-        <p>This is additional content below the welcome container.</p>
+        <h1>Our Destinations</h1>
+       <ImgMediaCard />
         <p>This is additional content below the welcome container.</p>
       </div>
       <div className="additional-content">

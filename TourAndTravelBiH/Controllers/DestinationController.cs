@@ -17,9 +17,26 @@ namespace TourAndTravelBiH.Controllers
         [HttpGet]
         public IActionResult GetDestination()
         {
+         
             var destination = _db.Destinations.ToList();
             return Ok(destination);
         }
+
+        //dohvacanje slike
+        [HttpGet("{imageName}")]
+        public IActionResult GetImage(string imageName)
+        {
+            var imagePath = Path.Combine("C:\\Users\\BLGS HP\\Pictures\\SLIKE ZA PROJEKAT", imageName);
+
+            if (!System.IO.File.Exists(imagePath))
+            {
+                return NotFound();
+            }
+
+            var imageFileStream = System.IO.File.OpenRead(imagePath);
+            return File(imageFileStream, "image/png"); // Promijenite tip MIME prema potrebi
+        }
+
         //dodavanje destinacija u BP. Admin samo moze.
         [HttpPost]
         public IActionResult PostDestination([FromBody] Destination destination)

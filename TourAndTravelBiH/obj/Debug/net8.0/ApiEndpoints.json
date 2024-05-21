@@ -90,6 +90,22 @@
   },
   {
     "ContainingType": "TourAndTravelBiH.Controllers.DestinationController",
+    "Method": "GetImage",
+    "RelativePath": "api/Destination/GetImage/{imageName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TourAndTravelBiH.Controllers.DestinationController",
     "Method": "PostDestination",
     "RelativePath": "api/Destination/PostDestination",
     "HttpMethod": "POST",

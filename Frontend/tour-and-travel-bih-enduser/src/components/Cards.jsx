@@ -1,0 +1,72 @@
+import React, { useEffect, useState } from 'react';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import IconButton from '@mui/material/IconButton';
+
+// stilovi
+import '../styles/Cards.css';
+
+  
+export default function ImgMediaCard() {
+  const [destinations, setDestinations] = useState([]);
+  // useEffect(() => {
+  //   fetch('http://localhost:5278/api/Destination/GetImage/${imageName}')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setDestinations(data);
+  //     })
+  //     .catch(error => console.error('Error fetching destination data:', error));
+  // }, []);
+  React.useEffect(() => {
+    fetch('http://localhost:5278/api/Destination/GetDestination') // link za dohvacanje destinacija
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map((destination) => ({
+          id: destination.destinationId,
+          location: destination.destinationLocation,
+          name: destination.destinationName,
+          image: destination.destinationImage,
+          details: destination.destinationDetails,
+        }));
+        setDestinations(formattedData);
+      })
+      .catch((error) => console.error('Error fetching destination data:', error));
+  }, []);
+
+  return (
+    <div className="cards-container">
+      {destinations.map(destination => (
+        <Card key={destination.id} sx={{ maxWidth: 345 }}>
+          <CardMedia
+            component="img"
+            alt={destination.name}
+            height="140"
+            image={`http://localhost:5278/api/Destination/GetImage/${destination.image}`}
+            sx={{ borderRadius: '16px 16px 0 0' }}
+            onError={(e) => e.target.src = 'default-image.jpg'} // Fallback image
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {destination.name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {destination.details}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Share</Button>
+            <Button size="small">Learn More</Button>
+            <IconButton aria-label="add to favorites">
+              <FavoriteIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
+      ))}
+    </div>
+  );
+}

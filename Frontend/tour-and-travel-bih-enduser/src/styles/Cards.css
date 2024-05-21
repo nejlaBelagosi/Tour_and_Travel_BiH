@@ -1,0 +1,11 @@
+/* Cards.css */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.cards-container .MuiCard-root {
+  border-radius: 16px;
+}
