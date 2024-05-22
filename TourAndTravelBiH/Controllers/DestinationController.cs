@@ -34,7 +34,7 @@ namespace TourAndTravelBiH.Controllers
             }
 
             var imageFileStream = System.IO.File.OpenRead(imagePath);
-            return File(imageFileStream, "image/png"); // Promijenite tip MIME prema potrebi
+            return File(imageFileStream, "image/png"); 
         }
 
         //dodavanje destinacija u BP. Admin samo moze.
@@ -69,22 +69,23 @@ namespace TourAndTravelBiH.Controllers
                 return BadRequest("Destination not found!");
             }
 
-            if(data.DestinationLocation != null && data.DestinationLocation != "string")
+            if (data.DestinationLocation != null && data.DestinationLocation != "string")
             {
-                editDestination.DestinationLocation= data.DestinationLocation;
+                editDestination.DestinationLocation = data.DestinationLocation;
             }
             if (data.DestinationName != null && data.DestinationName != "string")
             {
                 editDestination.DestinationName = data.DestinationName;
             }
-            if (data.DestinationDetails != null && data.DestinationDetails != "string")
-            {
-            editDestination.DestinationDetails= data.DestinationDetails;
-            }
             if (data.DestinationImage != null && data.DestinationImage != "string")
             {
-           editDestination.DestinationImage= data.DestinationImage;
+                editDestination.DestinationImage = data.DestinationImage;
             }
+            if (data.DestinationDetails != null && data.DestinationDetails != "string")
+            {
+                editDestination.DestinationDetails = data.DestinationDetails;
+            }
+
 
             _db.SaveChanges();
             return Ok(editDestination);

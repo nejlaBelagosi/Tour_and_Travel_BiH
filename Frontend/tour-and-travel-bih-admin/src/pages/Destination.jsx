@@ -19,7 +19,7 @@ function EditToolbar(props) {
 
   const handleClick = () => {
     const id = Math.random().toString(36).substring(2, 9); // Generiše nasumičan ID
-    setRows((oldRows) => [...oldRows, { id, location: '', name: '', details: '', isNew: true }]);
+    setRows((oldRows) => [...oldRows, { id, location: '', name: '',image: '', details: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'location' },
@@ -122,13 +122,26 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
+  // const processRowUpdate = async (newRow) => {
+  //   const updatedRow = { ...newRow, isNew: false };
+  //   if (await updateDestination(updatedRow)) {
+  //     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  //   }
+  //   return updatedRow;
+  // };
   const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    if (await updateDestination(updatedRow)) {
+    console.log('Processing row update:', newRow); // Log za praćenje podataka koji se obrađuju
+    const updatedRow = { ...newRow, isNew: false};
+    const success = await updateDestination(updatedRow);
+    if (success) {
       setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      console.log('Row updated successfully:', updatedRow); // Log za praćenje uspešnog ažuriranja stanja
+    } else {
+      console.error('Failed to update row:', updatedRow); // Log za praćenje neuspešnog ažuriranja stanja
     }
     return updatedRow;
   };
+  
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);

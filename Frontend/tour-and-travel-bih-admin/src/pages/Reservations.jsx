@@ -19,7 +19,7 @@ function EditToolbar(props) {
 
   const handleClick = () => {
     const id = Math.random().toString(36).substring(2, 9); // Generiše nasumičan ID
-    setRows((oldRows) => [...oldRows, { id, location: '', name: '', details: '', isNew: true }]);
+    setRows((oldRows) => [...oldRows, { id, totalTravelers, name: '', reservationStatus: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'location' },
