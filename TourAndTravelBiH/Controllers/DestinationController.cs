@@ -22,6 +22,17 @@ namespace TourAndTravelBiH.Controllers
             return Ok(destination);
         }
 
+        //dohvacanje danasnjeg prijedloga destinacija
+        [HttpGet]
+        public IActionResult GetPopularDestinations()
+        {
+            var destinations = _db.Destinations.ToList();
+            var random = new Random();
+            var randomDestinations = destinations.OrderBy(d => random.Next()).Take(5).ToList();
+
+            return Ok(randomDestinations);
+        }
+
         //dohvacanje slike
         [HttpGet("{imageName}")]
         public IActionResult GetImage(string imageName)

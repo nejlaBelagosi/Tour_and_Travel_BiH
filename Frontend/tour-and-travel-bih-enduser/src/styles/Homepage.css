@@ -49,6 +49,74 @@ body {
 
 /* Additional content urediti */
 .additional-content {
+  margin: 20px;
+  padding: 20px;
   font: "Roboto";
   color: black;
+  background-color: #fff;
+  border: 0.5px inset white; /* Dodajemo border */
+  border-radius: 20px; /* Zaobljeni uglovi */
+  outline: none; /* Uklanja outline */
+}
+
+.additional-content h1 {
+  font: "Roboto";
+  margin-bottom: 20px;
+  margin-left: 20px;
+  color: #4f6f52;
+}
+
+.additional-content .media-card-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* GRID CONTAINER */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.grid-container {
+  padding-left: 50px;
+  padding-right: 50px;
+  display: grid;
+  grid-template-columns: auto auto; /* Dva stupca, prvi će se prilagoditi veličini sadržaja, drugi će popuniti preostali prostor */
+  gap: 0px; /* Razmak između elemenata u gridu */
+  background-image: url("../img/route.png"); /* Postavljanje slike kao pozadine */
+  background-size: cover; /* Opciono: Prilagodite veličinu slike */
+  background-position: center; /* Opciono: Poravnajte sliku */
+  background-repeat: no-repeat; /* Opciono: Onemogućite ponavljanje slike */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Postavljanje boje pozadine s transparentnošću */
+}
+
+.image img {
+  max-width: 100%; /* Slika će se prilagoditi veličini roditeljskog elementa */
+  height: auto; /* Očuvava omjer širine i visine */
+}
+
+.text {
+  /* display: flex;
+  justify-content: flex-start; /* Tekst će se poravnati s lijeve strane 
+  align-items: center; */
+  text-align: left;
+  color: white;
+  background-image: url("../img/hiking.jpg");
+  /* background-color: rgba(81, 93, 87, 1); */
+}
+.text h1,
+p {
+  margin: 20px;
+}
+
+.button {
+  border: 1px solid #515d57;
+  border-radius: 20px;
+  background: white;
 }

@@ -106,6 +106,16 @@
   },
   {
     "ContainingType": "TourAndTravelBiH.Controllers.DestinationController",
+    "Method": "GetPopularDestinations",
+    "RelativePath": "api/Destination/GetPopularDestinations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TourAndTravelBiH.Controllers.DestinationController",
     "Method": "PostDestination",
     "RelativePath": "api/Destination/PostDestination",
     "HttpMethod": "POST",
