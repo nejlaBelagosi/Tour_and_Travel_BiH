@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-//import MenuItem from '@mui/material/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 //import AdbIcon from '@mui/icons-material/Adb';
 //import logo
 import logo from "../img/FAVICON.png";
@@ -20,26 +20,26 @@ import logo from "../img/FAVICON.png";
 import { Link } from 'react-router-dom';
 
 const pages = ['Tour Package', 'Destinations', 'Reservations','Favorites', 'About us'];
-//const settings = ['Profile', 'Account', 'Logout'];
+const settings = ['Profile', 'Account', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
- // const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-//   const handleOpenUserMenu = (event) => {
-//     setAnchorElUser(event.currentTarget);
-//   };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-//   const handleCloseUserMenu = () => {
-//     setAnchorElUser(null);
-//   };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   return (
     <AppBar position="static" sx={{backgroundColor: '#1A4D2E'}}>
@@ -53,8 +53,7 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component={Link}
-            to='/'
+            component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
@@ -98,13 +97,13 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {/* {pages.map((page) => (
+              {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                   <Link to={`/${page}`} style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link>
                 </MenuItem>
-              ))} */}
-            </Menu>*/
+              ))}
+            </Menu>
           </Box>
           {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
         {/* Logo for mobile view */}
@@ -145,12 +144,12 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          {/* <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              { <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}> }
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
-            </Tooltip> 
+            </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -173,7 +172,7 @@ function ResponsiveAppBar() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box> */}
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

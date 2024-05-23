@@ -1,0 +1,32 @@
+.review-card {
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  position: relative;
+  width: 250px; /* Postavljamo širinu kartica */
+}
+
+.review-card.larger {
+  height: 210px; /* Povećavamo širinu kartice s razredom "larger" */
+  width: 255px;
+}
+
+.ratings {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #fdd835;
+}
+
+.ratings p {
+  display: flex;
+  align-items: center;
+}
+
+.ratings p > svg {
+  color: #fdd835;
+  margin-right: 5px;
+}

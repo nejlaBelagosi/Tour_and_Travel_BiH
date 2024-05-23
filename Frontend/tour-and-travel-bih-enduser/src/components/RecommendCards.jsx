@@ -23,7 +23,7 @@ export default function ImgMediaCard() {
   //     .catch(error => console.error('Error fetching destination data:', error));
   // }, []);
   React.useEffect(() => {
-    fetch('http://localhost:5278/api/Destination/GetPopularDestinations') // link za dohvacanje destinacija
+    fetch('http://localhost:5278/api/Destination/GetRecommendedDestinations') // link za dohvacanje destinacija
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((destination) => ({
@@ -59,9 +59,9 @@ export default function ImgMediaCard() {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-            <IconButton aria-label="add to favorites">
+            <Button style={{color:'#4F6F52'}} size="small">Share</Button>
+            <Button style={{color:'#4F6F52'}} size="small">Learn More</Button>
+            <IconButton aria-label="add to favorites" style={{ color: '#E8DFCA'}}>
               <FavoriteIcon />
             </IconButton>
           </CardActions>
