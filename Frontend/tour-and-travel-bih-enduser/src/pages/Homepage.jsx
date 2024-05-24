@@ -5,14 +5,15 @@ import ImgMediaCard from '../components/RecommendCards';
 import Cards from '../components/PopularCards';
 import { Button } from '@mui/material';
 
+// components
 import Reviews from '../components/ReviewCards';
+import Footer from '../components/Footer';
 
 
 /* ikonice */
 import BeenhereOutlinedIcon from '@mui/icons-material/BeenhereOutlined';
 import RouteOutlinedIcon from '@mui/icons-material/RouteOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
-
 
   
 const Homepage = () => {
@@ -31,6 +32,20 @@ const Homepage = () => {
         <div className="right-container">
           <h1 style={{ marginLeft: '20px', fontFamily: 'Montserrat' }}>Best Of the Day</h1>
           <p className='text-paragraph'>Let's spend your money and relieve your stress by <br></br> going around the view.</p>
+          <div className='grid-container-3'>
+          <div>
+            <h1 className='text-1'>60+</h1>
+            <p className="text-paragraph-1">Destinations</p>
+          </div>
+          <div>
+            <h1 className='text-1'>150+</h1>
+            <p className="text-paragraph-1">Tourists</p>
+          </div>
+          <div>
+            <h1 className='text-1'>100+</h1>
+            <p className="text-paragraph-1">Packages</p>
+          </div>
+          </div>
           <Button style={{ marginTop: '20px', marginLeft: '20px', border: '1px solid #4F6F52', borderRadius: '20px', background: '#4F6F52', color: 'white', padding: '10px 30px' }}>Contact Us</Button>
         </div>
       </div>
@@ -53,7 +68,7 @@ const Homepage = () => {
           <img src="../src/img/route.png" alt="route" />
         </div>
         <div className="text">
-          <h1 style={{ fontFamily: 'Montserrat' }}>How to do it?</h1>
+          <h1 style={{ fontFamily: 'Montserrat', marginTop:'40px' }}>How to do it?</h1>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime qui fuga in esse <br></br> nihil optio quaerat sint a. Sunt perspiciatis iste incidunt error. Magnam repellat perferendis saepe rerum dolor laudantium.</p>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime qui fuga in esse <br></br> nihil optio quaerat sint a. Sunt perspiciatis iste incidunt error. Magnam repellat perferendis saepe rerum dolor laudantium.</p>
           <Button style={{ marginTop: '20px', marginLeft: '20px', border: '1px solid #515d57', borderRadius: '20px', background: '#4F6F52', color: 'white', padding: '10px 30px' }}>See more</Button>
@@ -109,7 +124,7 @@ const Homepage = () => {
 
       {/* footer */}
       <div className='footer'>
-<h1>FOOTER OSTAO</h1>
+        <Footer />
       </div>
     </div>
     </div>
