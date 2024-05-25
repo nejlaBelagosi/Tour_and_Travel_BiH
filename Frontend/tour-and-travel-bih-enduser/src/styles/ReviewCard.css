@@ -30,3 +30,8 @@
   color: #fdd835;
   margin-right: 5px;
 }
+
+.container {
+  height: 80%;
+  background-color: #ccc;
+}

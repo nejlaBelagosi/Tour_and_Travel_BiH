@@ -52,21 +52,10 @@ body {
 }
 
 .additional-content {
-  margin: 20px;
-  padding: 20px;
-  font-family: "Roboto", sans-serif;
-  color: black;
-  background-color: #fff;
-  border: 0.5px inset white;
-  border-radius: 20px;
-  outline: none;
-}
-
-.additional-content h1 {
   font-family: "Montserrat", sans-serif;
   margin-bottom: 20px;
   margin-left: 20px;
-  color: #4f6f52;
+  color: #1a4d2e;
 }
 
 .additional-content .media-card-container {
@@ -226,6 +215,7 @@ body {
 .review-container {
   background-color: #f5efe6;
   padding: 50px;
+  margin-top: 40px;
 }
 .review-container h1 {
   padding-bottom: 20px;

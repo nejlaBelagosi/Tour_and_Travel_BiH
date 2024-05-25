@@ -8,6 +8,8 @@ import { Button } from '@mui/material';
 // components
 import Reviews from '../components/ReviewCards';
 import Footer from '../components/Footer';
+import TourCards from '../components/TourPackagesCards'
+import TourReviews from '../components/TourReviews';
 
 
 /* ikonice */
@@ -105,8 +107,15 @@ const Homepage = () => {
         </div>
 
         {/* Tour Package */}
-        {/* Tour reviews */}
+        <h1 className='additional-content'>Our Packages</h1>
+        <TourCards />
 
+        {/* Tour reviews */}
+        <div className='review-container' style={{backgroundColor:"white"}}>
+          <h1>Tour reviews</h1>
+          <TourReviews />
+        </div>
+        
         {/* What do they say? */}
         <div className='review-container'>
           <h1>What do they say?</h1>

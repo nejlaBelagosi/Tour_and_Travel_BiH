@@ -37,7 +37,9 @@ namespace TourAndTravelBiH.Controllers
                 p.Accomodation,
                 p.PackageDescription,
                 p.Price,
-                DestinationName = p.Destination.DestinationName
+                destinationName = p.Destination.DestinationName,
+                destinationImage = p.Destination.DestinationImage,
+                destinationDetails = p.Destination.DestinationDetails
             });
             return Ok(result);
         }
