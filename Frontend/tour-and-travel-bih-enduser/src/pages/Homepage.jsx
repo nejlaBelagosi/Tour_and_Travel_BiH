@@ -46,7 +46,7 @@ const Homepage = () => {
             <p className="text-paragraph-1">Packages</p>
           </div>
           </div>
-          <Button style={{ marginTop: '20px', marginLeft: '20px', border: '1px solid #4F6F52', borderRadius: '20px', background: '#4F6F52', color: 'white', padding: '10px 30px' }}>Contact Us</Button>
+          <Button href='/AboutUs' style={{ marginTop: '20px', marginLeft: '20px', border: '1px solid #4F6F52', borderRadius: '20px', background: '#4F6F52', color: 'white', padding: '10px 30px' }}>Contact Us</Button>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ const Homepage = () => {
         <div className="right-container-2">
           <p className='text-paragraph'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex praesentium nam laudantium dicta nobis corrupti exercitationem eaque. Quos blanditiis in vel iure sint, totam a aliquid nemo voluptas nam magnam..</p>
           <p className='text-paragraph'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex praesentium nam laudantium dicta nobis corrupti exercitationem eaque. Quos blanditiis in vel iure sint, totam a aliquid nemo voluptas nam magnam..</p>
-          <Button style={{ marginTop: '20px', marginLeft: '20px', border: '1px solid #4F6F52', borderRadius: '20px', background: '#4F6F52', color: 'white', padding: '10px 30px' }}>Learn More</Button>
+          <Button href='/AboutUs' style={{ marginTop: '20px', marginLeft: '20px', border: '1px solid #4F6F52', borderRadius: '20px', background: '#4F6F52', color: 'white', padding: '10px 30px' }}>Learn More</Button>
         </div>
       </div>
 

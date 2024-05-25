@@ -3,6 +3,7 @@ import React from "react";
 //import pages
 import Homepage from "../pages/Homepage";
 import SignInSide from "../pages/Login";
+import SignUp from "../pages/Registration";
 
 // import User from "../pages/User";
 // import Destination from "../pages/Destination";
@@ -20,9 +21,9 @@ const AnimRoutes = () => {
 return (
    
         <Routes key={location.pathname} location={location} >
-            <Route path="/" element ={<Homepage />} />
+            <Route path="/Home" element ={<Homepage />} />
             <Route path="/Login" element = {<SignInSide />} />
-        
+            <Route path="/Registration" element = {<SignUp />} />
             
         </Routes>
 
