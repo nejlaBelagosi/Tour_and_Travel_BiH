@@ -2,6 +2,8 @@ import React from "react";
 
 //import pages
 import Homepage from "../pages/Homepage";
+import SignInSide from "../pages/Login";
+
 // import User from "../pages/User";
 // import Destination from "../pages/Destination";
 // import Accounts from "../pages/Accounts";
@@ -19,12 +21,8 @@ return (
    
         <Routes key={location.pathname} location={location} >
             <Route path="/" element ={<Homepage />} />
-            {/* <Route path="/User" element ={<User />} />
-            <Route path="/Destination" element ={<Destination />} />
-            <Route path="/Accounts" element ={<Accounts />} />
-            <Route path="/Payment" element ={<Payment />} />
-            <Route path="/Reservations" element ={<Reservations />} />
-            <Route path="/TourPackage" element ={<TourPackage />} /> */}
+            <Route path="/Login" element = {<SignInSide />} />
+        
             
         </Routes>
 

@@ -1,0 +1,17 @@
+.grid {
+  position: relative;
+}
+
+.grid::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90%;
+  height: 100%;
+  background-image: url("../img/Login.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0 0.5% 100% 0; /* Polukrug */
+}
