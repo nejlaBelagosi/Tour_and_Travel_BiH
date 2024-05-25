@@ -12,14 +12,14 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-//import MenuItem from '@mui/material/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 //import AdbIcon from '@mui/icons-material/Adb';
 //import logo
 import logo from "../img/FAVICON.png";
 
 import { Link } from 'react-router-dom';
 
-const pages = ['Tour Package', 'Destinations', 'Reservations','Favorites', 'About us'];
+const pages = ['Tour Package', 'Destinations', 'Reservations','Favorites', 'About us', 'Log in'];
 //const settings = ['Profile', 'Account', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -98,12 +98,12 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {/* {pages.map((page) => (
+              {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
-                  <Link to={`/${page}`} style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link>
+                                    <Link to={`/${page.replace(/\s+/g, '').toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link>
                 </MenuItem>
-              ))} */}
+              ))}
             </Menu>*/
           </Box>
           {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
@@ -138,7 +138,7 @@ function ResponsiveAppBar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 component={Link}
-                to={`/${page}`}
+                to={`/${page.replace(/\s+/g, '').toLowerCase()}`}
               >
                 {page}
               </Button>

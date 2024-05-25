@@ -139,6 +139,15 @@ body {
   margin: 20px;
   line-height: 1.5;
 }
+.text-paragraph-1 {
+  color: #adbc9f;
+  font-family: "Montserrat", sans-serif;
+  /* margin: 20px; */
+  line-height: 1.5;
+}
+.text-1 {
+  font-family: "Montserrat", sans-serif;
+}
 
 .left-container {
   margin-left: 100px;
