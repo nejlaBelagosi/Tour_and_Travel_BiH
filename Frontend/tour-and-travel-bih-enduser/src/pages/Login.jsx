@@ -73,7 +73,7 @@ export default function SignInSide() {
             <Avatar sx={{ m: 1, bgcolor: '#4F6F52' }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h5" style={{color:'#4F6F52'}}>
               Sign in
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -93,15 +93,19 @@ export default function SignInSide() {
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
+                        color:'#4F6F52'
                       },
                       '&.Mui-focused fieldset': {
                         borderColor: '#4F6F52',
+                        color:'#4F6F52'
                       },
                       '& input': {
                         color: '#4F6F52', // Boja teksta
+                        font:'Montserrat'
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52', // Boja teksta kada je fokusirano
+                        font:'Montserrat'
                       },
                     },
                     '& .MuiInputLabel-root': {
@@ -128,19 +132,24 @@ export default function SignInSide() {
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
+                        color:'#4F6F52'
                       },
                       '&.Mui-focused fieldset': {
                         borderColor: '#4F6F52',
+                        color: '#4F6F52',
                       },
                       '& input': {
                         color: '#4F6F52', // Boja teksta
+                        font:'Montserrat'
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52', // Boja teksta kada je fokusirano
+                        font:'Montserrat'
                       },
                     },
                     '& .MuiInputLabel-root': {
                       color: 'rgba(0, 0, 0, 0.6)', // Default label color
+                      
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52', // Label color when focused
@@ -150,29 +159,30 @@ export default function SignInSide() {
               <FormControlLabel
                 control={<Checkbox value="remember" style={{color: "#4F6F52"}} />}
                 label="Remember me"
+                style={{color: "#4F6F52", font:'Montserrat'}}
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                style={{backgroundColor: "#4F6F52"}}
+                style={{backgroundColor: "#4F6F52", font:'Montserrat'}}
               >
                 Sign In
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2" style={{color: "#4F6F52"}}>
+                  <Link href="#" variant="body2" style={{color: "#4F6F52", font:'Montserrat'}}>
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="../pages/Registration" variant="body2" style={{color: "#4F6F52"}}>
+                  <Link href="/Registration" variant="body2" style={{color: "#4F6F52", font:'Montserrat'}}>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              <Copyright sx={{ mt: 5 }} style={{font:'Montserrat'}} />
             </Box>
           </Box>
         </Grid>
