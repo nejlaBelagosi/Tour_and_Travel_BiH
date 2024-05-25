@@ -21,7 +21,7 @@ const AnimRoutes = () => {
 return (
    
         <Routes key={location.pathname} location={location} >
-            <Route path="/Home" element ={<Homepage />} />
+            <Route path="/" element ={<Homepage />} />
             <Route path="/Login" element = {<SignInSide />} />
             <Route path="/Registration" element = {<SignUp />} />
             
