@@ -31,7 +31,39 @@
   margin-right: 5px;
 }
 
-.container {
-  height: 80%;
-  background-color: #ccc;
+.cards-container {
+  display: flex;
+  align-items: center;
+}
+
+.card-wrapper {
+  display: flex;
+  position: relative;
+}
+
+.button-wrapper {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.button-wrapper:hover {
+  color: #e8dfca; /* Promenjena boja teksta na hover */
+}
+
+/* Dodatne stilizacije za ikonu strelice */
+.arrow-icon {
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+}
+
+.review-post-date {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 12px;
+  color: gray;
 }

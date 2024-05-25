@@ -111,15 +111,19 @@ const Homepage = () => {
         <TourCards />
 
         {/* Tour reviews */}
-        <div className='review-container' style={{backgroundColor:"white"}}>
+        {/* <div className='review-container' style={{backgroundColor:"white"}}>
           <h1>Tour reviews</h1>
           <TourReviews />
-        </div>
+        </div> */}
         
         {/* What do they say? */}
-        <div className='review-container'>
+        {/* <div className='review-container'>
           <h1>What do they say?</h1>
           <Reviews />
+        </div> */}
+                <div className='review-container'>
+          <h1>What do they say?</h1>
+          <TourReviews />
         </div>
 
       {/* quote */}

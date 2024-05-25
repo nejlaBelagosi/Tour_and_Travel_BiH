@@ -61,7 +61,7 @@ export default function TourCards() {
             <Typography variant="body2" color="text.secondary">
               {tourPackage.details}
             </Typography> 
-            <Typography variant="body2" color="text.secondary" style={{fontSize: '15px', paddingTop: '20px'}}>
+            <Typography variant="body2" color="text.secondary" style={{fontSize: '15px', paddingTop: '20px', fontWeight: 'bold'}}>
              Price: $ {tourPackage.price}
             </Typography>
           </CardContent>
