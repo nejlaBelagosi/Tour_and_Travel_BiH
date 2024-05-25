@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -17,8 +18,20 @@ namespace TourAndTravelBiH.Controllers
         [HttpGet]
         public IActionResult GetReview()
         {
-            var review = _db.Reviews.ToList();
-            return Ok(review);
+            var reviews = _db.Reviews
+                .Include(p => p.User)
+                .Include(p => p.Reservation)
+                .ToList();
+            var result = reviews.Select(p => new
+            {
+                p.ReviewId,
+                p.PostDate,
+                p.Rating,
+                p.ReviewComment,
+                user = p.User.Name + " " + p.User.Surname
+
+            });
+            return Ok(result);
         }
 
         //dodavanje review, ali modifikovati da ga mogu dodavati samo registrovani useri i useri ciji status
