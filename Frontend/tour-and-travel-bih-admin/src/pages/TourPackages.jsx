@@ -84,7 +84,7 @@ export default function FullFeaturedCrudGrid() {
           accomodation: tourPackage.accomodation,
           packageDescription: tourPackage.packageDescription,
           price: tourPackage.price,
-          destinationName: destinations.find(dest => dest.destinationId === tourPackage.destinationId)?.destinationName || tourPackage.destinationId,
+          destinationName: tourPackage.destinationName
         }));
         setRows(formattedData);
       })

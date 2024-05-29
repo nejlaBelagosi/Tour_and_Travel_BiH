@@ -19,17 +19,17 @@ function EditToolbar(props) {
 
   const handleClick = () => {
     const id = Math.random().toString(36).substring(2, 9); // Generiše nasumičan ID
-    setRows((oldRows) => [...oldRows, { id, location: '', name: '',image: '', details: '', isNew: true }]);
+    setRows((oldRows) => [...oldRows, { id, location: '', name: '', details: '', image: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'location' },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
 
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add Destination
+        Add destination
       </Button>
     </GridToolbarContainer>
   );
@@ -39,69 +39,117 @@ export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
-  // Dohvati destinacije
+// get #########################################################################################################
   React.useEffect(() => {
-    fetch('http://localhost:5278/api/Destination/GetDestination') // link za dohvacanje destinacija
+    fetch('http://localhost:5278/api/Destination/GetDestination') 
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((destination) => ({
           id: destination.destinationId,
-          location: destination.destinationLocation,
           name: destination.destinationName,
-          image: destination.destinationImage,
+          location: destination.destinationLocation,
           details: destination.destinationDetails,
+          image: destination.destinationImage,
         }));
         setRows(formattedData);
       })
       .catch((error) => console.error('Error fetching destination data:', error));
   }, []);
 
-  // Brisanje destinacije
-  const deleteDestination = async (id) => {
-    const response = await fetch(`http://localhost:5278/api/Destination/DeleteDestination/${id}`, {
-      method: 'DELETE',
+// ########################################################################################################
+// Postavljanje nove destinacije = > NE RADI
+const postDestination = async (newRow) => {
+  try {
+    const response = await fetch('http://localhost:5278/api/Destination/PostDestination', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        destinationName: newRow.name,
+        destinationLocation: newRow.location,
+        destinationDetails: newRow.details,
+        destinationImage: newRow.image,
+      }),
       mode: 'cors',
     });
-    if (response.ok) {
-      setRows((rows) => rows.filter((row) => row.id !== id));
-    } else {
-      console.error('Error deleting destination:', response.statusText);
-    }
-  };
 
-  // Uređivanje destinacije
+    if (!response.ok) {
+      throw new Error('Failed to add destination');
+    }
+
+    const responseData = await response.json();
+
+    // Update the frontend with the newly created record
+    setRows((prevRows) => [...prevRows, { ...newRow, id: responseData.id, isNew: false }]);
+    return true;
+  } catch (error) {
+    console.error('Error posting destination:', error.message);
+    return false;
+  }
+};
+// ####################################################################################################################
+  // Ažuriranje destinacije
   const updateDestination = async (updatedRow) => {
     const response = await fetch(`http://localhost:5278/api/Destination/UpdateDestination/${updatedRow.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updatedRow),
+      body: JSON.stringify({
+        destinationName: updatedRow.name,
+        destinationLocation: updatedRow.location,
+        destinationDetails: updatedRow.details,
+        destinationImage: updatedRow.image,
+      }),
       mode: 'cors',
     });
-  
+
     if (!response.ok) {
       console.error('Error updating destination:', response.statusText);
     }
     return response.ok;
   };
 
-  // ------------------------------- Handle ------------------------------
-
+// delete #####################################################################################################
+const deleteDestination = async (id) => {
+  const response = await fetch(`http://localhost:5278/api/Destination/DeleteDestination/${id}`, {
+      method: 'DELETE',
+      mode: 'cors'
+  });
+  if (response.ok) {
+      setRows((rows) => rows.filter((row) => row.id !== id));
+  } else {
+      console.error('Error deleting user:', response.statusText);
+  }
+};
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
 
+// ####################################################################################################################
+
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  // samo za edit
   const handleSaveClick = (id) => async () => {
-    const updatedRow = rows.find((row) => row.id === id);
-    if (await updateDestination(updatedRow)) {
+    const editedRow = rows.find((row) => row.id === id);
+    const isNew = editedRow.isNew;
+
+    let success;
+    if (isNew) {
+      success = await postDestination(editedRow);
+    } else {
+      success = await updateDestination(editedRow);
+    }
+
+    if (success) {
+      setRows((rows) =>
+        rows.map((row) => (row.id === id ? { ...row, isNew: false } : row))
+      );
       setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     }
   };
@@ -122,36 +170,31 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  // const processRowUpdate = async (newRow) => {
-  //   const updatedRow = { ...newRow, isNew: false };
-  //   if (await updateDestination(updatedRow)) {
-  //     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-  //   }
-  //   return updatedRow;
-  // };
   const processRowUpdate = async (newRow) => {
-    console.log('Processing row update:', newRow); // Log za praćenje podataka koji se obrađuju
-    const updatedRow = { ...newRow, isNew: false};
-    const success = await updateDestination(updatedRow);
-    if (success) {
-      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-      console.log('Row updated successfully:', updatedRow); // Log za praćenje uspešnog ažuriranja stanja
+    const isNew = newRow.isNew;
+    let updatedRow = { ...newRow, isNew: false };
+
+    if (isNew) {
+      if (await postDestination(updatedRow)) {
+        setRows((rows) => rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      }
     } else {
-      console.error('Failed to update row:', updatedRow); // Log za praćenje neuspešnog ažuriranja stanja
+      if (await updateDestination(updatedRow)) {
+        setRows((rows) => rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      }
     }
     return updatedRow;
   };
-  
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
   const columns = [
-    { field: 'location', headerName: 'Location', width: 180, editable: true },
     { field: 'name', headerName: 'Name', width: 180, editable: true },
-    { field: 'image', headerName: 'Image', width: 200, editable: true },
-    { field: 'details', headerName: 'Details', width: 200, editable: true },
+    { field: 'location', headerName: 'Location', width: 180, editable: true },
+    { field: 'details', headerName: 'Details', width: 180, editable: true },
+    { field: 'image', headerName: 'Image', width: 150, editable: true },
     {
       field: 'actions',
       type: 'actions',
