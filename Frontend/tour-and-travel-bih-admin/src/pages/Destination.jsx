@@ -89,7 +89,7 @@ const postDestination = async (newRow) => {
   }
 };
 // ####################################################################################################################
-  // Ažuriranje destinacije
+  // Azuriranje destinacije
   const updateDestination = async (updatedRow) => {
     const response = await fetch(`http://localhost:5278/api/Destination/UpdateDestination/${updatedRow.id}`, {
       method: 'PUT',
@@ -120,7 +120,7 @@ const deleteDestination = async (id) => {
   if (response.ok) {
       setRows((rows) => rows.filter((row) => row.id !== id));
   } else {
-      console.error('Error deleting user:', response.statusText);
+      console.error('Error deleting destination:', response.statusText);
   }
 };
   const handleRowEditStop = (params, event) => {
