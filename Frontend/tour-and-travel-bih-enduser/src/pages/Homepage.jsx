@@ -2,14 +2,15 @@ import React from 'react';
 import '../styles/Homepage.css';
 import SearchBar from '../components/SearchBar';
 import ImgMediaCard from '../components/RecommendCards';
-import Cards from '../components/PopularCards';
+import PopularCards from '../components/PopularCards';
 import { Button } from '@mui/material';
 
 // components
-import Reviews from '../components/ReviewCards';
+//import Reviews from '../components/ReviewCards';
 import Footer from '../components/Footer';
 import TourCards from '../components/TourPackagesCards'
 import TourReviews from '../components/TourReviews';
+import TourPackages from '../components/TourPackagesCards';
 
 
 /* ikonice */
@@ -100,7 +101,7 @@ const Homepage = () => {
       <div className='popular-container'>
           <h3>WHERE TO GO</h3>
           <h1>Popular destinations.</h1>
-          <Cards />
+          <PopularCards />
           <div className='button'>
           <Button style={{ marginTop: '20px', marginLeft: '20px', border: 'none', color: '#4F6F52', padding: '10px 30px'}} >See More</Button>
 </div>

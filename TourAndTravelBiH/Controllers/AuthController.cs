@@ -61,9 +61,8 @@ namespace TourAndTravelBiH.Controllers
         }
     }
     public class AuthLoginRequest
-        {
-            public string Username { get; set; }
-            public string UserPassword { get; set; }
-        }
+    {
+        public string Username { get; set; }
+        public string UserPassword { get; set; }
     }
-
+}

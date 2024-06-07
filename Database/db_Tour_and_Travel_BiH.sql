@@ -23,7 +23,7 @@ ALTER TABLE [USER]
 DROP COLUMN UserType
 
 ALTER TABLE [USER]
-ALTER COLUMN DateOfBirth DATETIME
+ALTER COLUMN DateOfBirth DATE
 
 ------------------ ACCOUNT AND ACCOUNT TYPES ----------------------------------
 

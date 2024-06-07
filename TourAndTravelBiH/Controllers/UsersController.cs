@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 
-
 namespace TourAndTravelBiH.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -108,7 +107,7 @@ namespace TourAndTravelBiH.Controllers
                 return BadRequest("Korisnički račun već postoji.");
             }
 
-            // Provjera postojanja korisničkog računa po username-u
+            // Provjera postojanja korisničkog imena
             var existingAccount = _db.Accounts.FirstOrDefault(a => a.Username == registration.Username);
             if (existingAccount != null)
             {

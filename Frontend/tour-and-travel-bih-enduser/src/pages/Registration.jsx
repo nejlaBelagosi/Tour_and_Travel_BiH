@@ -19,7 +19,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import dayjs from 'dayjs';
 
 import "../styles/Registration.css";
 
@@ -137,6 +137,12 @@ export default function SignUp() {
 
       if (!response.ok) {
         const errorText = await response.text();
+        if (errorText.includes('Korisničko ime je već zauzeto')) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            username: 'Username is already taken',
+          }));
+        }
         throw new Error(errorText);
       }
 
