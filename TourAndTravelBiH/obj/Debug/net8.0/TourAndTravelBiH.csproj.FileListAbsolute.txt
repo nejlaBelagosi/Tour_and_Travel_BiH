@@ -271,3 +271,4 @@ C:\Users\BLGS HP\Documents\GitHub\Tour_and_Travel_BiH\TourAndTravelBiH\obj\Debug
 C:\Users\BLGS HP\Documents\GitHub\Tour_and_Travel_BiH\TourAndTravelBiH\obj\Debug\net8.0\TourAndTravelBiH.pdb
 C:\Users\BLGS HP\Documents\GitHub\Tour_and_Travel_BiH\TourAndTravelBiH\obj\Debug\net8.0\TourAndTravelBiH.genruntimeconfig.cache
 C:\Users\BLGS HP\Documents\GitHub\Tour_and_Travel_BiH\TourAndTravelBiH\obj\Debug\net8.0\ref\TourAndTravelBiH.dll
+C:\Users\BLGS HP\Documents\GitHub\Tour_and_Travel_BiH\TourAndTravelBiH\bin\Debug\net8.0\BCrypt.Net-Next.dll

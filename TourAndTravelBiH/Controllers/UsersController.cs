@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 
+
 namespace TourAndTravelBiH.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -151,7 +152,7 @@ namespace TourAndTravelBiH.Controllers
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Address { get; set; }
-        public string DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
         public int AccountTypeId { get; set; }

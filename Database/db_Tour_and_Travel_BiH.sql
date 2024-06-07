@@ -23,7 +23,7 @@ ALTER TABLE [USER]
 DROP COLUMN UserType
 
 ALTER TABLE [USER]
-ALTER COLUMN DateOfBirth VARCHAR(200)
+ALTER COLUMN DateOfBirth DATETIME
 
 ------------------ ACCOUNT AND ACCOUNT TYPES ----------------------------------
 
@@ -249,6 +249,10 @@ VALUES(0,'online',80,'2024-05-14',1,0,'uplaceno')
 ----review---
 INSERT INTO REVIEW(ReviewId,PostDate,ReviewComment,Rating,UserId,ReservationId)
 VALUES(0,'2024-05-14','Odlicna organizacija. Preporucujem.',5,1,0)
+
+UPDATE [USER]
+SET DateOfBirth = '2000-01-01'
+WHERE TRY_CONVERT(DATETIME, DateOfBirth) IS NULL;
 
 SELECT * FROM [USER]
 SELECT * FROM ACCOUNT
