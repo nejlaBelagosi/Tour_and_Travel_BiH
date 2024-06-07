@@ -14,8 +14,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 
 import "../styles/Registration.css";
 
@@ -49,7 +53,7 @@ export default function SignUp() {
     firstName: '',
     lastName: '',
     address: '',
-    dateOfBirth: '',
+    dateOfBirth: null,
     contact: '',
     email: '',
     username: '',
@@ -66,6 +70,13 @@ export default function SignUp() {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleDateChange = (date) => {
+    setFormData({
+      ...formData,
+      dateOfBirth: date,
     });
   };
 
@@ -106,7 +117,7 @@ export default function SignUp() {
       name: formData.firstName,
       surname: formData.lastName,
       address: formData.address,
-      dateOfBirth: formData.dateOfBirth,
+      dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth : null,
       contact: formData.contact,
       email: formData.email,
       accountTypeId: 1,
@@ -283,43 +294,57 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="dateOfBirth"
-                  label="Date of Birth"
-                  name="dateOfBirth"
-                  autoComplete="dateOfBirth"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
-                  error={!!errors.dateOfBirth}
-                  helperText={errors.dateOfBirth}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: errors.dateOfBirth ? 'red' : 'rgba(0, 0, 0, 0.23)',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#4F6F52',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#4F6F52',
-                      },
-                      '& input': {
-                        color: errors.dateOfBirth ? 'red' : '#4F6F52',
-                      },
-                      '&.Mui-focused input': {
-                        color: '#4F6F52',
-                      },
-                    },
-                    '& .MuiInputLabel-root': {
-                      color: errors.dateOfBirth ? 'red' : 'rgba(0, 0, 0, 0.6)',
-                    },
-                    '& .Mui-focused .MuiInputLabel-root': {
-                      color: '#4F6F52',
-                    }
-                  }}
-                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Date of Birth"
+                    value={formData.dateOfBirth}
+                    onChange={handleDateChange}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        required
+                        error={!!errors.dateOfBirth}
+                        helperText={errors.dateOfBirth}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton edge="end">
+                                <CalendarMonthIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: errors.dateOfBirth ? 'red' : 'rgba(0, 0, 0, 0.23)',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: '#4F6F52',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: '#4F6F52',
+                            },
+                            '& input': {
+                              color: errors.dateOfBirth ? 'red' : '#4F6F52',
+                            },
+                            '&.Mui-focused input': {
+                              color: '#4F6F52',
+                            },
+                          },
+                          '& .MuiInputLabel-root': {
+                            color: errors.dateOfBirth ? 'red' : 'rgba(0, 0, 0, 0.6)',
+                            
+                          },
+                          '& .Mui-focused .MuiInputLabel-root': {
+                            color: '#4F6F52',
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={12}>
                 <TextField

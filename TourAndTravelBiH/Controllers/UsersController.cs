@@ -64,7 +64,7 @@ namespace TourAndTravelBiH.Controllers
                 editUser.Address = data.Address;
             }
 
-            if (data.DateOfBirth != null && data.DateOfBirth != "string")
+            if (data.DateOfBirth != null && data.DateOfBirth != default(DateTime))
             {
                 editUser.DateOfBirth = data.DateOfBirth;
             }
@@ -106,6 +106,13 @@ namespace TourAndTravelBiH.Controllers
             if (existingUser != null)
             {
                 return BadRequest("Korisnički račun već postoji.");
+            }
+
+            // Provjera postojanja korisničkog računa po username-u
+            var existingAccount = _db.Accounts.FirstOrDefault(a => a.Username == registration.Username);
+            if (existingAccount != null)
+            {
+                return BadRequest("Korisničko ime je već zauzeto.");
             }
 
             using var transaction = _db.Database.BeginTransaction();
