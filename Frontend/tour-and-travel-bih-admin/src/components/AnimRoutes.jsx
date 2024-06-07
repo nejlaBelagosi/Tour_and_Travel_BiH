@@ -7,7 +7,7 @@ import Destination from "../pages/Destination";
 import Accounts from "../pages/Accounts";
 import Payment from "../pages/Payment";
 import Reservations from "../pages/Reservations";
-import TourPackage from "../pages/TourPackage";
+import TourPackages from "../pages/TourPackages";
 
 //import routes route & useLocation
 import {Routes, Route, useLocation} from 'react-router-dom';
@@ -24,7 +24,7 @@ return (
             <Route path="/Accounts" element ={<Accounts />} />
             <Route path="/Payment" element ={<Payment />} />
             <Route path="/Reservations" element ={<Reservations />} />
-            <Route path="/TourPackage" element ={<TourPackage />} />
+            <Route path="/TourPackages" element ={<TourPackages />} />
             
         </Routes>
 
