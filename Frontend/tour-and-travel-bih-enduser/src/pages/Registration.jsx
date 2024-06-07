@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import "../styles/Registration.css"
+import "../styles/Registration.css";
 
 function Copyright(props) {
   return (
@@ -30,33 +30,92 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
+const validateEmail = (email) => {
+  const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return re.test(String(email).toLowerCase());
+};
+
+const validatePassword = (password) => {
+  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return re.test(password);
+};
+
 export default function SignUp() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    address: '',
+    dateOfBirth: '',
+    contact: '',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    
+    const newErrors = {};
+
+    // Validacija emaila
+    if (!validateEmail(formData.email)) {
+      newErrors.email = 'Invalid email format. Example: example@example.com';
+    }
+
+    // Validacija sifre
+    if (!validatePassword(formData.password)) {
+      newErrors.password = 'Password must have at least 8 characters, one uppercase letter, one number, and one special character.';
+    }
+
+    // Provjera sifri
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+
+    // Provjera obaveznih polja
+    ['firstName', 'lastName', 'email', 'username', 'password', 'confirmPassword'].forEach((field) => {
+      if (!formData[field]) {
+        newErrors[field] = 'Required';
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
+
     const registrationData = {
-      name: data.get('firstName'),
-      surname: data.get('lastName'),
-      address: data.get('address'),
-      dateOfBirth: data.get('dateOfBirth'),
-      contact: data.get('contact'),
-      email: data.get('email'),
-      accountTypeId: 1, // Primer ID-a tipa naloga
-      username: data.get('username'),
-      userPassword: data.get('password'),
-      userImage: '' // Dodajte polje za sliku korisnika ako je potrebno
+      name: formData.firstName,
+      surname: formData.lastName,
+      address: formData.address,
+      dateOfBirth: formData.dateOfBirth,
+      contact: formData.contact,
+      email: formData.email,
+      accountTypeId: 1,
+      username: formData.username,
+      userPassword: formData.password,
+      userImage: '',
     };
 
     try {
       const response = await fetch('http://localhost:5278/api/Users/RegisterUser', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(registrationData)
+        body: JSON.stringify(registrationData),
       });
 
       if (!response.ok) {
@@ -70,7 +129,7 @@ export default function SignUp() {
       window.location.href = '/login';
     } catch (error) {
       console.error("There was an error registering the user!", error);
-      setErrorMessage(error.message);
+      setErrorMessage(`There was an error registering the user: ${error.message}`);
     }
   };
 
@@ -108,10 +167,14 @@ export default function SignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  error={!!errors.firstName}
+                  helperText={errors.firstName}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.firstName ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -120,14 +183,14 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.firstName ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.firstName ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
@@ -143,10 +206,14 @@ export default function SignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  error={!!errors.lastName}
+                  helperText={errors.lastName}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.lastName ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -155,14 +222,14 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.lastName ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.lastName ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
@@ -178,10 +245,14 @@ export default function SignUp() {
                   label="Address"
                   name="address"
                   autoComplete="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  error={!!errors.address}
+                  helperText={errors.address}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.address ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -190,14 +261,14 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.address ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.address ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
@@ -213,10 +284,14 @@ export default function SignUp() {
                   label="Date of Birth"
                   name="dateOfBirth"
                   autoComplete="dateOfBirth"
+                  value={formData.dateOfBirth}
+                  onChange={handleChange}
+                  error={!!errors.dateOfBirth}
+                  helperText={errors.dateOfBirth}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.dateOfBirth ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -225,14 +300,14 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.dateOfBirth ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.dateOfBirth ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
@@ -248,10 +323,14 @@ export default function SignUp() {
                   label="Contact"
                   name="contact"
                   autoComplete="contact"
+                  value={formData.contact}
+                  onChange={handleChange}
+                  error={!!errors.contact}
+                  helperText={errors.contact}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.contact ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -260,14 +339,14 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.contact ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.contact ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
@@ -283,10 +362,14 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={!!errors.email}
+                  helperText={errors.email}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.email ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -295,14 +378,14 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.email ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.email ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
@@ -318,10 +401,14 @@ export default function SignUp() {
                   label="Username"
                   name="username"
                   autoComplete="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  error={!!errors.username}
+                  helperText={errors.username}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.username ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -330,14 +417,14 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.username ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.username ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
@@ -354,10 +441,14 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={!!errors.password}
+                  helperText={errors.password}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderColor: errors.password ? 'red' : 'rgba(0, 0, 0, 0.23)',
                       },
                       '&:hover fieldset': {
                         borderColor: '#4F6F52',
@@ -366,14 +457,54 @@ export default function SignUp() {
                         borderColor: '#4F6F52',
                       },
                       '& input': {
-                        color: '#4F6F52',
+                        color: errors.password ? 'red' : '#4F6F52',
                       },
                       '&.Mui-focused input': {
                         color: '#4F6F52',
                       },
                     },
                     '& .MuiInputLabel-root': {
-                      color: 'rgba(0, 0, 0, 0.6)',
+                      color: errors.password ? 'red' : 'rgba(0, 0, 0, 0.6)',
+                    },
+                    '& .Mui-focused .MuiInputLabel-root': {
+                      color: '#4F6F52',
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  error={!!errors.confirmPassword}
+                  helperText={errors.confirmPassword}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': {
+                        borderColor: errors.confirmPassword ? 'red' : 'rgba(0, 0, 0, 0.23)',
+                      },
+                      '&:hover fieldset': {
+                        borderColor: '#4F6F52',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#4F6F52',
+                      },
+                      '& input': {
+                        color: errors.confirmPassword ? 'red' : '#4F6F52',
+                      },
+                      '&.Mui-focused input': {
+                        color: '#4F6F52',
+                      },
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: errors.confirmPassword ? 'red' : 'rgba(0, 0, 0, 0.6)',
                     },
                     '& .Mui-focused .MuiInputLabel-root': {
                       color: '#4F6F52',
