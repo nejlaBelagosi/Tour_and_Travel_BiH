@@ -63,7 +63,7 @@ namespace TourAndTravelBiH.Controllers
                 editUser.Address = data.Address;
             }
 
-            if (data.DateOfBirth != null && data.DateOfBirth != default(DateTime))
+            if (data.DateOfBirth != null && data.DateOfBirth != default(DateOnly))
             {
                 editUser.DateOfBirth = data.DateOfBirth;
             }
@@ -180,7 +180,7 @@ namespace TourAndTravelBiH.Controllers
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Address { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
         public int AccountTypeId { get; set; }
