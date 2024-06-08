@@ -82,20 +82,42 @@ namespace TourAndTravelBiH.Controllers
             return Ok(editUser);
         }
 
+        //[HttpDelete("{id:int}")]
+        //public IActionResult DeleteUser([FromRoute] int id)
+        //{
+        //    User userData = _db.Users.Where(a => a.UserId == id).FirstOrDefault();
+        //    if (userData == null)
+        //    {
+        //        return NotFound("User is not found in Database.");
+        //    }
+
+        //    _db.Remove(userData);
+        //    _db.SaveChanges();
+
+        //    return Ok(userData);
+        //}
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteUser([FromRoute] int id)
+        public IActionResult DeleteUser(int id)
         {
-            User userData = _db.Users.Where(a => a.UserId == id).FirstOrDefault();
+            var userData = _db.Users.Include(u => u.Accounts).FirstOrDefault(a => a.UserId == id);
             if (userData == null)
             {
                 return NotFound("User is not found in Database.");
             }
 
-            _db.Remove(userData);
+            // Brisanje povezanih računa
+            foreach (var account in userData.Accounts)
+            {
+                _db.Accounts.Remove(account);
+            }
+
+            // Brisanje korisnika
+            _db.Users.Remove(userData);
             _db.SaveChanges();
 
             return Ok(userData);
         }
+
 
         [HttpPost]
         public IActionResult RegisterUser([FromBody] RegistrationDto registration)

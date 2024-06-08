@@ -207,6 +207,8 @@ public partial class DbTourAndTravelBiHContext : DbContext
             entity.Property(e => e.Surname)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
+            
         });
 
         OnModelCreatingPartial(modelBuilder);

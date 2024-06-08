@@ -26,4 +26,5 @@ public partial class User
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
 }
