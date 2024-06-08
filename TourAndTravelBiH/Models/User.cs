@@ -14,7 +14,8 @@ public partial class User
 
     public string? Address { get; set; }
 
-    public DateOnly? DateOfBirth { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime? DateOfBirth { get; set; }
 
     public string? Contact { get; set; }
 

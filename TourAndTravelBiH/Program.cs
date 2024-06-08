@@ -12,7 +12,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
     options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-    options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
+    options.SerializerSettings.DateFormatString = "MM-dd-yyyy";
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

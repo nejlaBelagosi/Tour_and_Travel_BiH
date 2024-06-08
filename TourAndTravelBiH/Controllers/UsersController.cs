@@ -30,7 +30,7 @@ namespace TourAndTravelBiH.Controllers
                 Name = data.Name,
                 Surname = data.Surname,
                 Address = data.Address,
-                DateOfBirth = data.DateOfBirth,
+                DateOfBirth = data.DateOfBirth?.Date,
                 Contact = data.Contact,
                 Email = data.Email
             });
@@ -63,9 +63,9 @@ namespace TourAndTravelBiH.Controllers
                 editUser.Address = data.Address;
             }
 
-            if (data.DateOfBirth != null && data.DateOfBirth != default(DateOnly))
+            if (data.DateOfBirth != null && data.DateOfBirth != default(DateTime))
             {
-                editUser.DateOfBirth = data.DateOfBirth;
+                editUser.DateOfBirth = data.DateOfBirth?.Date ?? editUser.DateOfBirth;
             }
 
             if (data.Contact != null && data.Contact != "string")
@@ -180,7 +180,7 @@ namespace TourAndTravelBiH.Controllers
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Address { get; set; }
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
         public int AccountTypeId { get; set; }
