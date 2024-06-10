@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -18,8 +19,17 @@ namespace TourAndTravelBiH.Controllers
         [HttpGet]
         public IActionResult GetAccount()
         {
-            var account = _db.Accounts.ToList();
-            return Ok(account);
+            var account = _db.Accounts.Include(p => p.User).ToList();
+            var result = account.Select(p => new
+            {
+                p.AccountId,
+                p.AccountTypeId,
+                p.AccountType,
+                userName = p.User.Name,
+                userSurname = p.User.Surname,
+    
+            });
+            return Ok(result);
         }
 
         //dodavanje racuna, ali modifikovati da se doda prilikom registracije

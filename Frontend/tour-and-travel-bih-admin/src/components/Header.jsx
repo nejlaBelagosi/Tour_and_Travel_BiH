@@ -11,22 +11,41 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-//import AdbIcon from '@mui/icons-material/Adb';
-//import logo
+import { Link, useNavigate } from 'react-router-dom';
 import logo from "../img/FAVICON.png";
 
-import { Link } from 'react-router-dom';
-
-const pages = ['User', 'Destination', 'Reservations','TourPackages', 'Payment','Accounts'];
+const pages = ['User', 'Destination', 'Reservations', 'TourPackages', 'Payment', 'Accounts'];
 const settings = ['Profile', 'Account', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+  const navigate = useNavigate();
+
+  // React.useEffect(() => {
+  //   const storedUser = JSON.parse(localStorage.getItem('user'));
+  //   setUser(storedUser);
+  // }, []);
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('http://localhost:5278/api/Account/GetAccount');
+        const result = await response.json();
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        const loggedUser = result.find(account => account.AccountId === storedUser.AccountId);
+        setUser(loggedUser);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -39,20 +58,42 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const handleLogout = async () => {
+    try {
+      const tokenId = localStorage.getItem('tokenId'); // Retrieve token ID
+      await fetch(`http://localhost:5278/auth/logout/${tokenId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenId'); // Remove token ID from local storage
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  const getInitials = (name, surname) => {
+    if (!name || !surname) return '';
+    return `${name[0]}${surname[0]}`;
+  };
+
   return (
-    <AppBar position="static" sx={{backgroundColor: '#1A4D2E'}}>
+    <AppBar position="static" sx={{ backgroundColor: '#1A4D2E' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-           {/* Logo for desktop view */}
-           <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
             <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '10px' }} />
           </Box>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="Home"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -103,17 +144,14 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
-        {/* Logo for mobile view */}
-        <Box sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
             <img src={logo} alt="Logo" style={{ height: '60px', marginRight: '10px' }} />
           </Box>
-          {/* <img sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} src={logo} alt="Logo" /> */}
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="Home"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -145,7 +183,9 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar>
+                  {user ? getInitials(user.userName, user.userSurname) : ''}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -164,8 +204,16 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              {user && (
+                <MenuItem disabled>
+                  <Typography textAlign="center">{`${user.userName} ${user.userSurname}`}</Typography>
+                </MenuItem>
+              )}
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}>
+                  {/* {setting === 'Profile' && user && (
+                    <Typography textAlign="center">{`${user.userName} ${user.userSurname}`}</Typography>
+                  )} */}
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
@@ -176,4 +224,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
