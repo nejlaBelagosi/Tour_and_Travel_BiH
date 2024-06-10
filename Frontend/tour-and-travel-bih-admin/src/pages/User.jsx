@@ -60,16 +60,21 @@ export default function FullFeaturedCrudGrid() {
 
   //brisanje korisnika
   const deleteUser = async (id) => {
-    const response = await fetch(`http://localhost:5278/api/Users/DeleteUser/${id}`, {
-        method: 'DELETE',
-        mode: 'cors'
-    });
-    if (response.ok) {
-        setRows((rows) => rows.filter((row) => row.id !== id));
-    } else {
-        console.error('Error deleting user:', response.statusText);
+    try {
+        const response = await fetch(`http://localhost:5278/api/Users/DeleteUser/${id}`, {
+            method: 'DELETE',
+            mode: 'cors'
+        });
+        if (response.ok) {
+            setRows((rows) => rows.filter((row) => row.id !== id));
+        } else {
+            console.error('Error deleting user:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error deleting user:', error);
     }
 };
+
 
 // edit korisnika
 const updateUser = async (updatedRow) => {

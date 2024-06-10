@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TourAndTravelBiH.Models;
 
@@ -13,7 +14,8 @@ public partial class User
 
     public string? Address { get; set; }
 
-    public string? DateOfBirth { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime? DateOfBirth { get; set; }
 
     public string? Contact { get; set; }
 
@@ -26,4 +28,5 @@ public partial class User
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
 }
