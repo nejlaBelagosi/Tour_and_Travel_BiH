@@ -60,7 +60,7 @@ function HeaderAfterLogin({ onLogout }) {
             variant="h6"
             noWrap
             component={Link}
-            to="/"
+            to="home"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -110,7 +110,7 @@ function HeaderAfterLogin({ onLogout }) {
             variant="h5"
             noWrap
             component={Link}
-            to="/"
+            to="home"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },

@@ -42,6 +42,13 @@ export default function SignInSide({ setUser }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/Home');
+    }
+  }, [navigate]);
+
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
