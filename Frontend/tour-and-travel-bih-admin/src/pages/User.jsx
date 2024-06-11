@@ -161,7 +161,7 @@ const updateUser = async (updatedRow) => {
     { field: 'name', headerName: 'Name', width: 180, editable: true },
     { field: 'surname', headerName: 'Surname', width: 180, editable: true },
     { field: 'address', headerName: 'Address', width: 180, editable: true },
-    { field: 'dateOfBirth', headerName: 'Date of Birth', width: 150, editable: true },
+    { field: 'dateOfBirth', headerName: 'Date of Birth', width: 150, editable: true,  },
     { field: 'contact', headerName: 'Contact', width: 150, editable: true },
     { field: 'email', headerName: 'Email', width: 200, editable: true },
     {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -43,6 +43,13 @@ export default function SignInSide() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/Home');
+    }
+  }, [navigate]);
+
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -85,7 +92,6 @@ export default function SignInSide() {
         localStorage.setItem('tokenId', result.tokenId);
 
         // Redirect to home page based on AccountTypeId
-      
         navigate('/Home');
       } else {
         setError('Invalid username or password');

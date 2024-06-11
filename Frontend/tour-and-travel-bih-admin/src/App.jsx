@@ -15,6 +15,11 @@ const PrivateRoute = ({ children }) => {
   return token ? children : <Navigate to="/login" />;
 };
 
+const RedirectIfLoggedIn = ({ children }) => {
+  const token = localStorage.getItem('token');
+  return token ? <Navigate to="/Home" /> : children;
+};
+
 const Layout = ({ children }) => (
   <>
     <Header />
@@ -26,7 +31,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<SignInSide />} />
+        <Route path="/login" element={
+          <RedirectIfLoggedIn>
+            <SignInSide />
+          </RedirectIfLoggedIn>
+        } />
         <Route path="/Home" element={
           <PrivateRoute>
             <Layout>
