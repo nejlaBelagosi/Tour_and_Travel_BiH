@@ -17,6 +17,7 @@ export default function TourPackages() {
   const [rating, setRating] = useState(0);
   const [showReviewForm, setShowReviewForm] = useState(false);
 
+  
   useEffect(() => {
     fetch(`http://localhost:5278/api/TourPackage/GetPackageId/${id}`)
       .then(response => {

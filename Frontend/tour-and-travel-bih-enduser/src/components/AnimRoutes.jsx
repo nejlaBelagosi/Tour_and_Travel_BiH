@@ -1,35 +1,29 @@
-import React from "react";
+// import React from 'react';
+// import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+// import Homepage from "../pages/Homepage";
+// import SignInSide from "../pages/Login";
+// import SignUp from "../pages/Registration";
+// import TourPackages from "../pages/TourPackages";
+// import Reservation from "../components/ReservationForm";
 
-//import pages
-import Homepage from "../pages/Homepage";
-import SignInSide from "../pages/Login";
-import SignUp from "../pages/Registration";
+// const ProtectedRoute = ({ element }) => {
+//     const user = JSON.parse(localStorage.getItem('user'));
+//     return user ? element : <Navigate to="/Login" />;
+// };
 
-// import User from "../pages/User";
-// import Destination from "../pages/Destination";
-// import Accounts from "../pages/Accounts";
-// import Payment from "../pages/Payment";
-import Reservation from "../components/ReservationForm";
-import TourPackages from "../pages/TourPackages";
+// const AnimRoutes = () => {
+//     const location = useLocation();
 
-//import routes route & useLocation
-import {Routes, Route, useLocation} from 'react-router-dom';
+//     return (
+//         <Routes key={location.pathname} location={location}>
+//             <Route path="/" element={<Homepage />} />
+//             <Route path="/Login" element={<SignInSide />} />
+//             <Route path="/Registration" element={<SignUp />} />
+//             <Route path="/package/:id" element={<ProtectedRoute element={<TourPackages />} />} />
+//             <Route path="/reservation/:id" element={<ProtectedRoute element={<Reservation />} />} />
+            
+//         </Routes>
+//     );
+// };
 
-
-const AnimRoutes = () => {
-    const location = useLocation();
-return (
-   
-        <Routes key={location.pathname} location={location} >
-            <Route path="/" element ={<Homepage />} />
-            <Route path="/Login" element = {<SignInSide />} />
-            <Route path="/Registration" element = {<SignUp />} />
-            <Route path='/package/:id' element = {<TourPackages />}/>
-            <Route path='reservation/:id' element = {<Reservation />} />
-        </Routes>
-
-
-)
-};
-
-export default AnimRoutes;
+// export default AnimRoutes;

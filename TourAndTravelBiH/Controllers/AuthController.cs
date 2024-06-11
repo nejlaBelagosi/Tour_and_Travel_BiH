@@ -21,7 +21,12 @@ namespace TourAndTravelBiH.Controllers
 
             if (logiraniKorisnik == null)
             {
-                return BadRequest(new { code = "USER_NOT_FOUND", message = "Korisnik ne postoji molimo vas registrujte se." });
+                var existingAccount = _db.Accounts.FirstOrDefault(a => a.Username == request.Username);
+                if (existingAccount == null)
+                {
+                    return BadRequest(new { code = "USER_NOT_FOUND", message = "Korisnik ne postoji molimo vas registrujte se." });
+                }
+                return BadRequest(new { code = "INVALID_CREDENTIALS", message = "Neispravno korisničko ime ili lozinka." });
             }
             //2- generisati random string
             string randomString = TokenGenerator.Generate(10);
@@ -37,10 +42,10 @@ namespace TourAndTravelBiH.Controllers
             _db.Add(noviToken);
             _db.SaveChanges();
 
-            //4- vratiti token string i korisničke podatke
             return Ok(new
             {
                 token = randomString,
+                tokenId = noviToken.AuthenticationId,
                 user = new
                 {
                     logiraniKorisnik.User.Name,
@@ -50,7 +55,7 @@ namespace TourAndTravelBiH.Controllers
             });
         }
 
-        [HttpPost("Adminlogin")]
+            [HttpPost("Adminlogin")]
         public IActionResult AdminLogin([FromBody] AuthLoginRequest request)
         {
             var logiraniKorisnik = _db.Accounts.Include(a => a.User)

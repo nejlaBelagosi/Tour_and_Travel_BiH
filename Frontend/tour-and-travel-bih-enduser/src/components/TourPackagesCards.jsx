@@ -13,6 +13,7 @@ import '../styles/Cards.css';
 export default function TourCards() {
   const [tourPackages, setTourPackages] = useState([]);
   const navigate= useNavigate();
+  const isUserLoggedIn = !!localStorage.getItem('user');
 
   useEffect(() => {
     fetch('http://localhost:5278/api/TourPackage/GetPackage')
@@ -61,7 +62,7 @@ export default function TourCards() {
           <CardActions>
             <Button style={{ color: '#4F6F52' }} size="small">Share</Button>
             <Button style={{ color: '#4F6F52' }} size="small" onClick={() => handleLearnMoreClick(tourPackage.id)}>Learn More</Button>
-            <IconButton aria-label="add to favorites" style={{ color: '#E8DFCA' }}>
+            <IconButton aria-label="add to favorites" style={{ color: '#E8DFCA' }}  disabled={!isUserLoggedIn} >
               <FavoriteIcon />
             </IconButton>
           </CardActions>
