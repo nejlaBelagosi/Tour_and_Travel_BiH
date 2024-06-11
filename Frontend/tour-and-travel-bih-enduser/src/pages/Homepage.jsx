@@ -110,19 +110,11 @@ const Homepage = () => {
         {/* Tour Package */}
         <h1 className='additional-content'>Our Packages</h1>
         <TourCards />
+        < div className='button'>
+          <Button style={{ marginTop: '20px', marginLeft: '20px', border: 'none', color: '#4F6F52', padding: '10px 30px'}} >See More</Button>
+        </div>
 
-        {/* Tour reviews */}
-        {/* <div className='review-container' style={{backgroundColor:"white"}}>
-          <h1>Tour reviews</h1>
-          <TourReviews />
-        </div> */}
-        
-        {/* What do they say? */}
-        {/* <div className='review-container'>
-          <h1>What do they say?</h1>
-          <Reviews />
-        </div> */}
-                <div className='review-container'>
+        <div className='review-container'>
           <h1>What do they say?</h1>
           <TourReviews />
         </div>

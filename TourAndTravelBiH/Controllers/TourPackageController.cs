@@ -43,6 +43,35 @@ namespace TourAndTravelBiH.Controllers
             });
             return Ok(result);
         }
+        // dohvacanje paketa prema id-u
+        [HttpGet("{id:int}")]
+        public IActionResult GetPackageId(int id)
+        {
+            var package = _db.TourPackages.Include(p => p.Destination)
+                                          .FirstOrDefault(p => p.PackageId == id);
+            if (package == null)
+            {
+                return NotFound();
+            }
+
+
+            var result = new
+            {
+                package.PackageId,
+                package.PackageAvailability,
+                package.StartDate,
+                package.EndDate,
+                package.Accomodation,
+                package.PackageDescription,
+                package.Price,
+                destinationName = package.Destination.DestinationName,
+                destinationImage = package.Destination.DestinationImage,
+                destinationDetails = package.Destination.DestinationDetails
+            };
+
+            return Ok(result);
+        }
+
         //dodavanje paketa na stranicu. SAMO ADMIN.
         [HttpPost]
         public IActionResult PostPackage([FromBody] TourPackage package)

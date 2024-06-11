@@ -35,7 +35,7 @@ const ReviewCard = ({ name, review, rating, destination, postDate, isLarger }) =
   );
 };
 
-export default function TourReviews() {
+export default function TourReviews({ packageId }) {
   const [tourReviews, setTourReviews] = useState([]);
   const [destinationNames, setDestinationNames] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,6 +46,7 @@ export default function TourReviews() {
     fetch('http://localhost:5278/api/Review/GetReview')
       .then(response => response.json())
       .then(data => {
+        console.log("Fetched reviews:", data); // Log fetched reviews
         const formattedData = data.map(review => ({
           id: review.reviewId,
           user: review.user,
@@ -69,8 +70,9 @@ export default function TourReviews() {
       .then(data => {
         const destinationNames = {};
         data.forEach(tourPackage => {
-          destinationNames[tourPackage.id] = tourPackage.destinationName;
+          destinationNames[tourPackage.packageId] = tourPackage.destinationName;
         });
+        console.log("Fetched destination names:", destinationNames); // Log fetched destination names
         setDestinationNames(destinationNames);
       })
       .catch(error => console.error('Error fetching destination names:', error));
@@ -88,15 +90,23 @@ export default function TourReviews() {
     return <div>Loading...</div>;
   }
 
-  if (tourReviews.length === 0) {
-    return <div>No reviews available.</div>;
+  console.log("packageId:", packageId); // Log packageId
+  const filteredReviews = tourReviews.filter(review => {
+    console.log("Review tourPackageId:", review.tourPackageId); // Log each review's tourPackageId
+    return review.tourPackageId === parseInt(packageId);
+  });
+
+  console.log("Filtered reviews:", filteredReviews); // Log filtered reviews
+
+  if (filteredReviews.length === 0) {
+    return <div>No reviews available for this package.</div>;
   }
 
   const getVisibleReviews = () => {
     return [
-      tourReviews[currentIndex],
-      tourReviews[(currentIndex + 1) % tourReviews.length],
-      tourReviews[(currentIndex + 2) % tourReviews.length]
+      filteredReviews[currentIndex],
+      filteredReviews[(currentIndex + 1) % filteredReviews.length],
+      filteredReviews[(currentIndex + 2) % filteredReviews.length]
     ];
   };
 

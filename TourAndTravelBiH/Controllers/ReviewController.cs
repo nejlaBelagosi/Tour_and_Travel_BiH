@@ -28,12 +28,32 @@ namespace TourAndTravelBiH.Controllers
                 p.PostDate,
                 p.Rating,
                 p.ReviewComment,
-                user = p.User.Name + " " + p.User.Surname
+                user = p.User.Name + " " + p.User.Surname,
+                tourPackageId = p.Reservation.PackageId
 
             });
             return Ok(result);
         }
+        [HttpGet("GetReviewByPackageId/{packageId:int}")]
+        public IActionResult GetReviewByPackageId(int packageId)
+        {
+            var reviews = _db.Reviews
+                .Include(p => p.User)
+                .Include(p => p.Reservation)
+                .Where(p => p.Reservation.PackageId == packageId)
+                .ToList();
+            var result = reviews.Select(p => new
+            {
+                p.ReviewId,
+                p.PostDate,
+                p.Rating,
+                p.ReviewComment,
+                user = p.User.Name + " " + p.User.Surname,
+                tourPackageId = p.Reservation.PackageId
 
+            });
+            return Ok(result);
+        }
         //dodavanje review, ali modifikovati da ga mogu dodavati samo registrovani useri i useri ciji status
         //rezervacije je zavrsen i uplacen
         [HttpPost]
