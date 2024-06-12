@@ -96,7 +96,7 @@ namespace TourAndTravelBiH.Controllers
                 {
                     logiraniKorisnik.User.Name,
                     logiraniKorisnik.User.Surname,
-                    logiraniKorisnik.AccountTypeId
+                    logiraniKorisnik.AccountTypeId,
                 }
             });
         }

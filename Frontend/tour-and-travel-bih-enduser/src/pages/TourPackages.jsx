@@ -5,7 +5,8 @@ import StarIcon from '@mui/icons-material/Star';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import TourReviews from '../components/TourReviews';
-import ReviewForm from '../components/ReviewForm'; // Dodajemo ReviewForm komponentu
+import ReviewForm from '../components/ReviewForm';
+import ReservationForm from '../components/ReservationForm';
 import '../styles/TourPackage.css';
 
 export default function TourPackages() {
@@ -17,7 +18,6 @@ export default function TourPackages() {
   const [rating, setRating] = useState(0);
   const [showReviewForm, setShowReviewForm] = useState(false);
 
-  
   useEffect(() => {
     fetch(`http://localhost:5278/api/TourPackage/GetPackageId/${id}`)
       .then(response => {
@@ -38,10 +38,17 @@ export default function TourPackages() {
 
     // Fetch average rating
     fetch(`http://localhost:5278/api/Review/GetReviewByPackageId/${id}`)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
-        const avgRating = data.length ? data.reduce((acc, review) => acc + review.rating, 0) / data.length : 0;
-        setRating(avgRating);
+        if (data.length) {
+          const avgRating = data.reduce((acc, review) => acc + review.rating, 0) / data.length;
+          setRating(avgRating);
+        }
       })
       .catch(error => console.error('Error fetching reviews:', error));
   }, [id]);
@@ -125,6 +132,13 @@ export default function TourPackages() {
           End date: <br />
           {packageDetails.endDate}
         </Typography>
+      </div>
+      <div>
+        <ReservationForm 
+          packageId={id} 
+          destinationName={packageDetails.destinationName} 
+          packagePrice={packageDetails.price} 
+        />
       </div>
       <div className="reviews-section">
         <TourReviews packageId={id} />

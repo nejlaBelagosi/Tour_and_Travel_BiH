@@ -8,7 +8,6 @@ import SignUp from './pages/Registration';
 import TourPackages from './pages/TourPackages';
 import Reservation from './components/ReservationForm';
 
-
 function App() {
     const [user, setUser] = useState(null);
 

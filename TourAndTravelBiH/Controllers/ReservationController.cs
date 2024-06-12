@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -37,22 +38,26 @@ namespace TourAndTravelBiH.Controllers
             return Ok(result);
         }
 
+
         [HttpPost]
         public IActionResult PostReservation([FromBody] Reservation reservation)
         {
-            Reservation newReservation = new Reservation();
-            // newReservation.ReservationId = reservation.ReservationId; => id se automatski generise
-            newReservation.TotalTravelers = reservation.TotalTravelers;
-            newReservation.DateOfReservation = reservation.DateOfReservation;
-            newReservation.TotalPrice = reservation.TotalPrice;
-            newReservation.UserId = reservation.UserId;
-            newReservation.PackageId = reservation.PackageId;
-            newReservation.ReservationStatus = reservation.ReservationStatus;
+
+            Reservation newReservation = new Reservation
+            {
+                TotalTravelers = reservation.TotalTravelers,
+                DateOfReservation = reservation.DateOfReservation,
+                TotalPrice = reservation.TotalPrice,
+                UserId = reservation.UserId,
+                PackageId = reservation.PackageId,
+                ReservationStatus = reservation.ReservationStatus
+            };
 
             _db.Add(newReservation);
             _db.SaveChanges();
             return Ok(newReservation);
         }
+
 
         // korisnik moze editovati ukupan broj putnika, total price se automatski mijenja, status
         [HttpPut("{id:int}")]
