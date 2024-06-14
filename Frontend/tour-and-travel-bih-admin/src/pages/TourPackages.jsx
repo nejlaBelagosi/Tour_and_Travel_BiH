@@ -14,6 +14,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import {FormControl, InputLabel} from '@mui/material';
+
 import {
   GridRowModes,
   DataGrid,
@@ -377,6 +379,8 @@ export default function TourPackages() {
               value={newPackage.price}
               onChange={handleChange}
             />
+             <FormControl fullWidth margin="dense">
+             <InputLabel>Destination Name</InputLabel>
             <Select
               margin="dense"
               name="destinationName"
@@ -391,6 +395,7 @@ export default function TourPackages() {
                 </MenuItem>
               ))}
             </Select>
+            </FormControl>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
               <Button type="submit">Submit</Button>
