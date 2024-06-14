@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component={Link}
-            to='/'
+            to='/Home'
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,

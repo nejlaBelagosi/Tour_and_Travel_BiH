@@ -40,6 +40,34 @@ namespace TourAndTravelBiH.Controllers
             return Ok(result);
         }
 
+        //dohvacanje prema userId
+        [HttpGet("{userId}")]
+        public IActionResult GetReservationsByUserId(int userId)
+        {
+            var reservations = _db.Reservations
+                          .Include(r => r.Package) // assuming there is a relationship between Reservation and TourPackage
+                          .Where(r => r.UserId == userId)
+                          .Select(r => new
+                          {
+                              r.ReservationId,
+                              r.UserId,
+                              r.PackageId,
+                              r.TotalTravelers,
+                              r.DateOfReservation,
+                              r.TotalPrice,
+                              r.ReservationStatus,
+                              DestinationName = r.Package.Destination.DestinationName, // assuming nested relationship
+                              DestinationImage = r.Package.Destination.DestinationImage
+                          })
+                          .ToList();
+
+            if (reservations == null || reservations.Count == 0)
+            {
+                return NotFound("No reservations found for this user.");
+            }
+            return Ok(reservations);
+        }
+
 
         [HttpPost]
         public IActionResult PostReservation([FromBody] Reservation reservation)
@@ -72,6 +100,7 @@ namespace TourAndTravelBiH.Controllers
             }            
             editReservation.TotalTravelers = data.TotalTravelers;
             editReservation.TotalPrice = data.TotalPrice;
+            editReservation.DateOfReservation = data.DateOfReservation;
             editReservation.ReservationStatus= data.ReservationStatus;
             if (data.UserId != null && data.UserId != 0)
             {
@@ -86,7 +115,7 @@ namespace TourAndTravelBiH.Controllers
             
            
             _db.SaveChanges();
-            return Ok("Reservation edited");
+            return Ok(editReservation);
         }
         [HttpDelete("{id:int}")]
         public IActionResult DeleteReservation([FromRoute] int id)

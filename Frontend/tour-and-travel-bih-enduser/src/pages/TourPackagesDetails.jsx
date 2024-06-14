@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Typography, Box } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
@@ -17,6 +17,7 @@ export default function TourPackages() {
   const [error, setError] = useState(null);
   const [rating, setRating] = useState(0);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const reservationRef = useRef(null);
 
   useEffect(() => {
     fetch(`http://localhost:5278/api/TourPackage/GetPackageId/${id}`)
@@ -54,7 +55,7 @@ export default function TourPackages() {
   }, [id]);
 
   const handleReservationClick = () => {
-    navigate(`/reservation/${id}`);
+    reservationRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleReviewSubmit = () => {
@@ -111,7 +112,7 @@ export default function TourPackages() {
               }}
               onClick={handleReservationClick}
             >
-              Check Availability
+              Check Reservation
             </Button>
             <IconButton aria-label="add to favorites" style={{ color: '#E8DFCA', width: '50px', height: '50px', marginTop: '20px' }}>
               <FavoriteIcon />
@@ -133,7 +134,7 @@ export default function TourPackages() {
           {packageDetails.endDate}
         </Typography>
       </div>
-      <div>
+      <div ref={reservationRef}>
         <ReservationForm 
           packageId={id} 
           destinationName={packageDetails.destinationName} 

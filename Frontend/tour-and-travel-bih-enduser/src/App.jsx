@@ -7,7 +7,7 @@ import SignInSide from './pages/Login';
 import SignUp from './pages/Registration';
 import TourPackagesDetails from './pages/TourPackagesDetails';
 import FavoriteCards from './pages/FavoriteItems';
-import Reservation from './components/ReservationForm';
+import Reservations from './pages/Reservations';
 import TourPackages from './pages/TourPackages';
 
 
@@ -57,12 +57,12 @@ function App() {
                 />
                 <Route path="/registration" element={<SignUp />} />
                 <Route 
-                    path="/package/:id" 
+                    path="/packageDetails/:id" 
                     element={<TourPackagesDetails />} 
                 />
                 <Route 
-                    path="/reservation/:id" 
-                    element={<Reservation />} 
+                    path="/Reservations" 
+                    element={<Reservations />} 
                 />
                                 <Route 
                     path="/Favorites" 
@@ -70,6 +70,10 @@ function App() {
                 />
                 <Route 
                     path="/Tour Package" 
+                    element={<TourPackages />} 
+                />
+                                <Route 
+                    path="/tourpackage" 
                     element={<TourPackages />} 
                 />
                 <Route path="/home" element={<Homepage />} />
