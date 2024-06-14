@@ -48,6 +48,7 @@ namespace TourAndTravelBiH.Controllers
                 tokenId = noviToken.AuthenticationId,
                 user = new
                 {
+                    logiraniKorisnik.User.UserId,
                     logiraniKorisnik.User.Name,
                     logiraniKorisnik.User.Surname,
                     logiraniKorisnik.AccountTypeId
@@ -94,6 +95,8 @@ namespace TourAndTravelBiH.Controllers
                 tokenId = noviToken.AuthenticationId,
                 user = new
                 {
+                    logiraniKorisnik.User.UserId,
+                    logiraniKorisnik.AccountId,
                     logiraniKorisnik.User.Name,
                     logiraniKorisnik.User.Surname,
                     logiraniKorisnik.AccountTypeId,

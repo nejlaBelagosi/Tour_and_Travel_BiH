@@ -22,6 +22,7 @@ namespace TourAndTravelBiH.Controllers
             var reservations = _db.Reservations
                 .Include(p => p.User)
                 .Include(p => p.Package)
+                .ThenInclude(p => p.Destination)
                 .ToList();
                 
           
@@ -33,7 +34,8 @@ namespace TourAndTravelBiH.Controllers
                 p.TotalPrice,
                 p.ReservationStatus,            
                 username = p.User.Name + ' ' + p.User.Surname,
-                packageDescription = p.Package.PackageDescription
+                packageDescription = p.Package.PackageDescription,
+                destinationName = p.Package.Destination.DestinationName
             });
             return Ok(result);
         }

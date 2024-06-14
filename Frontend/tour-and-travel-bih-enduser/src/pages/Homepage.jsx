@@ -4,13 +4,14 @@ import SearchBar from '../components/SearchBar';
 import ImgMediaCard from '../components/RecommendCards';
 import PopularCards from '../components/PopularCards';
 import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 // components
 //import Reviews from '../components/ReviewCards';
 import Footer from '../components/Footer';
 import TourCards from '../components/TourPackagesCards'
 import TourReviews from '../components/TourReviews';
-import TourPackages from '../components/TourPackagesCards';
+//import TourPackages from '../components/TourPackagesCards';
 
 
 /* ikonice */
@@ -103,15 +104,15 @@ const Homepage = () => {
           <h1>Popular destinations.</h1>
           <PopularCards />
           <div className='button'>
-          <Button style={{ marginTop: '20px', marginLeft: '20px', border: 'none', color: '#4F6F52', padding: '10px 30px'}} >See More</Button>
+          <Button style={{ marginTop: '20px', marginLeft: '20px', border: 'none', color: '#4F6F52', padding: '10px 30px'}} component ={Link} to='/Tour Package'>See More</Button>
 </div>
         </div>
 
         {/* Tour Package */}
         <h1 className='additional-content'>Our Packages</h1>
-        <TourCards />
+        <TourCards limit={5}/>)
         < div className='button'>
-          <Button style={{ marginTop: '20px', marginLeft: '20px', border: 'none', color: '#4F6F52', padding: '10px 30px'}} >See More</Button>
+          <Button style={{ marginTop: '20px', marginLeft: '20px', border: 'none', color: '#4F6F52', padding: '10px 30px'}} component ={Link} to='/Tour Package'>See More</Button>
         </div>
 
         <div className='review-container'>
@@ -125,7 +126,7 @@ const Homepage = () => {
       <p>Lorem Ipsum is Lorem Ipsum and Lorem Ipsum is</p>
       <div className='subscribe'>
       <input className="input" name="myInput" placeholder='Your email' />
-      <Button style={{  border: '1px solid #515d57', background: '#4F6F52', color: 'white',  width: '150px', height: '50px'}}>Subscribe</Button>
+      <Button style={{  border: '1px solid #515d57', background: '#4F6F52', color: 'white',  width: '150px', height: '50px'}} >Subscribe</Button>
       </div>
 
       {/* footer */}

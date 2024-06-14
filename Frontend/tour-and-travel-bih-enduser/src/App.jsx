@@ -5,8 +5,11 @@ import HeaderAfterLogin from './components/HeaderAfterLogin';
 import Homepage from './pages/Homepage';
 import SignInSide from './pages/Login';
 import SignUp from './pages/Registration';
-import TourPackages from './pages/TourPackages';
+import TourPackagesDetails from './pages/TourPackagesDetails';
+import FavoriteCards from './pages/FavoriteItems';
 import Reservation from './components/ReservationForm';
+import TourPackages from './pages/TourPackages';
+
 
 function App() {
     const [user, setUser] = useState(null);
@@ -55,11 +58,19 @@ function App() {
                 <Route path="/registration" element={<SignUp />} />
                 <Route 
                     path="/package/:id" 
-                    element={<TourPackages />} 
+                    element={<TourPackagesDetails />} 
                 />
                 <Route 
                     path="/reservation/:id" 
                     element={<Reservation />} 
+                />
+                                <Route 
+                    path="/Favorites" 
+                    element={<FavoriteCards />} 
+                />
+                <Route 
+                    path="/Tour Package" 
+                    element={<TourPackages />} 
                 />
                 <Route path="/home" element={<Homepage />} />
             </Routes>

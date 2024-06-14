@@ -8,6 +8,7 @@ import Reservations from './pages/Reservations';
 import TourPackages from './pages/TourPackages';
 import Payment from './pages/Payment';
 import Account from './pages/Accounts';
+import Reviews from './pages/Reviews';
 import Header from './components/Header';
 
 const PrivateRoute = ({ children }) => {
@@ -75,6 +76,13 @@ function App() {
           <PrivateRoute>
             <Layout>
               <Payment />
+            </Layout>
+          </PrivateRoute>
+        } />
+         <Route path="/Reviews" element={
+          <PrivateRoute>
+            <Layout>
+              <Reviews />
             </Layout>
           </PrivateRoute>
         } />

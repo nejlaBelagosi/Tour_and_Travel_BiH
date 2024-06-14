@@ -237,6 +237,7 @@ const updateUser = async (updatedRow) => {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        sx={{marginLeft:'20px', marginRight:'20px', marginTop:'20px', marginBottom:'20px'}}
       />
     </Box>
   );
