@@ -36,8 +36,32 @@ export default function ImgMediaCard() {
         setDestinations(formattedData);
       })
       .catch((error) => console.error('Error fetching destination data:', error));
-  }, []);
 
+  
+    }, []);
+  
+    const handleAddToFavorites = (tourPackage) => {
+      fetch('http://localhost:5278/api/Favorite/PostFavorite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          packageId: tourPackage.id,
+          userId: localStorage.getItem('userId'), // Assuming the user ID is stored in localStorage
+        }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to add to favorites');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Added to favorites:', data);
+        })
+        .catch(error => console.error('Error adding to favorites:', error));
+    };
   return (
     <div className="cards-container">
       {destinations.map(destination => (
@@ -61,7 +85,8 @@ export default function ImgMediaCard() {
           <CardActions>
             <Button style={{color:'#4F6F52'}} size="small">Share</Button>
             <Button style={{color:'#4F6F52'}} size="small">Learn More</Button>
-            <IconButton aria-label="add to favorites" style={{ color: '#E8DFCA'}}>
+            <IconButton aria-label="add to favorites" style={{ color: '#E8DFCA'}}
+            onClick={() => handleAddToFavorites(tourPackage)}>
               <FavoriteIcon />
             </IconButton>
           </CardActions>

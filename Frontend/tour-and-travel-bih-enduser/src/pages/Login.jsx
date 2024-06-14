@@ -82,6 +82,7 @@ export default function SignInSide({ setUser }) {
         localStorage.setItem('user', JSON.stringify(result.user));
         localStorage.setItem('token', result.token);
         localStorage.setItem('tokenId', result.tokenId);
+        localStorage.setItem('userId', result.user.userId);
         setUser(result.user);
         navigate('/Home');
       } else {

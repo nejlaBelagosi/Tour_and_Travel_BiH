@@ -50,10 +50,10 @@ namespace TourAndTravelBiH.Controllers
                 p.ReviewComment,
                 user = p.User.Name + " " + p.User.Surname,
                 tourPackageId = p.Reservation.PackageId
-
             });
             return Ok(result);
         }
+
         //dodavanje review, ali modifikovati da ga mogu dodavati samo registrovani useri i useri ciji status
         //rezervacije je zavrsen i uplacen
         [HttpPost]

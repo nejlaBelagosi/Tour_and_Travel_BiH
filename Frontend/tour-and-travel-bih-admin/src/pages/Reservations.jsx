@@ -28,9 +28,8 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add Destination
-      </Button>
+      <h1 style={{ marginLeft:'20px'
+      }}>Reservations</h1>
     </GridToolbarContainer>
   );
 }
@@ -46,6 +45,7 @@ export default function FullFeaturedCrudGrid() {
       .then((data) => {
         const formattedData = data.map((reservation) => ({
           id: reservation.reservationId,
+          destinationName: reservation.destinationName,
           totalTravelers: reservation.totalTravelers,
           dateOfReservation: reservation.dateOfReservation,
           totalPrice: reservation.totalPrice,
@@ -138,6 +138,7 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const columns = [
+    { field: 'destinationName', headerName: ' Destination name', width: 180, editable: true },
     { field: 'totalTravelers', headerName: ' Total Travelers', width: 180, editable: true },
     { field: 'dateOfReservation', headerName: 'Date', width: 180, editable: true },
     { field: 'totalPrice', headerName: 'Total Price', width: 200, editable: true },
@@ -217,6 +218,7 @@ export default function FullFeaturedCrudGrid() {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        sx={{marginLeft:'20px', marginRight:'20px', marginTop:'20px', marginBottom:'20px'}}
       />
     </Box>
   );

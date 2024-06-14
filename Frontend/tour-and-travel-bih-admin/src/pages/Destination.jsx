@@ -6,6 +6,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import {
   GridRowModes,
   DataGrid,
@@ -15,20 +21,11 @@ import {
 } from '@mui/x-data-grid';
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = Math.random().toString(36).substring(2, 9); // Generiše nasumičan ID
-    setRows((oldRows) => [...oldRows, { id, location: '', name: '', details: '', image: '', isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
-  };
+  const { handleOpenDialog } = props;
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleOpenDialog}>
         Add destination
       </Button>
     </GridToolbarContainer>
@@ -38,10 +35,16 @@ function EditToolbar(props) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
+  const [open, setOpen] = React.useState(false);
+  const [newDestination, setNewDestination] = React.useState({
+    name: '',
+    location: '',
+    details: '',
+    image: '',
+  });
 
-// get #########################################################################################################
-  React.useEffect(() => {
-    fetch('http://localhost:5278/api/Destination/GetDestination') 
+  const fetchData = React.useCallback(() => {
+    fetch('http://localhost:5278/api/Destination/GetDestination')
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((destination) => ({
@@ -56,40 +59,58 @@ export default function FullFeaturedCrudGrid() {
       .catch((error) => console.error('Error fetching destination data:', error));
   }, []);
 
-// ########################################################################################################
-// Postavljanje nove destinacije = > NE RADI
-const postDestination = async (newRow) => {
-  try {
-    const response = await fetch('http://localhost:5278/api/Destination/PostDestination', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        destinationName: newRow.name,
-        destinationLocation: newRow.location,
-        destinationDetails: newRow.details,
-        destinationImage: newRow.image,
-      }),
-      mode: 'cors',
+  React.useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setNewDestination({
+      name: '',
+      location: '',
+      details: '',
+      image: '',
     });
+  };
 
-    if (!response.ok) {
-      throw new Error('Failed to add destination');
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setNewDestination({ ...newDestination, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5278/api/Destination/PostDestination', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          destinationName: newDestination.name,
+          destinationLocation: newDestination.location,
+          destinationDetails: newDestination.details,
+          destinationImage: newDestination.image,
+        }),
+        mode: 'cors',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add destination');
+      }
+
+      await response.json();
+      fetchData();
+      handleClose();
+    } catch (error) {
+      console.error('Error posting destination:', error.message);
     }
+  };
 
-    const responseData = await response.json();
-
-    // Update the frontend with the newly created record
-    setRows((prevRows) => [...prevRows, { ...newRow, id: responseData.id, isNew: false }]);
-    return true;
-  } catch (error) {
-    console.error('Error posting destination:', error.message);
-    return false;
-  }
-};
-// ####################################################################################################################
-  // Azuriranje destinacije
   const updateDestination = async (updatedRow) => {
     const response = await fetch(`http://localhost:5278/api/Destination/UpdateDestination/${updatedRow.id}`, {
       method: 'PUT',
@@ -111,25 +132,23 @@ const postDestination = async (newRow) => {
     return response.ok;
   };
 
-// delete #####################################################################################################
-const deleteDestination = async (id) => {
-  const response = await fetch(`http://localhost:5278/api/Destination/DeleteDestination/${id}`, {
+  const deleteDestination = async (id) => {
+    const response = await fetch(`http://localhost:5278/api/Destination/DeleteDestination/${id}`, {
       method: 'DELETE',
-      mode: 'cors'
-  });
-  if (response.ok) {
+      mode: 'cors',
+    });
+    if (response.ok) {
       setRows((rows) => rows.filter((row) => row.id !== id));
-  } else {
+    } else {
       console.error('Error deleting destination:', response.statusText);
-  }
-};
+    }
+  };
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
-
-// ####################################################################################################################
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -266,9 +285,61 @@ const deleteDestination = async (id) => {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { handleOpenDialog: handleClickOpen },
         }}
+        sx={{marginLeft:'20px', marginRight:'20px', marginTop:'20px', marginBottom:'20px'}}
       />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New Destination</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please fill out the form below to add a new destination.
+          </DialogContentText>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="name"
+              label="Name"
+              type="text"
+              fullWidth
+              value={newDestination.name}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
+              name="location"
+              label="Location"
+              type="text"
+              fullWidth
+              value={newDestination.location}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
+              name="details"
+              label="Details"
+              type="text"
+              fullWidth
+              value={newDestination.details}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
+              name="image"
+              label="Image"
+              type="text"
+              fullWidth
+              value={newDestination.image}
+              onChange={handleChange}
+            />
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button type="submit">Submit</Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

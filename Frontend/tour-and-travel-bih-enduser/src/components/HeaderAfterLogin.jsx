@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../img/FAVICON.png';
 
-const pages = ['Tour Package', 'Destinations', 'Reservations','Favorites', 'About us'];
+const pages = ['Tour Package', 'Reservations','Favorites', 'About us'];
 const settings = ['Profile', 'Account', 'Logout'];
 
 function HeaderAfterLogin({ onLogout }) {

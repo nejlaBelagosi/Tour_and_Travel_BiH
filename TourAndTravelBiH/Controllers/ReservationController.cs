@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -21,6 +22,7 @@ namespace TourAndTravelBiH.Controllers
             var reservations = _db.Reservations
                 .Include(p => p.User)
                 .Include(p => p.Package)
+                .ThenInclude(p => p.Destination)
                 .ToList();
                 
           
@@ -32,27 +34,60 @@ namespace TourAndTravelBiH.Controllers
                 p.TotalPrice,
                 p.ReservationStatus,            
                 username = p.User.Name + ' ' + p.User.Surname,
-                packageDescription = p.Package.PackageDescription
+                packageDescription = p.Package.PackageDescription,
+                destinationName = p.Package.Destination.DestinationName
             });
             return Ok(result);
         }
 
+        //dohvacanje prema userId
+        [HttpGet("{userId}")]
+        public IActionResult GetReservationsByUserId(int userId)
+        {
+            var reservations = _db.Reservations
+                          .Include(r => r.Package) // assuming there is a relationship between Reservation and TourPackage
+                          .Where(r => r.UserId == userId)
+                          .Select(r => new
+                          {
+                              r.ReservationId,
+                              r.UserId,
+                              r.PackageId,
+                              r.TotalTravelers,
+                              r.DateOfReservation,
+                              r.TotalPrice,
+                              r.ReservationStatus,
+                              DestinationName = r.Package.Destination.DestinationName, // assuming nested relationship
+                              DestinationImage = r.Package.Destination.DestinationImage
+                          })
+                          .ToList();
+
+            if (reservations == null || reservations.Count == 0)
+            {
+                return NotFound("No reservations found for this user.");
+            }
+            return Ok(reservations);
+        }
+
+
         [HttpPost]
         public IActionResult PostReservation([FromBody] Reservation reservation)
         {
-            Reservation newReservation = new Reservation();
-            // newReservation.ReservationId = reservation.ReservationId; => id se automatski generise
-            newReservation.TotalTravelers = reservation.TotalTravelers;
-            newReservation.DateOfReservation = reservation.DateOfReservation;
-            newReservation.TotalPrice = reservation.TotalPrice;
-            newReservation.UserId = reservation.UserId;
-            newReservation.PackageId = reservation.PackageId;
-            newReservation.ReservationStatus = reservation.ReservationStatus;
+
+            Reservation newReservation = new Reservation
+            {
+                TotalTravelers = reservation.TotalTravelers,
+                DateOfReservation = reservation.DateOfReservation,
+                TotalPrice = reservation.TotalPrice,
+                UserId = reservation.UserId,
+                PackageId = reservation.PackageId,
+                ReservationStatus = reservation.ReservationStatus
+            };
 
             _db.Add(newReservation);
             _db.SaveChanges();
             return Ok(newReservation);
         }
+
 
         // korisnik moze editovati ukupan broj putnika, total price se automatski mijenja, status
         [HttpPut("{id:int}")]
@@ -65,6 +100,7 @@ namespace TourAndTravelBiH.Controllers
             }            
             editReservation.TotalTravelers = data.TotalTravelers;
             editReservation.TotalPrice = data.TotalPrice;
+            editReservation.DateOfReservation = data.DateOfReservation;
             editReservation.ReservationStatus= data.ReservationStatus;
             if (data.UserId != null && data.UserId != 0)
             {
@@ -79,7 +115,7 @@ namespace TourAndTravelBiH.Controllers
             
            
             _db.SaveChanges();
-            return Ok("Reservation edited");
+            return Ok(editReservation);
         }
         [HttpDelete("{id:int}")]
         public IActionResult DeleteReservation([FromRoute] int id)

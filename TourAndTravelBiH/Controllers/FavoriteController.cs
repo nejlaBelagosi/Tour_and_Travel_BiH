@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -14,45 +15,52 @@ namespace TourAndTravelBiH.Controllers
             _db = db;
         }
 
-        // dohvacanje favorite, pregled user
         [HttpGet]
         public IActionResult GetFavorite()
         {
-            var favorite = _db.Favorites.ToList();
+            var favorite = _db.Favorites
+                .Include (f => f.Package)// Assuming `Package` is the navigation property for the related data
+                .Select(f => new
+                {
+                    f.FavoriteItemId,
+                    f.PackageId,
+                    f.UserId,
+                    DestinationName = f.Package.Destination.DestinationName,
+                    DestinationLocation = f.Package.Destination.DestinationLocation,
+                    DestinationDetails = f.Package.Destination.DestinationDetails,
+                    DestinationImage = f.Package.Destination.DestinationImage
+                }).ToList();
+
             return Ok(favorite);
         }
 
-        //dodavanje favorite, dodaju useri na user dijelu
-       
         [HttpPost]
         public IActionResult PostFavorite([FromBody] Favorite favorite)
         {
-            Favorite newFavorite = new Favorite();
-            // newFavorite.FavoriteItemId = favorite.FavoriteItemId; => id se automatski generise
-            newFavorite.PackageId = favorite.PackageId;
-            newFavorite.UserId = favorite.UserId;
+            Favorite newFavorite = new Favorite
+            {
+                PackageId = favorite.PackageId,
+                UserId = favorite.UserId
+            };
 
             _db.Add(newFavorite);
             _db.SaveChanges();
             return Ok(newFavorite);
-
         }
 
-        //Brisanje favorite sa stranice. User
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteFavorite( int id)
+        public IActionResult DeleteFavorite(int id)
         {
-            Favorite favoriteData = _db.Favorites.Where(a => a.FavoriteItemId == id).FirstOrDefault();
+            Favorite favoriteData = _db.Favorites.FirstOrDefault(a => a.FavoriteItemId == id);
             if (favoriteData == null)
             {
-                return NotFound("Favorite is not found in Database.");
+                return NotFound("Favorite not found in Database.");
             }
 
             _db.Remove(favoriteData);
             _db.SaveChanges();
 
             return Ok(favoriteData);
-
         }
     }
 }

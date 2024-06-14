@@ -19,7 +19,7 @@ import logo from "../img/FAVICON.png";
 
 import { Link } from 'react-router-dom';
 
-const pages = ['Tour Package', 'Destinations', 'Favorites', 'About us', 'Log in'];
+const pages = ['Tour Package', 'Favorites', 'About us', 'Log in'];
 //const settings = ['Profile', 'Account', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component={Link}
-            to='/'
+            to='/Home'
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
@@ -101,7 +101,7 @@ function ResponsiveAppBar() {
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
-                                    <Link to={`/${page.replace(/\s+/g, '').toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link>
+              <Link to={`/${page.replace(/\s+/g, '').toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link>
                 </MenuItem>
               ))}
             </Menu>*/

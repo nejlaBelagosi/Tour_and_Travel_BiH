@@ -11,13 +11,13 @@ namespace TourAndTravelBiH.Controllers
         private readonly DbTourAndTravelBiHContext _db;
         public DestinationController(DbTourAndTravelBiHContext db)
         {
-            _db = db;   
+            _db = db;
         }
         // dohvacanje svih destinacija iz BP.
         [HttpGet]
         public IActionResult GetDestination()
         {
-         
+
             var destination = _db.Destinations.ToList();
             return Ok(destination);
         }
@@ -44,6 +44,19 @@ namespace TourAndTravelBiH.Controllers
         }
 
         //dohvacanje slike
+        //[HttpGet("{imageName}")]
+        //public IActionResult GetImage(string imageName)
+        //{
+        //    var imagePath = Path.Combine("C:\\Users\\BLGS HP\\Pictures\\SLIKE ZA PROJEKAT", imageName);
+
+        //    if (!System.IO.File.Exists(imagePath))
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var imageFileStream = System.IO.File.OpenRead(imagePath);
+        //    return File(imageFileStream, "image/png");
+        //}
         [HttpGet("{imageName}")]
         public IActionResult GetImage(string imageName)
         {
@@ -54,9 +67,24 @@ namespace TourAndTravelBiH.Controllers
                 return NotFound();
             }
 
+            var mimeTypes = new Dictionary<string, string>
+    {
+        { ".png", "image/png" },
+        { ".jpg", "image/jpeg" },
+        { ".jpeg", "image/jpeg" }
+    };
+
+            var fileExtension = Path.GetExtension(imagePath).ToLowerInvariant();
+
+            if (!mimeTypes.ContainsKey(fileExtension))
+            {
+                return BadRequest("Unsupported image format.");
+            }
+
             var imageFileStream = System.IO.File.OpenRead(imagePath);
-            return File(imageFileStream, "image/png"); 
+            return File(imageFileStream, mimeTypes[fileExtension]);
         }
+
 
         //dodavanje destinacija u BP. Admin samo moze.
         [HttpPost]

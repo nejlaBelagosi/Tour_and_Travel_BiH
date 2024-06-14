@@ -14,4 +14,5 @@ public partial class Favorite
     public virtual TourPackage? Package { get; set; }
 
     public virtual User? User { get; set; }
+    
 }

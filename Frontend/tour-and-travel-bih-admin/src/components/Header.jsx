@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../img/FAVICON.png";
 
-const pages = ['User', 'Destination', 'Reservations', 'TourPackages', 'Payment', 'Accounts'];
+const pages = ['User', 'Destination', 'Reservations', 'TourPackages', 'Payment','Reviews', 'Accounts'];
 const settings = ['Profile', 'Account', 'Logout'];
 
 function ResponsiveAppBar() {

@@ -5,8 +5,10 @@ import HeaderAfterLogin from './components/HeaderAfterLogin';
 import Homepage from './pages/Homepage';
 import SignInSide from './pages/Login';
 import SignUp from './pages/Registration';
+import TourPackagesDetails from './pages/TourPackagesDetails';
+import FavoriteCards from './pages/FavoriteItems';
+import Reservations from './pages/Reservations';
 import TourPackages from './pages/TourPackages';
-import Reservation from './components/ReservationForm';
 
 
 function App() {
@@ -55,12 +57,24 @@ function App() {
                 />
                 <Route path="/registration" element={<SignUp />} />
                 <Route 
-                    path="/package/:id" 
-                    element={<TourPackages />} 
+                    path="/packageDetails/:id" 
+                    element={<TourPackagesDetails />} 
                 />
                 <Route 
-                    path="/reservation/:id" 
-                    element={<Reservation />} 
+                    path="/Reservations" 
+                    element={<Reservations />} 
+                />
+                                <Route 
+                    path="/Favorites" 
+                    element={<FavoriteCards />} 
+                />
+                <Route 
+                    path="/Tour Package" 
+                    element={<TourPackages />} 
+                />
+                                <Route 
+                    path="/tourpackage" 
+                    element={<TourPackages />} 
                 />
                 <Route path="/home" element={<Homepage />} />
             </Routes>
