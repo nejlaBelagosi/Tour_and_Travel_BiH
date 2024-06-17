@@ -15,11 +15,13 @@ namespace TourAndTravelBiH.Controllers
             _db = db;
         }
 
-        [HttpGet]
-        public IActionResult GetFavorite()
+        [HttpGet("{userId}")]
+        public IActionResult GetFavoriteByUserId(int userId)
         {
+
             var favorite = _db.Favorites
-                .Include (f => f.Package)// Assuming `Package` is the navigation property for the related data
+                .Include(f => f.Package)
+                .Where(f => f.UserId == userId)
                 .Select(f => new
                 {
                     f.FavoriteItemId,
@@ -37,6 +39,12 @@ namespace TourAndTravelBiH.Controllers
         [HttpPost]
         public IActionResult PostFavorite([FromBody] Favorite favorite)
         {
+
+            if (favorite.UserId == null || favorite.UserId == 0)
+            {
+                return BadRequest("User must be logged in to add favorites.");
+            }
+
             Favorite newFavorite = new Favorite
             {
                 PackageId = favorite.PackageId,

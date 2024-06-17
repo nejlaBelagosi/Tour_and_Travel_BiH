@@ -21,6 +21,32 @@ namespace TourAndTravelBiH.Controllers
             var reviews = _db.Reviews
                 .Include(p => p.User)
                 .Include(p => p.Reservation)
+                .ThenInclude(p => p.Package)
+                .ThenInclude(p => p.Destination)
+                .ToList();
+            var result = reviews.Select(p => new
+            {
+                p.ReviewId,
+                p.PostDate,
+                p.Rating,
+                p.ReviewComment,
+                user = p.User.Name + " " + p.User.Surname,
+                tourPackageId = p.Reservation.PackageId,
+                destinationName = p.Reservation.Package.Destination.DestinationName
+
+
+            });
+            return Ok(result);
+        }
+
+        // dohvacanje reviews prema packageId
+        [HttpGet("GetReviewByPackageId/{packageId:int}")]
+        public IActionResult GetReviewByPackageId(int packageId)
+        {
+            var reviews = _db.Reviews
+                .Include(p => p.User)
+                .Include(p => p.Reservation)
+                .Where(p => p.Reservation.PackageId == packageId)
                 .ToList();
             var result = reviews.Select(p => new
             {
@@ -30,17 +56,20 @@ namespace TourAndTravelBiH.Controllers
                 p.ReviewComment,
                 user = p.User.Name + " " + p.User.Surname,
                 tourPackageId = p.Reservation.PackageId
-
             });
             return Ok(result);
         }
-        [HttpGet("GetReviewByPackageId/{packageId:int}")]
-        public IActionResult GetReviewByPackageId(int packageId)
+
+        //dohvacanje reviews prema destinationName
+        [HttpGet("GetReviewByDestinationName/{destinationName}")]
+        public IActionResult GetReviewByDestinationName(string destinationName)
         {
             var reviews = _db.Reviews
                 .Include(p => p.User)
                 .Include(p => p.Reservation)
-                .Where(p => p.Reservation.PackageId == packageId)
+                .ThenInclude(r => r.Package)
+                .ThenInclude(p => p.Destination)
+                .Where(p => p.Reservation.Package.Destination.DestinationName == destinationName)
                 .ToList();
             var result = reviews.Select(p => new
             {
@@ -64,7 +93,7 @@ namespace TourAndTravelBiH.Controllers
             var reservation = _db.Reservations.FirstOrDefault(r => r.ReservationId == review.ReservationId);
 
             // Provjeri je li rezervacija pronađena i je li njezin status "završen" i je li uplata uplaćena
-            if (reservation != null && reservation.ReservationStatus ==  "zavrseno")
+            if (reservation != null && reservation.ReservationStatus ==  "Zavrseno")
             {
                 Review newReview = new Review();
                 // newReview.ReviewId = review.ReviewId; => id se automatski generise

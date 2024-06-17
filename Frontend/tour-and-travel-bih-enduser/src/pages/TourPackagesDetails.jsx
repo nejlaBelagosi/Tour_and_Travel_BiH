@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Typography, Box } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import IconButton from '@mui/material/IconButton';
-import TourReviews from '../components/TourReviews';
-import ReviewForm from '../components/ReviewForm';
-import ReservationForm from '../components/ReservationForm';
-import '../styles/TourPackageDetails.css';
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button, Typography, Box } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import IconButton from "@mui/material/IconButton";
+import TourReviews from "../components/TourReviews";
+import ReservationForm from "../components/ReservationForm";
+import "../styles/TourPackageDetails.css";
 
 export default function TourPackages() {
   const { id } = useParams();
@@ -16,52 +15,50 @@ export default function TourPackages() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [rating, setRating] = useState(0);
-  const [showReviewForm, setShowReviewForm] = useState(false);
   const reservationRef = useRef(null);
 
   useEffect(() => {
     fetch(`http://localhost:5278/api/TourPackage/GetPackageId/${id}`)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         setPackageDetails(data);
         setLoading(false);
       })
-      .catch(error => {
-        console.error('Error fetching package details:', error);
+      .catch((error) => {
+        console.error("Error fetching package details:", error);
         setError(error);
         setLoading(false);
       });
 
-    // Fetch average rating
     fetch(`http://localhost:5278/api/Review/GetReviewByPackageId/${id}`)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         if (data.length) {
-          const avgRating = data.reduce((acc, review) => acc + review.rating, 0) / data.length;
+          const avgRating =
+            data.reduce((acc, review) => acc + review.rating, 0) / data.length;
           setRating(avgRating);
         }
       })
-      .catch(error => console.error('Error fetching reviews:', error));
+      .catch((error) => console.error("Error fetching reviews:", error));
   }, [id]);
 
   const handleReservationClick = () => {
-    reservationRef.current.scrollIntoView({ behavior: 'smooth' });
+    reservationRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleReviewSubmit = () => {
-    setShowReviewForm(false);
-    // Fetch new reviews and update rating
-  };
+  // const handleReviewSubmit = () => {
+  //   setShowReviewForm(false);
+  // };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -81,7 +78,11 @@ export default function TourPackages() {
         <Typography variant="h4" className="tour-package-header-title">
           {packageDetails.destinationName}
         </Typography>
-        <Typography variant="body2" className="tour-package-header-rating" fontSize={'30px'}>
+        <Typography
+          variant="body2"
+          className="tour-package-header-rating"
+          fontSize={"30px"}
+        >
           {rating.toFixed(1)} <StarIcon fontSize="medium" />
         </Typography>
       </div>
@@ -95,26 +96,38 @@ export default function TourPackages() {
         </div>
         <div className="tour-package-details">
           <Typography>From:</Typography>
-          <Typography variant="h4" className="tour-package-price" style={{ marginTop: '20px', marginBottom: '20px' }}>
+          <Typography
+            variant="h4"
+            className="tour-package-price"
+            style={{ marginTop: "20px", marginBottom: "20px" }}
+          >
             ${packageDetails.price}
           </Typography>
           <div className="tour-package-buttons">
             <Button
               className="tour-package-button check-availability-button"
               style={{
-                marginTop: '20px',
-                marginBottom: '20px',
-                border: '1px solid #4F6F52',
-                borderRadius: '25px',
-                background: '#4F6F52',
-                color: 'white',
-                padding: '10px 30px',
+                marginTop: "20px",
+                marginBottom: "20px",
+                border: "1px solid #4F6F52",
+                borderRadius: "25px",
+                background: "#4F6F52",
+                color: "white",
+                padding: "10px 30px",
               }}
               onClick={handleReservationClick}
             >
               Check Reservation
             </Button>
-            <IconButton aria-label="add to favorites" style={{ color: '#E8DFCA', width: '50px', height: '50px', marginTop: '20px' }}>
+            <IconButton
+              aria-label="add to favorites"
+              style={{
+                color: "#E8DFCA",
+                width: "50px",
+                height: "50px",
+                marginTop: "20px",
+              }}
+            >
               <FavoriteIcon />
             </IconButton>
           </div>
@@ -125,30 +138,34 @@ export default function TourPackages() {
           Description: <br />
           {packageDetails.packageDescription}
         </Typography>
-        <Typography variant="body1" className="tour-package-description">
-          Start: <br />
-          {packageDetails.startDate}
-        </Typography>
-        <Typography variant="body1" className="tour-package-description">
-          End date: <br />
-          {packageDetails.endDate}
-        </Typography>
+        {packageDetails.dates.map((date) => (
+          <div key={date.dateId}>
+            <Typography variant="body1" className="tour-package-description">
+              Start: <br />
+              {date.startDate}
+            </Typography>
+            <Typography variant="body1" className="tour-package-description">
+              End date: <br />
+              {date.endDate}
+            </Typography>
+          </div>
+        ))}
       </div>
       <div ref={reservationRef}>
-        <ReservationForm 
-          packageId={id} 
-          destinationName={packageDetails.destinationName} 
-          packagePrice={packageDetails.price} 
+        <ReservationForm
+          packageId={id}
+          destinationName={packageDetails.destinationName}
+          packagePrice={packageDetails.price}
         />
       </div>
       <div className="reviews-section">
         <TourReviews packageId={id} />
       </div>
-      {showReviewForm ? (
-        <ReviewForm reservationId={packageDetails.reservationId} onReviewSubmitted={handleReviewSubmit} />
-      ) : (
-        <Button onClick={() => setShowReviewForm(true)}>Add a Review</Button>
-      )}
+
+      {/* <ReviewForm
+        reservationId={packageDetails.reservationId}
+        onReviewSubmitted={handleReviewSubmit}
+      /> */}
     </div>
   );
 }

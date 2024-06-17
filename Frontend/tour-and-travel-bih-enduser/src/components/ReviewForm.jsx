@@ -1,101 +1,96 @@
 import React, { useState, useEffect } from 'react';
+import { TextField, Button, Box, Typography, Grid } from '@mui/material';
 
 export default function ReviewForm({ reservationId, onReviewSubmitted }) {
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Provjera logovanja
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [review, setReview] = useState({
+    userId: '',
+    reservationId: reservationId,
+    rating:  0.0,
+    reviewComment: '',
+    postDate: '',
+  });
+
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Provjerite status logovanja (zamijenite ovo stvarnim provjerama)
-    const loggedIn = true; // Provjerite da li je korisnik logovan
-    setIsLoggedIn(loggedIn);
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      setUser(storedUser);
+      setReview(prevState => ({
+        ...prevState,
+        userId: storedUser.userId,
+        postDate: new Date().toISOString().split('T')[0] // Trenutni datum
+      }));
+    }
+  }, []);
 
-    // Provjerite status rezervacije i endDate
-    fetch(`http://localhost:5278/api/Reservation/${reservationId}`)
-      .then(response => response.json())
-      .then(data => {
-        const endDate = new Date(data.endDate);
-        const today = new Date();
-        if (data.reservationStatus === 'zavrseno' && endDate < today) {
-          setCanSubmit(true);
-        }
-      });
-  }, [reservationId]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setReview(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!isLoggedIn) {
-      alert("Morate biti logovani da biste dodali recenziju.");
-      return;
-    }
-
-    const review = {
-      rating,
-      reviewComment: comment,
-      reservationId,
-      postDate: new Date().toISOString().split('T')[0]
-    };
+    console.log("Submitting review:", review); // Dodaj ovaj red da vidimo podatke koji se šalju
 
     fetch('http://localhost:5278/api/Review/PostReview', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(review)
+      body: JSON.stringify(review),
     })
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Neuspješno slanje recenzije.');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
+        return response.json();
       })
       .then(data => {
         onReviewSubmitted();
-        alert("Recenzija je uspješno dodana.");
       })
-      .catch(error => {
-        console.error('Error:', error);
-        alert("Neuspješno slanje recenzije. Provjerite status rezervacije.");
-      });
+      .catch(error => console.error('Error posting review:', error));
   };
 
-  if (!isLoggedIn) {
-    return <div>Morate biti logovani da biste dodali recenziju.</div>;
-  }
-
-  if (!canSubmit) {
-    return <div>Ne možete dodati recenziju dok vaša tura ne završi.</div>;
+  if (!user) {
+    return <Typography variant="h6">You need to be logged in to submit a review.</Typography>;
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Ocjena:
-          <input
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+      <Typography variant="h6">Add a Review</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <TextField
+            label="Rating"
             type="number"
-            min="1"
-            max="5"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
+            name="rating"
+            value={review.rating}
+            onChange={handleChange}
+            inputProps={{ min: 1, max: 5, step: 0.1 }}
+            fullWidth
             required
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Komentar:
-          <textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Comment"
+            name="reviewComment"
+            value={review.reviewComment}
+            onChange={handleChange}
+            multiline
+            rows={4}
+            fullWidth
             required
           />
-        </label>
-      </div>
-      <button type="submit">Dodaj recenziju</button>
-    </form>
+        </Grid>
+      </Grid>
+      <Button type="submit" variant="contained" sx={{ mt: 2, backgroundColor:'#4F6F52' }}>
+        Submit Review
+      </Button>
+    </Box>
   );
 }

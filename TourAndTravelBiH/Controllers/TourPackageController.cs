@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 
@@ -12,132 +11,178 @@ namespace TourAndTravelBiH.Controllers
     public class TourPackageController : ControllerBase
     {
         private readonly MyAuthService _authService;
-        DbTourAndTravelBiHContext _db = new DbTourAndTravelBiHContext();
-        public TourPackageController( MyAuthService authService)
+        private readonly DbTourAndTravelBiHContext _db;
+        public TourPackageController(MyAuthService authService, DbTourAndTravelBiHContext db)
         {
-           
             _authService = authService;
-
+            _db = db;
         }
-        // dohvacanje svih paketa. 
+
+        // Fetch all packages with their dates and destination
         [HttpGet]
-        //public IActionResult GetPackage()
-        //{
-        //    var package = _db.TourPackages.ToList();
-        //    return Ok(package);
-        //}
         public IActionResult GetPackage()
         {
-            var packages = _db.TourPackages.Include(p => p.Destination).ToList();
+            var packages = _db.TourPackages
+                              .Include(p => p.Destination)
+                              .Include(p => p.TourPackageDates)
+                              .ToList();
             var result = packages.Select(p => new
             {
                 p.PackageId,
                 p.PackageAvailability,
-                p.StartDate,
-                p.EndDate,
                 p.Accomodation,
                 p.PackageDescription,
                 p.Price,
-                destinationName = p.Destination.DestinationName,
+                destinationName = p.Destination != null ? p.Destination.DestinationName : null,
                 destinationImage = p.Destination.DestinationImage,
-                destinationDetails = p.Destination.DestinationDetails
+                destinationDetails = p.Destination.DestinationDetails,
+                Dates = p.TourPackageDates.Select(d => new { d.DateId, d.StartDate, d.EndDate,
+                })
             });
             return Ok(result);
         }
-        // dohvacanje paketa prema id-u
+
+        // Fetch a package by ID with its dates and destination
         [HttpGet("{id:int}")]
         public IActionResult GetPackageId(int id)
         {
-            var package = _db.TourPackages.Include(p => p.Destination)
-                                          .FirstOrDefault(p => p.PackageId == id);
+            var package = _db.TourPackages
+                             .Include(p => p.Destination)
+                             .Include(p => p.TourPackageDates)
+                             .FirstOrDefault(p => p.PackageId == id);
             if (package == null)
             {
                 return NotFound();
             }
 
-
             var result = new
             {
                 package.PackageId,
                 package.PackageAvailability,
-                package.StartDate,
-                package.EndDate,
                 package.Accomodation,
                 package.PackageDescription,
                 package.Price,
-                destinationName = package.Destination.DestinationName,
+                destinationName = package.Destination != null ? package.Destination.DestinationName : null,
                 destinationImage = package.Destination.DestinationImage,
-                destinationDetails = package.Destination.DestinationDetails
+                destinationDetails = package.Destination.DestinationDetails,
+                Dates = package.TourPackageDates.Select(d => new
+                {
+                    d.DateId,
+                    d.StartDate,
+                    d.EndDate,
+     
+                })
             };
 
             return Ok(result);
         }
 
-        //dodavanje paketa na stranicu. SAMO ADMIN.
+
+        // Add a new package with dates
         [HttpPost]
-        public IActionResult PostPackage([FromBody] TourPackage package)
+        public IActionResult PostPackage([FromBody] PackageRequest packageRequest)
         {
-            // provjera da li paket vec postoji
-            var existingPackage = _db.TourPackages.FirstOrDefault(a => a.PackageId == package.PackageId);
-            if (existingPackage != null)
+            var newPackage = new TourPackage
             {
-                return BadRequest("Paket već postoji.");
-            }
-            TourPackage newPackage = new TourPackage();
-           // newPackage.PackageId = package.PackageId; => id se automatski generise
-            newPackage.PackageAvailability = package.PackageAvailability;
-            newPackage.StartDate = package.StartDate;
-            newPackage.EndDate = package.EndDate;
-            newPackage.PackageDescription = package.PackageDescription;
-            newPackage.Accomodation = package.Accomodation;
-            newPackage.Price = package.Price;
-            newPackage.DestinationId = package.DestinationId;
+                PackageAvailability = packageRequest.PackageAvailability,
+                PackageDescription = packageRequest.PackageDescription,
+                Accomodation = packageRequest.Accomodation,
+                Price = packageRequest.Price,
+                DestinationId = packageRequest.DestinationId
+            };
 
-            _db.Add(newPackage);
+            _db.TourPackages.Add(newPackage);
             _db.SaveChanges();
-            return Ok(newPackage);
 
+            foreach (var date in packageRequest.Dates)
+            {
+                var tourPackageDate = new TourPackageDate
+                {
+                    PackageId = newPackage.PackageId,
+                    StartDate = date.StartDate,
+                    EndDate = date.EndDate
+                };
+                _db.TourPackageDates.Add(tourPackageDate);
+            }
+            _db.SaveChanges();
+
+            return Ok(newPackage);
         }
-        // editovanje paketa. samo admin ima tu mogucnost.
+
+        // Update an existing package with dates
         [HttpPut("{id:int}")]
         public IActionResult UpdatePackage([FromBody] TourPackage data, int id)
         {
-            var editPackage = _db.TourPackages.Find(id);
+            var editPackage = _db.TourPackages
+                                 .Include(p => p.TourPackageDates)
+                                 .FirstOrDefault(p => p.PackageId == id);
             if (editPackage == null)
             {
                 return BadRequest("Package not found!");
             }
-            //editPackage.PackageId = data.PackageId;
+
+            // Update package details
             editPackage.PackageAvailability = data.PackageAvailability;
-            editPackage.StartDate = data.StartDate;
-            editPackage.EndDate = data.EndDate;
-            editPackage.PackageDescription= data.PackageDescription;
+            editPackage.PackageDescription = data.PackageDescription;
             editPackage.Accomodation = data.Accomodation;
             editPackage.Price = data.Price;
             editPackage.DestinationId = data.DestinationId;
 
+            // Remove existing dates
+            _db.TourPackageDates.RemoveRange(editPackage.TourPackageDates);
+
+            // Add new dates
+            foreach (var date in data.TourPackageDates)
+            {
+                var tourPackageDate = new TourPackageDate
+                {
+                    PackageId = editPackage.PackageId,
+                    StartDate = date.StartDate,
+                    EndDate = date.EndDate
+                };
+                _db.TourPackageDates.Add(tourPackageDate);
+            }
+
             _db.SaveChanges();
             return Ok(editPackage);
         }
-        // Uklanjanje TOUR paketa, samo Admin ima dozvolu za uklanjanje.
-       [HttpDelete("{id:int}")]
-        public IActionResult DeletePackage( int id)
+
+        // Delete a package and its dates
+        [HttpDelete("{id:int}")]
+        public IActionResult DeletePackage(int id)
         {
+            //if (_authService.AccountTypeId != 0)
+            //    throw new UnauthorizedAccessException();
 
-            if (_authService.AccountTypeId != 0)
-                throw new UnauthorizedAccessException();
-
-            TourPackage packageData = _db.TourPackages.Where(a => a.PackageId == id).FirstOrDefault();
+            var packageData = _db.TourPackages
+                                 .Include(p => p.TourPackageDates)
+                                 .FirstOrDefault(a => a.PackageId == id);
             if (packageData == null)
             {
                 return NotFound("Package is not found in Database.");
             }
 
-            _db.Remove(packageData);
+            _db.TourPackageDates.RemoveRange(packageData.TourPackageDates);
+            _db.TourPackages.Remove(packageData);
             _db.SaveChanges();
 
             return Ok(packageData);
-
         }
+    }
+
+    public class PackageRequest
+    {
+        public bool PackageAvailability { get; set; }
+        public string Accomodation { get; set; }
+        public string PackageDescription { get; set; }
+        public decimal Price { get; set; }
+        public int DestinationId { get; set; }
+        public List<TourPackageDateRequest> Dates { get; set; }
+    }
+
+    public class TourPackageDateRequest
+    {
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
     }
 }

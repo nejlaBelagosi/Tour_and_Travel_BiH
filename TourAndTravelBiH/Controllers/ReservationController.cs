@@ -17,26 +17,29 @@ namespace TourAndTravelBiH.Controllers
         }
         // dohvacanje rezervacija, pregled mogu imati registrovani korisnici i admin
         [HttpGet]
-        public IActionResult GetReservation() 
+        public IActionResult GetReservation()
         {
             var reservations = _db.Reservations
                 .Include(p => p.User)
                 .Include(p => p.Package)
                 .ThenInclude(p => p.Destination)
+                .Include(p => p.TourPackageDates) // Include the TourPackageDate
                 .ToList();
-                
-          
+
             var result = reservations.Select(p => new
             {
                 p.ReservationId,
                 p.TotalTravelers,
                 p.DateOfReservation,
                 p.TotalPrice,
-                p.ReservationStatus,            
+                p.ReservationStatus,
                 username = p.User.Name + ' ' + p.User.Surname,
                 packageDescription = p.Package.PackageDescription,
-                destinationName = p.Package.Destination.DestinationName
-            });
+                destinationName = p.Package.Destination.DestinationName,
+               startDate = p.TourPackageDates.StartDate, // Correctly map start date
+                endDate = p.TourPackageDates.EndDate // Correctly map end date
+            }).ToList();
+
             return Ok(result);
         }
 
@@ -45,6 +48,9 @@ namespace TourAndTravelBiH.Controllers
         public IActionResult GetReservationsByUserId(int userId)
         {
             var reservations = _db.Reservations
+                .Include(r => r.Package)
+                .ThenInclude(r => r.Destination)
+                .Include(r => r.TourPackageDates)
                           .Include(r => r.Package) // assuming there is a relationship between Reservation and TourPackage
                           .Where(r => r.UserId == userId)
                           .Select(r => new
@@ -56,9 +62,12 @@ namespace TourAndTravelBiH.Controllers
                               r.DateOfReservation,
                               r.TotalPrice,
                               r.ReservationStatus,
-                              DestinationName = r.Package.Destination.DestinationName, // assuming nested relationship
-                              DestinationImage = r.Package.Destination.DestinationImage
+                              destinationName = r.Package.Destination.DestinationName, // assuming nested relationship
+                              destinationImage = r.Package.Destination.DestinationImage,
+                              startDate = r.TourPackageDates.StartDate,
+                              endDate = r.TourPackageDates.EndDate
                           })
+
                           .ToList();
 
             if (reservations == null || reservations.Count == 0)
@@ -68,10 +77,35 @@ namespace TourAndTravelBiH.Controllers
             return Ok(reservations);
         }
 
+        [HttpGet("{packageId}")]
+        public IActionResult GetPackageDates(int packageId)
+        {
+            var dates = _db.TourPackageDates
+                .Where(d => d.PackageId == packageId)
+                .Select(d => new
+                {
+                    d.DateId,
+                    d.StartDate,
+                    d.EndDate
+                })
+                .ToList();
+
+            return Ok(dates);
+        }
+
+
 
         [HttpPost]
         public IActionResult PostReservation([FromBody] Reservation reservation)
         {
+            if (reservation.DateId == null)
+            {
+                return BadRequest("DateId is required.");
+            }
+
+            // Retrieve the TourPackageDate entity using the provided DateId
+            var tourPackageDate = _db.TourPackageDates
+                .FirstOrDefault(d => d.DateId == reservation.DateId);
 
             Reservation newReservation = new Reservation
             {
@@ -80,7 +114,8 @@ namespace TourAndTravelBiH.Controllers
                 TotalPrice = reservation.TotalPrice,
                 UserId = reservation.UserId,
                 PackageId = reservation.PackageId,
-                ReservationStatus = reservation.ReservationStatus
+                ReservationStatus = reservation.ReservationStatus,
+                DateId = reservation.DateId,
             };
 
             _db.Add(newReservation);
@@ -97,11 +132,17 @@ namespace TourAndTravelBiH.Controllers
             if (editReservation == null)
             {
                 return BadRequest("Reservation not found!");
-            }            
+            }
             editReservation.TotalTravelers = data.TotalTravelers;
             editReservation.TotalPrice = data.TotalPrice;
             editReservation.DateOfReservation = data.DateOfReservation;
-            editReservation.ReservationStatus= data.ReservationStatus;
+            editReservation.ReservationStatus = data.ReservationStatus;
+
+            if(data.DateId != null && data.DateId != 0)
+            {
+            editReservation.DateId = data.DateId;
+            }
+
             if (data.UserId != null && data.UserId != 0)
             {
                 editReservation.UserId = data.UserId;
@@ -112,8 +153,8 @@ namespace TourAndTravelBiH.Controllers
                 editReservation.PackageId = data.PackageId;
             }
 
-            
-           
+
+
             _db.SaveChanges();
             return Ok(editReservation);
         }

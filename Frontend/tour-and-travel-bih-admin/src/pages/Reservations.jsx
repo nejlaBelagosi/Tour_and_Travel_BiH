@@ -1,35 +1,44 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import {
   GridRowModes,
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from '@mui/x-data-grid';
+} from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
   const handleClick = () => {
-    const id = Math.random().toString(36).substring(2, 9); // Generiše nasumičan ID
-    setRows((oldRows) => [...oldRows, { id, totalTravelers, name: '', reservationStatus: '', isNew: true }]);
+    const id = Math.random().toString(36).substring(2, 9); // Generate random ID
+    const today = new Date().toISOString().split("T")[0]; // Current date in 'YYYY-MM-DD' format
+    setRows((oldRows) => [
+      ...oldRows,
+      {
+        id,
+        dateOfReservation: today,
+        totalTravelers: 1,
+        name: "",
+        reservationStatus: "Pending",
+        isNew: true,
+      },
+    ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'location' },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "destinationName" },
     }));
   };
 
   return (
     <GridToolbarContainer>
-      <h1 style={{ marginLeft:'20px'
-      }}>Reservations</h1>
+      <h1 style={{ marginLeft: "20px" }}>Reservations</h1>
     </GridToolbarContainer>
   );
 }
@@ -38,9 +47,44 @@ export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
-  // Dohvati REZERVACIJU
+  const checkReservationStatus = (endDate) => {
+    const today = new Date();
+    const end = new Date(endDate);
+    return end < today ? "Zavrseno" : "Pending";
+  };
+
+  const updateReservationStatus = async (reservations) => {
+    const token = localStorage.getItem("TokenValue");
+    const updatedReservations = reservations.map((reservation) => {
+      const status = checkReservationStatus(reservation.endDate);
+      if (status !== reservation.reservationStatus) {
+        return { ...reservation, reservationStatus: status };
+      }
+      return reservation;
+    });
+
+    for (const reservation of updatedReservations) {
+      if (reservation.reservationStatus !== "Pending") {
+        await fetch(
+          `http://localhost:5278/api/Reservation/UpdateReservation/${reservation.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(reservation),
+            mode: "cors",
+          }
+        );
+      }
+    }
+    setRows(updatedReservations);
+  };
+
+  // Fetch Reservations
   React.useEffect(() => {
-    fetch('http://localhost:5278/api/Reservation/GetReservation') // link za dohvacanje destinacija
+    fetch("http://localhost:5278/api/Reservation/GetReservation")
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((reservation) => ({
@@ -48,43 +92,51 @@ export default function FullFeaturedCrudGrid() {
           destinationName: reservation.destinationName,
           totalTravelers: reservation.totalTravelers,
           dateOfReservation: reservation.dateOfReservation,
+          endDate: reservation.endDate,
           totalPrice: reservation.totalPrice,
-          userName: reservation.username, // Use 'username' property instead of 'userId'
+          userName: reservation.username,
           packageDescription: reservation.packageDescription,
-          reservationStatus: reservation.reservationStatus
+          reservationStatus: checkReservationStatus(reservation.endDate),
         }));
-        setRows(formattedData);
+        updateReservationStatus(formattedData);
       })
-      .catch((error) => console.error('Error fetching destination data:', error));
+      .catch((error) =>
+        console.error("Error fetching reservation data:", error)
+      );
   }, []);
-  
 
-  // Brisanje destinacije
+  // Delete Reservation
   const deleteReservation = async (id) => {
-    const response = await fetch(`http://localhost:5278/api/Reservation/DeleteReservation/${id}`, {
-      method: 'DELETE',
-      mode: 'cors',
-    });
+    const response = await fetch(
+      `http://localhost:5278/api/Reservation/DeleteReservation/${id}`,
+      {
+        method: "DELETE",
+        mode: "cors",
+      }
+    );
     if (response.ok) {
       setRows((rows) => rows.filter((row) => row.id !== id));
     } else {
-      console.error('Error deleting reservation:', response.statusText);
+      console.error("Error deleting reservation:", response.statusText);
     }
   };
 
-  // Uređivanje destinacije
-  const updateReservation= async (updatedRow) => {
-    const response = await fetch(`http://localhost:5278/api/Reservation/UpdateReservation/${updatedRow.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedRow),
-      mode: 'cors',
-    });
-  
+  // Update Reservation
+  const updateReservation = async (updatedRow) => {
+    const response = await fetch(
+      `http://localhost:5278/api/Reservation/UpdateReservation/${updatedRow.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedRow),
+        mode: "cors",
+      }
+    );
+
     if (!response.ok) {
-      console.error('Error updating reservation:', response.statusText);
+      console.error("Error updating reservation:", response.statusText);
     }
     return response.ok;
   };
@@ -101,7 +153,7 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  // samo za edit
+  // Save Edit
   const handleSaveClick = (id) => async () => {
     const updatedRow = rows.find((row) => row.id === id);
     if (await updateReservation(updatedRow)) {
@@ -126,6 +178,7 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const processRowUpdate = async (newRow) => {
+    newRow.reservationStatus = checkReservationStatus(newRow.endDate); // Update status based on endDate
     const updatedRow = { ...newRow, isNew: false };
     if (await updateReservation(updatedRow)) {
       setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
@@ -138,19 +191,55 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const columns = [
-    { field: 'destinationName', headerName: ' Destination name', width: 180, editable: true },
-    { field: 'totalTravelers', headerName: ' Total Travelers', width: 180, editable: true },
-    { field: 'dateOfReservation', headerName: 'Date', width: 180, editable: true },
-    { field: 'totalPrice', headerName: 'Total Price', width: 200, editable: true },
-    { field: 'userName', headerName: 'Name and surname', width: 200, editable: true }, // Change field to 'userName'
-    { field: 'packageDescription', headerName: 'Package description', width: 200, editable: true },
-    { field: 'reservationStatus', headerName: 'Status', width: 200, editable: true },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "destinationName",
+      headerName: "Destination name",
+      width: 180,
+      editable: true,
+    },
+    {
+      field: "totalTravelers",
+      headerName: "Total Travelers",
+      width: 180,
+      editable: true,
+    },
+    {
+      field: "dateOfReservation",
+      headerName: "Date of Reservation",
+      width: 180,
+      editable: true,
+    },
+    { field: "endDate", headerName: "End Date", width: 180, editable: true }, // Add endDate column
+    {
+      field: "totalPrice",
+      headerName: "Total Price",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "userName",
+      headerName: "Name and surname",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "packageDescription",
+      headerName: "Package description",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "reservationStatus",
+      headerName: "Status",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
       width: 100,
-      cellClassName: 'actions',
+      cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -159,7 +248,7 @@ export default function FullFeaturedCrudGrid() {
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
-              sx={{ color: 'primary.main' }}
+              sx={{ color: "primary.main" }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
@@ -195,12 +284,12 @@ export default function FullFeaturedCrudGrid() {
     <Box
       sx={{
         height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
+        width: "100%",
+        "& .actions": {
+          color: "text.secondary",
         },
-        '& .textPrimary': {
-          color: 'text.primary',
+        "& .textPrimary": {
+          color: "text.primary",
         },
       }}
     >
@@ -218,7 +307,12 @@ export default function FullFeaturedCrudGrid() {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        sx={{marginLeft:'20px', marginRight:'20px', marginTop:'20px', marginBottom:'20px'}}
+        sx={{
+          marginLeft: "20px",
+          marginRight: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
+        }}
       />
     </Box>
   );

@@ -13,11 +13,12 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../img/FAVICON.png';
+import ResponsiveAppBar from './Header';
 
-const pages = ['Tour Package', 'Reservations','Favorites', 'About us'];
+const pages = ['Tour Package', 'Reservations', 'Favorites', 'About us'];
 const settings = ['Profile', 'Account', 'Logout'];
 
-function HeaderAfterLogin({ onLogout }) {
+function HeaderAfterLogin() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [user, setUser] = useState(null);
@@ -27,6 +28,32 @@ function HeaderAfterLogin({ onLogout }) {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     setUser(storedUser);
   }, []);
+
+  const handleLogout = async () => {
+    const tokenId = localStorage.getItem('tokenId');
+    try {
+      const response = await fetch(`http://localhost:5278/auth/logout/${tokenId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('tokenId');
+        localStorage.removeItem('userId');
+        setUser(null);
+        handleCloseUserMenu(); // Close the user menu
+        navigate('/'); // Redirect to home after logout
+      } else {
+        console.error('Failed to logout');
+      }
+    } catch (error) {
+      console.error('Failed to logout', error);
+    }
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -60,7 +87,7 @@ function HeaderAfterLogin({ onLogout }) {
             variant="h6"
             noWrap
             component={Link}
-            to="home"
+            to="/home"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -110,7 +137,7 @@ function HeaderAfterLogin({ onLogout }) {
             variant="h5"
             noWrap
             component={Link}
-            to="home"
+            to="/home"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -140,12 +167,15 @@ function HeaderAfterLogin({ onLogout }) {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar>
-                  {user ? getInitials(user.name, user.surname) : ''}</Avatar>
-              </IconButton>
-            </Tooltip>
+            {user && (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar>
+                    {getInitials(user.name, user.surname)}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+            )}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -162,7 +192,7 @@ function HeaderAfterLogin({ onLogout }) {
                 </MenuItem>
               )}
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={setting === 'Logout' ? onLogout : handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

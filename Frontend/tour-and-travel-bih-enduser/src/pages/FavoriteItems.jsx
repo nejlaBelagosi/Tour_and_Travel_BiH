@@ -11,39 +11,78 @@ import '../styles/Cards.css';
 
 export default function FavoriteCards() {
   const [favorites, setFavorites] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5278/api/Favorite/GetFavorite')
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
+
+    if (storedUser) {
+      fetch(`http://localhost:5278/api/Favorite/GetFavoriteByUserId/${storedUser.userId}`)
+        .then(response => response.json())
+        .then(data => {
+          const formattedData = data.map(favorite => ({
+            id: favorite.favoriteItemId,
+            location: favorite.destinationLocation,
+            name: favorite.destinationName,
+            image: favorite.destinationImage,
+            details: favorite.destinationDetails,
+          }));
+          setFavorites(formattedData);
+        })
+        .catch(error => console.error('Error fetching favorite data:', error));
+    }
+  }, []);
+
+  const handleRemoveFavorite = (id) => {
+    if (user) {
+      fetch(`http://localhost:5278/api/Favorite/DeleteFavorite/${id}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (response.ok) {
+            setFavorites(prevFavorites => prevFavorites.filter(favorite => favorite.id !== id));
+          } else {
+            console.error('Failed to delete favorite');
+          }
+        })
+        .catch(error => console.error('Error deleting favorite:', error));
+    }
+  };
+
+  const handleAddFavorite = (favorite) => {
+    if (!user) {
+      alert('You must be logged in to add items to favorites.');
+      return;
+    }
+
+    const favoriteToAdd = {
+      PackageId: favorite.packageId,
+      UserId: user.userId,
+    };
+
+    fetch('http://localhost:5278/api/Favorite/PostFavorite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(favoriteToAdd),
+    })
       .then(response => response.json())
       .then(data => {
-        const formattedData = data.map(favorite => ({
-          id: favorite.favoriteItemId,
+        setFavorites(prevFavorites => [...prevFavorites, {
+          id: data.favoriteItemId,
           location: favorite.destinationLocation,
           name: favorite.destinationName,
           image: favorite.destinationImage,
           details: favorite.destinationDetails,
-        }));
-        setFavorites(formattedData);
+        }]);
       })
-      .catch(error => console.error('Error fetching favorite data:', error));
-  }, []);
-
-  const handleRemoveFavorite = (id) => {
-    fetch(`http://localhost:5278/api/Favorite/DeleteFavorite/${id}`, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        if (response.ok) {
-          setFavorites(prevFavorites => prevFavorites.filter(favorite => favorite.id !== id));
-        } else {
-          console.error('Failed to delete favorite');
-        }
-      })
-      .catch(error => console.error('Error deleting favorite:', error));
+      .catch(error => console.error('Error adding favorite:', error));
   };
 
   return (
-    <div className="cards-container" style={{marginTop:'20px'}}>
+    <div className="cards-container" style={{ marginTop: '20px' }}>
       {favorites.map(favorite => (
         <Card key={favorite.id} sx={{ maxWidth: 345 }}>
           <CardMedia
@@ -66,9 +105,9 @@ export default function FavoriteCards() {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button style={{color:'#4F6F52'}} size="small">Share</Button>
-            <Button style={{color:'#4F6F52'}} size="small">Learn More</Button>
-            <IconButton aria-label="remove from favorites" style={{color:'#E8DFCA'}} onClick={() => handleRemoveFavorite(favorite.id)}>
+            <Button style={{ color: '#4F6F52' }} size="small">Share</Button>
+            <Button style={{ color: '#4F6F52' }} size="small">Learn More</Button>
+            <IconButton aria-label="remove from favorites" style={{ color: '#E8DFCA' }} onClick={() => handleRemoveFavorite(favorite.id)}>
               <FavoriteIcon />
             </IconButton>
           </CardActions>

@@ -1,35 +1,37 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import {FormControl, InputLabel} from '@mui/material';
-
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { FormControl, InputLabel, IconButton } from "@mui/material";
 import {
   GridRowModes,
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from '@mui/x-data-grid';
+} from "@mui/x-data-grid";
 
 function EditToolbar(props) {
   const { handleOpenDialog } = props;
-
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleOpenDialog}>
+      <Button
+        color="primary"
+        startIcon={<AddIcon />}
+        onClick={handleOpenDialog}
+      >
         Add record
       </Button>
     </GridToolbarContainer>
@@ -42,37 +44,37 @@ export default function TourPackages() {
   const [destinations, setDestinations] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [newPackage, setNewPackage] = React.useState({
-    availability: '',
-    startDate: '',
-    endDate: '',
-    accomodation: '',
-    packageDescription: '',
-    price: '',
-    destinationName: ''
+    availability: "",
+    dates: [{ startDate: "", endDate: "", dateId: null }],
+    accomodation: "",
+    packageDescription: "",
+    price: "",
+    destinationName: "",
   });
 
   const fetchData = React.useCallback(() => {
-    const token = localStorage.getItem('TokenValue'); // Pretpostavljamo da je token pohranjen u localStorage
-    fetch('http://localhost:5278/api/TourPackage/GetPackage', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+    const token = localStorage.getItem("TokenValue");
+    fetch("http://localhost:5278/api/TourPackage/GetPackage", {
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((tourPackage) => ({
           id: tourPackage.packageId,
-          availability: tourPackage.packageAvailability ? 'Dostupna' : 'Nije dostupna',
-          startDate: tourPackage.startDate,
-          endDate: tourPackage.endDate,
+          availability: tourPackage.packageAvailability
+            ? "Dostupna"
+            : "Nije dostupna",
+          startDate: tourPackage.dates[0]?.startDate || "",
+          endDate: tourPackage.dates[0]?.endDate || "",
+          dates: tourPackage.dates,
           accomodation: tourPackage.accomodation,
           packageDescription: tourPackage.packageDescription,
           price: tourPackage.price,
-          destinationName: tourPackage.destinationName
+          destinationName: tourPackage.destinationName,
         }));
         setRows(formattedData);
       })
-      .catch((error) => console.error('Error fetching package data:', error));
+      .catch((error) => console.error("Error fetching package data:", error));
   }, []);
 
   React.useEffect(() => {
@@ -80,12 +82,12 @@ export default function TourPackages() {
   }, [fetchData]);
 
   React.useEffect(() => {
-    fetch('http://localhost:5278/api/Destination/GetDestination')
+    fetch("http://localhost:5278/api/Destination/GetDestination")
       .then((response) => response.json())
-      .then((data) => {
-        setDestinations(data);
-      })
-      .catch((error) => console.error('Error fetching destination data:', error));
+      .then((data) => setDestinations(data))
+      .catch((error) =>
+        console.error("Error fetching destination data:", error)
+      );
   }, []);
 
   const handleClickOpen = () => {
@@ -95,13 +97,12 @@ export default function TourPackages() {
   const handleClose = () => {
     setOpen(false);
     setNewPackage({
-      availability: '',
-      startDate: '',
-      endDate: '',
-      accomodation: '',
-      packageDescription: '',
-      price: '',
-      destinationName: ''
+      availability: "",
+      dates: [{ startDate: "", endDate: "", dateId: null }],
+      accomodation: "",
+      packageDescription: "",
+      price: "",
+      destinationName: "",
     });
   };
 
@@ -110,74 +111,108 @@ export default function TourPackages() {
     setNewPackage({ ...newPackage, [name]: value });
   };
 
+  const handleDateChange = (index, event) => {
+    const { name, value } = event.target;
+    const dates = [...newPackage.dates];
+    dates[index][name] = value;
+    setNewPackage({ ...newPackage, dates });
+  };
+
+  const handleAddDate = () => {
+    setNewPackage({
+      ...newPackage,
+      dates: [
+        ...newPackage.dates,
+        { startDate: "", endDate: "", dateId: null },
+      ],
+    });
+  };
+
+  const handleRemoveDate = (index) => {
+    const dates = [...newPackage.dates];
+    dates.splice(index, 1);
+    setNewPackage({ ...newPackage, dates });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('TokenValue'); // Pretpostavljamo da je token pohranjen u localStorage
+    const token = localStorage.getItem("TokenValue");
     try {
-      const response = await fetch('http://localhost:5278/api/TourPackage/PostPackage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          packageAvailability: newPackage.availability === 'Dostupna' ? 1 : 0,
-          startDate: newPackage.startDate,
-          endDate: newPackage.endDate,
-          accomodation: newPackage.accomodation,
-          packageDescription: newPackage.packageDescription,
-          price: newPackage.price,
-          destinationId: destinations.find(dest => dest.destinationName === newPackage.destinationName)?.destinationId,
-        }),
-        mode: 'cors',
-      });
+      const response = await fetch(
+        "http://localhost:5278/api/TourPackage/PostPackage",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            packageAvailability: newPackage.availability === "Dostupna" ? 1 : 0,
+            accomodation: newPackage.accomodation,
+            packageDescription: newPackage.packageDescription,
+            price: newPackage.price,
+            destinationId: destinations.find(
+              (dest) => dest.destinationName === newPackage.destinationName
+            )?.destinationId,
+            dates: newPackage.dates,
+          }),
+          mode: "cors",
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to add package');
+        throw new Error("Failed to add package");
       }
 
       await response.json();
       fetchData();
       handleClose();
     } catch (error) {
-      console.error('Error posting package:', error.message);
+      console.error("Error posting package:", error.message);
     }
   };
 
   const deletePackage = async (id) => {
-    const response = await fetch(`http://localhost:5278/api/TourPackage/DeletePackage/${id}`, {
-      method: 'DELETE',
-      mode: 'cors'
-    });
+    const response = await fetch(
+      `http://localhost:5278/api/TourPackage/DeletePackage/${id}`,
+      {
+        method: "DELETE",
+        mode: "cors",
+      }
+    );
     if (response.ok) {
       fetchData();
     } else {
-      console.error('Error deleting package:', response.statusText);
+      console.error("Error deleting package:", response.statusText);
     }
   };
 
   const updatePackage = async (updatedRow) => {
-    const token = localStorage.getItem('TokenValue'); // Pretpostavljamo da je token pohranjen u localStorage
-    const response = await fetch(`http://localhost:5278/api/TourPackage/UpdatePackage/${updatedRow.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        packageAvailability: updatedRow.availability === 'Dostupna' ? 1 : 0,
-        startDate: updatedRow.startDate,
-        endDate: updatedRow.endDate,
-        accomodation: updatedRow.accomodation,
-        packageDescription: updatedRow.packageDescription,
-        price: updatedRow.price,
-        destinationId: destinations.find(dest => dest.destinationName === updatedRow.destinationName)?.destinationId,
-      }),
-      mode: 'cors',
-    });
+    const token = localStorage.getItem("TokenValue");
+    const response = await fetch(
+      `http://localhost:5278/api/TourPackage/UpdatePackage/${updatedRow.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          packageAvailability: updatedRow.availability === "Dostupna" ? 1 : 0,
+          accomodation: updatedRow.accomodation,
+          packageDescription: updatedRow.packageDescription,
+          price: updatedRow.price,
+          destinationId: destinations.find(
+            (dest) => dest.destinationName === updatedRow.destinationName
+          )?.destinationId,
+          dates: updatedRow.dates,
+        }),
+        mode: "cors",
+      }
+    );
 
     if (!response.ok) {
-      console.error('Error updating package:', response.statusText);
+      console.error("Error updating package:", response.statusText);
     }
     return response.ok;
   };
@@ -229,19 +264,85 @@ export default function TourPackages() {
   };
 
   const columns = [
-    { field: 'destinationName', headerName: 'Destination', width: 200, editable: true },
-    { field: 'availability', headerName: 'Availability', width: 180, editable: true },
-    { field: 'startDate', headerName: 'Start date', width: 180, editable: true },
-    { field: 'endDate', headerName: 'End date', width: 180, editable: true },
-    { field: 'accomodation', headerName: 'Accomodation', width: 150, editable: true },
-    { field: 'packageDescription', headerName: 'Description', width: 150, editable: true },
-    { field: 'price', headerName: 'Price', width: 200, editable: true },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "destinationName",
+      headerName: "Destination",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "availability",
+      headerName: "Availability",
+      width: 180,
+      editable: true,
+    },
+    {
+      field: "startDate",
+      headerName: "Start Date",
+      width: 150,
+      editable: true,
+      renderCell: (params) => (
+        <FormControl fullWidth>
+          {/* <InputLabel>Start Date</InputLabel> */}
+          <Select
+            value={params.row.startDate}
+            onChange={(e) => {
+              const updatedRow = { ...params.row, startDate: e.target.value };
+              processRowUpdate(updatedRow);
+            }}
+          >
+            {params.row.dates.map((date) => (
+              <MenuItem key={date.dateId} value={date.startDate}>
+                {date.startDate}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ),
+    },
+    {
+      field: "endDate",
+      headerName: "End Date",
+      width: 150,
+      editable: true,
+      renderCell: (params) => (
+        <FormControl fullWidth>
+          {/* <InputLabel>End Date</InputLabel> */}
+          <Select
+            value={params.row.endDate}
+            onChange={(e) => {
+              const updatedRow = { ...params.row, endDate: e.target.value };
+              processRowUpdate(updatedRow);
+            }}
+          >
+            {params.row.dates.map((date) => (
+              <MenuItem key={date.dateId} value={date.endDate}>
+                {date.endDate}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ),
+    },
+    {
+      field: "accomodation",
+      headerName: "Accomodation",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "packageDescription",
+      headerName: "Description",
+      width: 150,
+      editable: true,
+    },
+    { field: "price", headerName: "Price", width: 200, editable: true },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
       width: 100,
-      cellClassName: 'actions',
+      cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -250,7 +351,7 @@ export default function TourPackages() {
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
-              sx={{ color: 'primary.main' }}
+              sx={{ color: "primary.main" }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
@@ -286,13 +387,9 @@ export default function TourPackages() {
     <Box
       sx={{
         height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
+        width: "100%",
+        "& .actions": { color: "text.secondary" },
+        "& .textPrimary": { color: "text.primary" },
       }}
     >
       <DataGrid
@@ -303,13 +400,14 @@ export default function TourPackages() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
+        slots={{ toolbar: EditToolbar }}
+        slotProps={{ toolbar: { handleOpenDialog: handleClickOpen } }}
+        sx={{
+          marginLeft: "20px",
+          marginRight: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
         }}
-        slotProps={{
-          toolbar: { handleOpenDialog: handleClickOpen },
-        }}
-        sx={{marginLeft:'20px', marginRight:'20px', marginTop:'20px', marginBottom:'20px'}}
       />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add New Package</DialogTitle>
@@ -328,30 +426,39 @@ export default function TourPackages() {
               value={newPackage.availability}
               onChange={handleChange}
             />
-            <TextField
-              margin="dense"
-              name="startDate"
-              label="Start Date"
-              type="date"
-              fullWidth
-              value={newPackage.startDate}
-              onChange={handleChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <TextField
-              margin="dense"
-              name="endDate"
-              label="End Date"
-              type="date"
-              fullWidth
-              value={newPackage.endDate}
-              onChange={handleChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+            {newPackage.dates.map((date, index) => (
+              <React.Fragment key={index}>
+                <TextField
+                  margin="dense"
+                  name="startDate"
+                  label="Start Date"
+                  type="date"
+                  fullWidth
+                  value={date.startDate}
+                  onChange={(e) => handleDateChange(index, e)}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <TextField
+                  margin="dense"
+                  name="endDate"
+                  label="End Date"
+                  type="date"
+                  fullWidth
+                  value={date.endDate}
+                  onChange={(e) => handleDateChange(index, e)}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <IconButton
+                  aria-label="remove date"
+                  onClick={() => handleRemoveDate(index)}
+                >
+                  <CancelIcon />
+                </IconButton>
+              </React.Fragment>
+            ))}
+            <Button onClick={handleAddDate} startIcon={<AddIcon />}>
+              Add another date
+            </Button>
             <TextField
               margin="dense"
               name="accomodation"
@@ -379,22 +486,25 @@ export default function TourPackages() {
               value={newPackage.price}
               onChange={handleChange}
             />
-             <FormControl fullWidth margin="dense">
-             <InputLabel>Destination Name</InputLabel>
-            <Select
-              margin="dense"
-              name="destinationName"
-              label="Destination Name"
-              fullWidth
-              value={newPackage.destinationName}
-              onChange={handleChange}
-            >
-              {destinations.map((destination) => (
-                <MenuItem key={destination.destinationId} value={destination.destinationName}>
-                  {destination.destinationName}
-                </MenuItem>
-              ))}
-            </Select>
+            <FormControl fullWidth margin="dense">
+              <InputLabel>Destination Name</InputLabel>
+              <Select
+                margin="dense"
+                name="destinationName"
+                label="Destination Name"
+                fullWidth
+                value={newPackage.destinationName}
+                onChange={handleChange}
+              >
+                {destinations.map((destination) => (
+                  <MenuItem
+                    key={destination.destinationId}
+                    value={destination.destinationName}
+                  >
+                    {destination.destinationName}
+                  </MenuItem>
+                ))}
+              </Select>
             </FormControl>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>

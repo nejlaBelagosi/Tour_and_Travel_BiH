@@ -9,10 +9,6 @@ public partial class TourPackage
 
     public bool? PackageAvailability { get; set; }
 
-    public DateOnly? StartDate { get; set; }
-
-    public DateOnly? EndDate { get; set; }
-
     public string? Accomodation { get; set; }
 
     public string? PackageDescription { get; set; }
@@ -26,4 +22,6 @@ public partial class TourPackage
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+    public virtual ICollection<TourPackageDate> TourPackageDates { get; set; } = new List<TourPackageDate>();
 }

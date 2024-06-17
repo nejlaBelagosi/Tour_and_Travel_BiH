@@ -33,11 +33,13 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
     public virtual DbSet<TourPackage> TourPackages { get; set; }
 
+    public virtual DbSet<TourPackageDate> TourPackageDates { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-MAC1B56\\MSSQLSERVER02;Database=db_Tour_and_Travel_BiH;Trusted_Connection=True; TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-MAC1B56\\MSSQLSERVER02;Database=db_Tour_and_Travel_BiH;Trusted_Connection=True;Encrypt=false");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -57,6 +59,7 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Accounts)
                 .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__ACCOUNT__UserId__208CD6FA");
         });
 
@@ -107,6 +110,7 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.HasOne(d => d.Package).WithMany(p => p.Favorites)
                 .HasForeignKey(d => d.PackageId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__FAVORITE__Packag__19DFD96B");
 
             entity.HasOne(d => d.User).WithMany(p => p.Favorites)
@@ -130,6 +134,7 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.HasOne(d => d.Reservation).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.ReservationId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__PAYMENT__Reserva__245D67DE");
         });
 
@@ -146,11 +151,18 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.HasOne(d => d.Package).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.PackageId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__RESERVATI__Packa__160F4887");
 
             entity.HasOne(d => d.User).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__RESERVATI__UserI__151B244E");
+
+            entity.HasOne(d => d.TourPackageDates)
+                  .WithMany(p => p.Reservations)
+                  .HasForeignKey(e => e.DateId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
         });
 
         modelBuilder.Entity<Review>(entity =>
@@ -165,6 +177,7 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.HasOne(d => d.Reservation).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.ReservationId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__REVIEW__Reservat__14270015");
 
             entity.HasOne(d => d.User).WithMany(p => p.Reviews)
@@ -189,6 +202,18 @@ public partial class DbTourAndTravelBiHContext : DbContext
                 .HasConstraintName("FK__TOUR_PACK__Desti__114A936A");
         });
 
+        modelBuilder.Entity<TourPackageDate>(entity =>
+        {
+            entity.HasKey(e => e.DateId).HasName("PK__TOUR_PAC__A426F23337A86CE2");
+
+            entity.ToTable("TOUR_PACKAGE_DATE");
+
+            entity.HasOne(d => d.Package).WithMany(p => p.TourPackageDates)
+                .HasForeignKey(d => d.PackageId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__TOUR_PACK__Packa__6442E2C9");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK__tmp_ms_x__1788CC4C3150C90E");
@@ -197,9 +222,6 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.Property(e => e.Address).HasMaxLength(50);
             entity.Property(e => e.Contact).HasMaxLength(15);
-            entity.Property(e => e.DateOfBirth)
-                .HasMaxLength(200)
-                .IsUnicode(false);
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
@@ -207,8 +229,6 @@ public partial class DbTourAndTravelBiHContext : DbContext
             entity.Property(e => e.Surname)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-
-            
         });
 
         OnModelCreatingPartial(modelBuilder);
