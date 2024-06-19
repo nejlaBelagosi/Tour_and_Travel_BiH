@@ -111,41 +111,54 @@ namespace TourAndTravelBiH.Controllers
 
         // Update an existing package with dates
         [HttpPut("{id:int}")]
-        public IActionResult UpdatePackage([FromBody] TourPackage data, int id)
+        public IActionResult UpdatePackage(int id, [FromBody] PackageRequest data)
         {
-            var editPackage = _db.TourPackages
-                                 .Include(p => p.TourPackageDates)
-                                 .FirstOrDefault(p => p.PackageId == id);
-            if (editPackage == null)
+            var existingPackage = _db.TourPackages
+                                     .Include(p => p.TourPackageDates)
+                                     .FirstOrDefault(p => p.PackageId == id);
+            if (existingPackage == null)
             {
                 return BadRequest("Package not found!");
             }
 
             // Update package details
-            editPackage.PackageAvailability = data.PackageAvailability;
-            editPackage.PackageDescription = data.PackageDescription;
-            editPackage.Accomodation = data.Accomodation;
-            editPackage.Price = data.Price;
-            editPackage.DestinationId = data.DestinationId;
+            existingPackage.PackageAvailability = data.PackageAvailability;
+            existingPackage.PackageDescription = data.PackageDescription;
+            existingPackage.Accomodation = data.Accomodation;
+            existingPackage.Price = data.Price;
+            existingPackage.DestinationId = data.DestinationId;
 
-            // Remove existing dates
-            _db.TourPackageDates.RemoveRange(editPackage.TourPackageDates);
+            // Remove dates that are not in the updated list
+            var datesToRemove = existingPackage.TourPackageDates
+                                               .Where(d => !data.Dates.Any(nd => nd.DateId == d.DateId))
+                                               .ToList();
+            _db.TourPackageDates.RemoveRange(datesToRemove);
 
-            // Add new dates
-            foreach (var date in data.TourPackageDates)
+            // Update or add new dates
+            foreach (var date in data.Dates)
             {
-                var tourPackageDate = new TourPackageDate
+                var existingDate = existingPackage.TourPackageDates.FirstOrDefault(d => d.DateId == date.DateId);
+                if (existingDate != null)
                 {
-                    PackageId = editPackage.PackageId,
-                    StartDate = date.StartDate,
-                    EndDate = date.EndDate
-                };
-                _db.TourPackageDates.Add(tourPackageDate);
+                    existingDate.StartDate = date.StartDate;
+                    existingDate.EndDate = date.EndDate;
+                }
+                else
+                {
+                    var newDate = new TourPackageDate
+                    {
+                        PackageId = existingPackage.PackageId,
+                        StartDate = date.StartDate,
+                        EndDate = date.EndDate
+                    };
+                    _db.TourPackageDates.Add(newDate);
+                }
             }
 
             _db.SaveChanges();
-            return Ok(editPackage);
+            return Ok(existingPackage);
         }
+
 
         // Delete a package and its dates
         [HttpDelete("{id:int}")]
@@ -184,5 +197,6 @@ namespace TourAndTravelBiH.Controllers
     {
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
+        public int DateId { get; set; }
     }
 }

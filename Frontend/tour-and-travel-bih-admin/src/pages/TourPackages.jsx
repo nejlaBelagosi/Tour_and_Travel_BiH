@@ -43,6 +43,9 @@ export default function TourPackages() {
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [destinations, setDestinations] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const [openDateDialog, setOpenDateDialog] = React.useState(false);
+  const [newDate, setNewDate] = React.useState({ startDate: "", endDate: "" });
+  const [selectedPackageId, setSelectedPackageId] = React.useState(null);
   const [newPackage, setNewPackage] = React.useState({
     availability: "",
     dates: [{ startDate: "", endDate: "", dateId: null }],
@@ -64,8 +67,6 @@ export default function TourPackages() {
           availability: tourPackage.packageAvailability
             ? "Dostupna"
             : "Nije dostupna",
-          startDate: tourPackage.dates[0]?.startDate || "",
-          endDate: tourPackage.dates[0]?.endDate || "",
           dates: tourPackage.dates,
           accomodation: tourPackage.accomodation,
           packageDescription: tourPackage.packageDescription,
@@ -106,6 +107,16 @@ export default function TourPackages() {
     });
   };
 
+  const handleDateDialogOpen = (packageId) => {
+    setSelectedPackageId(packageId);
+    setOpenDateDialog(true);
+  };
+
+  const handleDateDialogClose = () => {
+    setOpenDateDialog(false);
+    setNewDate({ startDate: "", endDate: "" });
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setNewPackage({ ...newPackage, [name]: value });
@@ -132,6 +143,62 @@ export default function TourPackages() {
     const dates = [...newPackage.dates];
     dates.splice(index, 1);
     setNewPackage({ ...newPackage, dates });
+  };
+
+  const handleAddNewDate = async () => {
+    const token = localStorage.getItem("TokenValue");
+    const updatedRows = rows.map((row) => {
+      if (row.id === selectedPackageId) {
+        return {
+          ...row,
+          dates: [
+            ...row.dates,
+            {
+              startDate: newDate.startDate,
+              endDate: newDate.endDate,
+              dateId: null,
+            },
+          ],
+        };
+      }
+      return row;
+    });
+    setRows(updatedRows);
+
+    const updatedRow = updatedRows.find((row) => row.id === selectedPackageId);
+    try {
+      const response = await fetch(
+        `http://localhost:5278/api/TourPackage/UpdatePackage/${selectedPackageId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            packageAvailability: updatedRow.availability === "Dostupna" ? 1 : 0,
+            accomodation: updatedRow.accomodation,
+            packageDescription: updatedRow.packageDescription,
+            price: updatedRow.price,
+            destinationId: destinations.find(
+              (dest) => dest.destinationName === updatedRow.destinationName
+            )?.destinationId,
+            dates: updatedRow.dates,
+          }),
+          mode: "cors",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update package");
+      }
+
+      await response.json();
+      fetchData();
+      handleDateDialogClose();
+    } catch (error) {
+      console.error("Error updating package:", error.message);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -283,9 +350,8 @@ export default function TourPackages() {
       editable: true,
       renderCell: (params) => (
         <FormControl fullWidth>
-          {/* <InputLabel>Start Date</InputLabel> */}
           <Select
-            value={params.row.startDate}
+            value={params.row.dates[0]?.startDate || ""}
             onChange={(e) => {
               const updatedRow = { ...params.row, startDate: e.target.value };
               processRowUpdate(updatedRow);
@@ -296,6 +362,9 @@ export default function TourPackages() {
                 {date.startDate}
               </MenuItem>
             ))}
+            <MenuItem onClick={() => handleDateDialogOpen(params.row.id)}>
+              <Button startIcon={<AddIcon />}>Add New Date</Button>
+            </MenuItem>
           </Select>
         </FormControl>
       ),
@@ -307,9 +376,8 @@ export default function TourPackages() {
       editable: true,
       renderCell: (params) => (
         <FormControl fullWidth>
-          {/* <InputLabel>End Date</InputLabel> */}
           <Select
-            value={params.row.endDate}
+            value={params.row.dates[0]?.endDate || ""}
             onChange={(e) => {
               const updatedRow = { ...params.row, endDate: e.target.value };
               processRowUpdate(updatedRow);
@@ -509,6 +577,50 @@ export default function TourPackages() {
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
               <Button type="submit">Submit</Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={openDateDialog} onClose={handleDateDialogClose}>
+        <DialogTitle>Add New Date</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please fill out the form below to add a new date to the package.
+          </DialogContentText>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleAddNewDate();
+            }}
+          >
+            <TextField
+              autoFocus
+              margin="dense"
+              name="startDate"
+              label="Start Date"
+              type="date"
+              fullWidth
+              value={newDate.startDate}
+              onChange={(e) =>
+                setNewDate({ ...newDate, startDate: e.target.value })
+              }
+              InputLabelProps={{ shrink: true }}
+            />
+            <TextField
+              margin="dense"
+              name="endDate"
+              label="End Date"
+              type="date"
+              fullWidth
+              value={newDate.endDate}
+              onChange={(e) =>
+                setNewDate({ ...newDate, endDate: e.target.value })
+              }
+              InputLabelProps={{ shrink: true }}
+            />
+            <DialogActions>
+              <Button onClick={handleDateDialogClose}>Cancel</Button>
+              <Button type="submit">Add Date</Button>
             </DialogActions>
           </form>
         </DialogContent>
