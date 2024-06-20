@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Searchbar.css";
+import "../styles/SearchBar.css";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 

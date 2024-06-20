@@ -82,6 +82,31 @@ namespace TourAndTravelBiH.Controllers
             });
             return Ok(result);
         }
+        [HttpGet("GetRatingByDestinationName/{destinationName}")]
+        public IActionResult GetRatingByDestinationName(string destinationName)
+        {
+            var reviews = _db.Reviews
+                .Include(p => p.User)
+                .Include(p => p.Reservation)
+                .ThenInclude(r => r.Package)
+                .ThenInclude(p => p.Destination)
+                .Where(p => p.Reservation.Package.Destination.DestinationName == destinationName)
+                .ToList();
+
+            var result = reviews.Select(p => new
+            {
+                p.ReviewId,
+                p.PostDate,
+                p.Rating,
+                p.ReviewComment,
+                user = p.User.Name + " " + p.User.Surname,
+                tourPackageId = p.Reservation.PackageId
+            }).ToList();
+
+            double averageRating = reviews.Any() ? reviews.Average(p => (double)p.Rating) : 0.0;
+
+            return Ok(new { reviews = result, averageRating });
+        }
 
         //dodavanje review, ali modifikovati da ga mogu dodavati samo registrovani useri i useri ciji status
         //rezervacije je zavrsen i uplacen

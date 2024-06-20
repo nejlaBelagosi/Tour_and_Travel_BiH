@@ -17,6 +17,10 @@ public partial class TourPackage
 
     public int? DestinationId { get; set; }
 
+    public string? TourHighlights { get; set; }
+
+    public string? AdditionalInformations { get; set; }
+
     public virtual Destination? Destination { get; set; }
 
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();

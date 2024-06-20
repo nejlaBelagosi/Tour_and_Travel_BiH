@@ -124,9 +124,9 @@ export default function ReservationForm({
 
   return (
     <Box sx={{ maxWidth: 600, mx: "auto", mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
+      {/* <Typography variant="h4" gutterBottom>
         Create Reservation
-      </Typography>
+      </Typography> */}
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>

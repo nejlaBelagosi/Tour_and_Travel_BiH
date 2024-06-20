@@ -1,14 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
 /* Osnovni stilovi za TourPackages */
 .tour-package-container {
-  max-width: 1000px;
+  /* max-width: 1000px; */
+  /* margin: 20px auto; */
+  /* padding: 20px; */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  font-family: "Roboto", sans-serif;
+}
+.header-card {
+  max-width: 1240px;
   margin: 20px auto;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  font-family: "Arial", sans-serif;
+  /* font-family: "Arial", sans-serif; */
+  font-family: "Roboto", sans-serif;
 }
-
 .tour-package-header {
   text-align: start;
   margin-bottom: 20px;
@@ -92,15 +108,48 @@
 }
 
 .tour-package-description {
+  white-space: pre-line;
   font-size: 16px;
   line-height: 1.5;
-  color: #555;
+  color: "black";
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
+/* .tour-package-description ul {
+  list-style-type: none; /* Remove default bullets 
+  padding-left: 20px; /* Remove padding 
+}
+
+.tour-package-description li {
+  display: flex;
+  align-items: center; /* Align icon and text 
+  margin-bottom: 25px; /* Space between items 
+}
+
+.tour-package-description li svg {
+  margin-right: 10px; /* Space between icon and text 
+} */
+.tour-highlights {
+  margin-top: 20px;
+  margin-left: 65px;
+  margin-right: 50px;
+  max-width: 90%;
+}
+.available-dates {
+  margin-left: 65px;
+}
 .reviews-section {
   margin-top: 30px;
   padding-top: 20px;
   border-top: 1px solid #ddd;
+}
+
+.image-grid-container {
+  background-image: url("../img/mapPin.png"); /* Ensure the correct path */
+  background-size: contain; /* Adjust as needed (cover, contain, etc.) */
+  background-position: center; /* Adjust as needed */
+  background-repeat: no-repeat; /* Ensure the image does not repeat */
+  height: 300px; /* Adjust as needed */
+  width: 100%; /* Adjust as needed */
 }

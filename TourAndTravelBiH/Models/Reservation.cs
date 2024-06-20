@@ -9,25 +9,25 @@ public partial class Reservation
 
     public int? TotalTravelers { get; set; }
 
-    public DateTime? DateOfReservation { get; set; }
+    public DateOnly? DateOfReservation { get; set; }
 
     public decimal? TotalPrice { get; set; }
 
     public int? UserId { get; set; }
 
     public int? PackageId { get; set; }
-    public int? DateId { get; set; }
 
     public string? ReservationStatus { get; set; }
 
-    public virtual TourPackage? Package { get; set; }
+    public int DateId { get; set; }
 
     public virtual TourPackageDate? TourPackageDates { get; set; }
+
+    public virtual TourPackage? Package { get; set; }
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual User? User { get; set; }
-  
 }

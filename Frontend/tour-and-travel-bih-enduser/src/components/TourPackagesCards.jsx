@@ -74,7 +74,7 @@ const TourCards = ({ limit }) => {
                 {pkg.destinationName}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {pkg.packageDescription}
+                {pkg.destinationDetails}
               </Typography>
               <Typography variant="h6">${pkg.price}</Typography>
             </CardContent>

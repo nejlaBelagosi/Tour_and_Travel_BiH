@@ -95,9 +95,7 @@ public partial class DbTourAndTravelBiHContext : DbContext
 
             entity.ToTable("DESTINATION");
 
-            entity.Property(e => e.DestinationDetails)
-                .HasMaxLength(200)
-                .IsUnicode(false);
+            entity.Property(e => e.DestinationDetails).IsUnicode(false);
             entity.Property(e => e.DestinationLocation).HasMaxLength(50);
             entity.Property(e => e.DestinationName).HasMaxLength(50);
         });
@@ -149,6 +147,11 @@ public partial class DbTourAndTravelBiHContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.TotalPrice).HasColumnType("money");
 
+            entity.HasOne(d => d.TourPackageDates)
+                              .WithMany(p => p.Reservations)
+                              .HasForeignKey(e => e.DateId)
+                              .OnDelete(DeleteBehavior.Cascade);
+
             entity.HasOne(d => d.Package).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.PackageId)
                 .OnDelete(DeleteBehavior.Cascade)
@@ -157,12 +160,6 @@ public partial class DbTourAndTravelBiHContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__RESERVATI__UserI__151B244E");
-
-            entity.HasOne(d => d.TourPackageDates)
-                  .WithMany(p => p.Reservations)
-                  .HasForeignKey(e => e.DateId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
         });
 
         modelBuilder.Entity<Review>(entity =>
@@ -194,8 +191,10 @@ public partial class DbTourAndTravelBiHContext : DbContext
             entity.Property(e => e.Accomodation)
                 .HasMaxLength(200)
                 .IsUnicode(false);
-            entity.Property(e => e.PackageDescription).HasMaxLength(300);
+            entity.Property(e => e.AdditionalInformations).IsUnicode(false);
+            entity.Property(e => e.PackageDescription).IsUnicode(false);
             entity.Property(e => e.Price).HasColumnType("money");
+            entity.Property(e => e.TourHighlights).IsUnicode(false);
 
             entity.HasOne(d => d.Destination).WithMany(p => p.TourPackages)
                 .HasForeignKey(d => d.DestinationId)

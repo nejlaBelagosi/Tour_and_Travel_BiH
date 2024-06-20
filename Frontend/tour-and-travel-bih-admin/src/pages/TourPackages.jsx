@@ -53,6 +53,8 @@ export default function TourPackages() {
     packageDescription: "",
     price: "",
     destinationName: "",
+    additionalInformations: "",
+    tourHighlights: "",
   });
 
   const fetchData = React.useCallback(() => {
@@ -70,6 +72,8 @@ export default function TourPackages() {
           dates: tourPackage.dates,
           accomodation: tourPackage.accomodation,
           packageDescription: tourPackage.packageDescription,
+          additionalInformations: tourPackage.additionalInformations,
+          tourHighlights: tourPackage.tourHighlights,
           price: tourPackage.price,
           destinationName: tourPackage.destinationName,
         }));
@@ -102,6 +106,8 @@ export default function TourPackages() {
       dates: [{ startDate: "", endDate: "", dateId: null }],
       accomodation: "",
       packageDescription: "",
+      additionalInformations: "",
+      tourHighlights: "",
       price: "",
       destinationName: "",
     });
@@ -179,6 +185,8 @@ export default function TourPackages() {
             packageAvailability: updatedRow.availability === "Dostupna" ? 1 : 0,
             accomodation: updatedRow.accomodation,
             packageDescription: updatedRow.packageDescription,
+            additionalInformations: updatedRow.additionalInformations,
+            tourHighlights: updatedRow.tourHighlights,
             price: updatedRow.price,
             destinationId: destinations.find(
               (dest) => dest.destinationName === updatedRow.destinationName
@@ -217,6 +225,8 @@ export default function TourPackages() {
             packageAvailability: newPackage.availability === "Dostupna" ? 1 : 0,
             accomodation: newPackage.accomodation,
             packageDescription: newPackage.packageDescription,
+            additionalInformations: newPackage.additionalInformations,
+            tourHighlights: newPackage.tourHighlights,
             price: newPackage.price,
             destinationId: destinations.find(
               (dest) => dest.destinationName === newPackage.destinationName
@@ -256,32 +266,52 @@ export default function TourPackages() {
 
   const updatePackage = async (updatedRow) => {
     const token = localStorage.getItem("TokenValue");
-    const response = await fetch(
-      `http://localhost:5278/api/TourPackage/UpdatePackage/${updatedRow.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          packageAvailability: updatedRow.availability === "Dostupna" ? 1 : 0,
-          accomodation: updatedRow.accomodation,
-          packageDescription: updatedRow.packageDescription,
-          price: updatedRow.price,
-          destinationId: destinations.find(
-            (dest) => dest.destinationName === updatedRow.destinationName
-          )?.destinationId,
-          dates: updatedRow.dates,
-        }),
-        mode: "cors",
-      }
+    const destination = destinations.find(
+      (dest) => dest.destinationName === updatedRow.destinationName
     );
 
-    if (!response.ok) {
-      console.error("Error updating package:", response.statusText);
+    if (!destination) {
+      console.error("Invalid destination name");
+      return false;
     }
-    return response.ok;
+
+    const payload = {
+      packageAvailability: updatedRow.availability === "Dostupna" ? 1 : 0,
+      accomodation: updatedRow.accomodation,
+      packageDescription: updatedRow.packageDescription,
+      additionalInformations: updatedRow.additionalInformations, // Fixed typo
+      tourHighlights: updatedRow.tourHighlights,
+      price: updatedRow.price,
+      destinationId: destination.destinationId,
+      dates: updatedRow.dates,
+    };
+
+    console.log("Updating package with payload:", payload); // Log the payload
+
+    try {
+      const response = await fetch(
+        `http://localhost:5278/api/TourPackage/UpdatePackage/${updatedRow.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+          mode: "cors",
+        }
+      );
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+      }
+
+      return response.ok;
+    } catch (error) {
+      console.error("Error updating package:", error.message);
+      return false;
+    }
   };
 
   const handleRowEditStop = (params, event) => {
@@ -401,6 +431,18 @@ export default function TourPackages() {
     {
       field: "packageDescription",
       headerName: "Description",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "additionalInformations",
+      headerName: "Additional Information",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "tourHighlights",
+      headerName: "Tour Highlights",
       width: 150,
       editable: true,
     },
@@ -547,6 +589,24 @@ export default function TourPackages() {
             />
             <TextField
               margin="dense"
+              name="additionalInformations"
+              label="Additional Information"
+              type="text"
+              fullWidth
+              value={newPackage.additionalInformations}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
+              name="tourHighlights"
+              label="Tour Highlights"
+              type="text"
+              fullWidth
+              value={newPackage.tourHighlights}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
               name="price"
               label="Price"
               type="number"
@@ -581,6 +641,7 @@ export default function TourPackages() {
           </form>
         </DialogContent>
       </Dialog>
+
       <Dialog open={openDateDialog} onClose={handleDateDialogClose}>
         <DialogTitle>Add New Date</DialogTitle>
         <DialogContent>

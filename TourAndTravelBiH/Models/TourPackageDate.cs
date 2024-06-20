@@ -14,5 +14,6 @@ public partial class TourPackageDate
     public DateOnly EndDate { get; set; }
 
     public virtual TourPackage Package { get; set; } = null!;
+
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }

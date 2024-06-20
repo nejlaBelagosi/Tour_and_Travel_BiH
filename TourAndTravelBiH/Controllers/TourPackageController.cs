@@ -33,6 +33,8 @@ namespace TourAndTravelBiH.Controllers
                 p.Accomodation,
                 p.PackageDescription,
                 p.Price,
+                p.AdditionalInformations,
+                p.TourHighlights,
                 destinationName = p.Destination != null ? p.Destination.DestinationName : null,
                 destinationImage = p.Destination.DestinationImage,
                 destinationDetails = p.Destination.DestinationDetails,
@@ -41,6 +43,40 @@ namespace TourAndTravelBiH.Controllers
             });
             return Ok(result);
         }
+
+        [HttpGet("Search")]
+        public IActionResult SearchPackages([FromQuery] string destinationName, [FromQuery] DateTime? date)
+        {
+            var packages = _db.TourPackages
+                              .Include(p => p.Destination)
+                              .Include(p => p.TourPackageDates)
+                              .AsQueryable();
+
+            if (!string.IsNullOrEmpty(destinationName))
+            {
+                packages = packages.Where(p => p.Destination.DestinationName.Contains(destinationName));
+            }
+
+            if (date.HasValue)
+            {
+                var dateOnly = DateOnly.FromDateTime(date.Value);
+                packages = packages.Where(p => p.TourPackageDates.Any(d => d.StartDate <= dateOnly && d.EndDate >= dateOnly));
+            }
+
+            var result = packages.ToList().Select(p => new
+            {
+                p.PackageId,
+                p.PackageAvailability,
+                p.Accomodation,
+                p.PackageDescription,
+                p.Price,
+                destinationName = p.Destination != null ? p.Destination.DestinationName : null,
+                Dates = p.TourPackageDates.Select(d => new { d.DateId, d.StartDate, d.EndDate })
+            });
+
+            return Ok(result);
+        }
+
 
         // Fetch a package by ID with its dates and destination
         [HttpGet("{id:int}")]
@@ -62,6 +98,8 @@ namespace TourAndTravelBiH.Controllers
                 package.Accomodation,
                 package.PackageDescription,
                 package.Price,
+                package.AdditionalInformations,
+                package.TourHighlights,
                 destinationName = package.Destination != null ? package.Destination.DestinationName : null,
                 destinationImage = package.Destination.DestinationImage,
                 destinationDetails = package.Destination.DestinationDetails,
@@ -86,6 +124,8 @@ namespace TourAndTravelBiH.Controllers
             {
                 PackageAvailability = packageRequest.PackageAvailability,
                 PackageDescription = packageRequest.PackageDescription,
+                AdditionalInformations = packageRequest.AdditionalInformations,
+                TourHighlights = packageRequest.TourHighlights,
                 Accomodation = packageRequest.Accomodation,
                 Price = packageRequest.Price,
                 DestinationId = packageRequest.DestinationId
@@ -122,11 +162,36 @@ namespace TourAndTravelBiH.Controllers
             }
 
             // Update package details
-            existingPackage.PackageAvailability = data.PackageAvailability;
-            existingPackage.PackageDescription = data.PackageDescription;
-            existingPackage.Accomodation = data.Accomodation;
-            existingPackage.Price = data.Price;
-            existingPackage.DestinationId = data.DestinationId;
+            if (data.PackageDescription != null)
+            {
+                existingPackage.PackageAvailability = data.PackageAvailability;
+            }
+            if (data.PackageDescription != null && data.PackageDescription != "string")
+            {
+               existingPackage.PackageDescription = data.PackageDescription; 
+            }
+            if (data.Accomodation != null && data.Accomodation != "string")
+            {
+                existingPackage.Accomodation = data.Accomodation;
+            }
+            if (data.Price != null && data.Price != default(decimal))
+            {
+                 existingPackage.Price = data.Price;
+            }
+
+            if (data.DestinationId != null && data.DestinationId != default(int))
+            {
+               existingPackage.DestinationId = data.DestinationId; 
+            }
+            if (data.AdditionalInformations != null && data.AdditionalInformations != "string")
+            {
+              existingPackage.AdditionalInformations = data.AdditionalInformations;
+            }
+            if (data.TourHighlights != null && data.TourHighlights != "string")
+            {
+                   existingPackage.TourHighlights = data.TourHighlights;
+            }
+         
 
             // Remove dates that are not in the updated list
             var datesToRemove = existingPackage.TourPackageDates
@@ -190,6 +255,8 @@ namespace TourAndTravelBiH.Controllers
         public string PackageDescription { get; set; }
         public decimal Price { get; set; }
         public int DestinationId { get; set; }
+        public string AdditionalInformations { get; set; }
+        public string TourHighlights { get; set; }
         public List<TourPackageDateRequest> Dates { get; set; }
     }
 

@@ -13,7 +13,6 @@ public partial class User
     public string? Surname { get; set; }
 
     public string? Address { get; set; }
-
     [DataType(DataType.Date)]
     public DateTime? DateOfBirth { get; set; }
 
