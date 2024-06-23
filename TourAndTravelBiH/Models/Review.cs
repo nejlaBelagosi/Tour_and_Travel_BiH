@@ -11,7 +11,7 @@ public partial class Review
 
     public string? ReviewComment { get; set; }
 
-    public double? Rating { get; set; }
+    public int? Rating { get; set; }
 
     public int? UserId { get; set; }
 

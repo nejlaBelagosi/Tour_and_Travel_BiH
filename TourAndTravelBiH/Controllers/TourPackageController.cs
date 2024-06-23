@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
+using Microsoft.ML;
+using TourAndTravelBiH.Services;
 
 namespace TourAndTravelBiH.Controllers
 {
@@ -12,10 +14,16 @@ namespace TourAndTravelBiH.Controllers
     {
         private readonly MyAuthService _authService;
         private readonly DbTourAndTravelBiHContext _db;
-        public TourPackageController(MyAuthService authService, DbTourAndTravelBiHContext db)
+        private readonly MLModelService _mlModelService;
+        private readonly MLContext _mlContext;
+        private readonly ITransformer _model;
+        public TourPackageController(MyAuthService authService, DbTourAndTravelBiHContext db, MLModelService mlModelService)
         {
             _authService = authService;
             _db = db;
+            _mlModelService = mlModelService;
+            _mlContext = new MLContext();
+            _model = LoadModel();
         }
 
         // Fetch all packages with their dates and destination
@@ -43,9 +51,15 @@ namespace TourAndTravelBiH.Controllers
             });
             return Ok(result);
         }
+        [HttpGet("TourPackages")]
+        public async Task<IActionResult> GetTourPackagesCount()
+        {
+            var count = await _db.TourPackages.CountAsync();
+            return Ok(count);
+        }
 
         [HttpGet("Search")]
-        public IActionResult SearchPackages([FromQuery] string destinationName, [FromQuery] DateTime? date)
+        public IActionResult SearchPackages([FromQuery] string? destinationName, [FromQuery] DateTime? date)
         {
             var packages = _db.TourPackages
                               .Include(p => p.Destination)
@@ -71,12 +85,74 @@ namespace TourAndTravelBiH.Controllers
                 p.PackageDescription,
                 p.Price,
                 destinationName = p.Destination != null ? p.Destination.DestinationName : null,
+                destinationImage = p.Destination.DestinationImage,
                 Dates = p.TourPackageDates.Select(d => new { d.DateId, d.StartDate, d.EndDate })
             });
 
             return Ok(result);
         }
 
+
+
+
+        private ITransformer LoadModel()
+        {
+            var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "PackageRecommenderModel.zip");
+            DataViewSchema modelSchema;
+            return _mlContext.Model.Load(modelPath, out modelSchema);
+        }
+        [HttpGet("recommend/{userId}")]
+        public IActionResult GetRecommendations(int userId)
+        {
+            var recommendations = GenerateRecommendations(userId);
+            return Ok(recommendations);
+        }
+
+        private List<dynamic> GenerateRecommendations(int userId)
+        {
+            var predictionEngine = _mlContext.Model.CreatePredictionEngine<PackageRatingData.PackageRating, PackageRatingData.PackageRatingPrediction>(_model);
+
+            var recommendations = new List<PackageRatingData.PackageRatingPrediction>();
+            var packageIds = _db.TourPackages.Select(p => p.PackageId).ToList();
+
+            Console.WriteLine($"Predictions for User ID: {userId}");
+
+            foreach (var packageId in packageIds)
+            {
+                var testInput = new PackageRatingData.PackageRating { userId = userId, packageId = packageId, Rating = 0 };
+                var prediction = predictionEngine.Predict(testInput);
+                prediction.packageId = packageId; // Ensure the package ID is included in the response
+                recommendations.Add(prediction);
+
+                Console.WriteLine($"Package ID: {packageId}, Predicted Rating: {prediction.Score}");
+
+            }
+
+            // Assuming threshold is mean + stdDev calculated based on the distribution
+            //var scores = recommendations.Select(r => r.Score).ToList();
+            //var mean = scores.Average();
+            //var stdDev = Math.Sqrt(scores.Average(v => Math.Pow(v - mean, 2)));
+            //var threshold = mean + stdDev;
+
+            // Filter recommendations based on the threshold
+            var filteredRecommendations = recommendations
+                .Where(r => r.Score > 4.3)
+                .OrderByDescending(r => r.Score )
+                .ToList();
+
+
+            var result = filteredRecommendations.Select(r => new
+            {
+                PackageId = r.packageId,
+                score = r.Score,
+                packageDescription = _db.TourPackages.FirstOrDefault(p => p.PackageId == r.packageId)?.PackageDescription,
+                price = _db.TourPackages.FirstOrDefault(p => p.PackageId == r.packageId)?.Price,
+                destinationName = _db.TourPackages.Include(p => p.Destination).FirstOrDefault(p => p.PackageId == r.packageId)?.Destination.DestinationName,
+                destinationImage = _db.TourPackages.Include(p => p.Destination).FirstOrDefault(p => p.PackageId == r.packageId)?.Destination.DestinationImage
+            }).Cast<dynamic>().ToList(); ;
+
+            return result;
+        }
 
         // Fetch a package by ID with its dates and destination
         [HttpGet("{id:int}")]

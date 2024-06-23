@@ -9,3 +9,18 @@
 .cards-container .MuiCard-root {
   border-radius: 16px;
 }
+.single-row {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  gap: 16px;
+}
+
+/* .single-row .MuiGrid-item {
+  flex: 0 0 auto;
+} */
+
+/* .single-row .MuiCard-root {
+  /* min-width: 300px; 
+  margin: 0 8px;
+} */

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
 using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
+using TourAndTravelBiH.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +28,14 @@ builder.Services.AddSwaggerGen(x => x.OperationFilter<AutorizacijaSwaggerHeader>
 
 builder.Services.AddDbContext<DbTourAndTravelBiHContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddSingleton<MLModelService>();
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var mlModelService = scope.ServiceProvider.GetRequiredService<MLModelService>();
+    mlModelService.TrainAndSaveModel();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

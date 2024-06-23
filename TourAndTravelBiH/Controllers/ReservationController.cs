@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
 using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 
@@ -172,6 +173,52 @@ namespace TourAndTravelBiH.Controllers
 
             return Ok(reservationData);
 
+        }
+        [HttpGet("Reservations")]
+        public async Task<IActionResult> GetReservationsCount()
+        {
+            var count = await _db.Reservations.CountAsync();
+            return Ok(count);
+        }
+        [HttpGet("Search")]
+        public IActionResult SearchReservations(string searchTerm)
+        {
+            // If searchTerm is null or empty, return all reservations
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return GetReservation();
+            }
+
+            // Convert searchTerm to lowercase for case-insensitive search
+            searchTerm = searchTerm.ToLower();
+
+            // Filter reservations based on the search term
+            var reservations = _db.Reservations
+                .Include(p => p.User)
+                .Include(p => p.Package)
+                .ThenInclude(p => p.Destination)
+                .Include(p => p.TourPackageDates)
+                .Where(p => p.User.Name.ToLower().Contains(searchTerm) ||
+                            p.User.Surname.ToLower().Contains(searchTerm) ||
+                            p.Package.Destination.DestinationName.ToLower().Contains(searchTerm) ||
+                            p.DateOfReservation.ToString().Contains(searchTerm))
+                .ToList();
+
+            var result = reservations.Select(p => new
+            {
+                p.ReservationId,
+                p.TotalTravelers,
+                p.DateOfReservation,
+                p.TotalPrice,
+                p.ReservationStatus,
+                username = p.User.Name + ' ' + p.User.Surname,
+                packageDescription = p.Package.PackageDescription,
+                destinationName = p.Package.Destination.DestinationName,
+                startDate = p.TourPackageDates.StartDate,
+                endDate = p.TourPackageDates.EndDate
+            }).ToList();
+
+            return Ok(result);
         }
     }
 

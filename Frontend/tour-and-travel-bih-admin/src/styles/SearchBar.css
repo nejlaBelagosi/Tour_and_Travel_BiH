@@ -1,70 +1,35 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
-
-.searchbar-container {
+/* .searchbar-container {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
+  justify-content: center;
+  margin-bottom: 20px;
+  border: 1px solid #4f6f52;
   padding: 10px;
-  border-radius: 30px; /* Zaobljeni uglovi */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Blagi shadow za efekat */
+  border-radius: 8px;
 }
 
 .input-wrapper {
-  position: relative;
   display: flex;
   align-items: center;
+  margin: 0 10px;
 }
 
 .search-input {
-  padding: 10px 10px 10px 40px;
-  border: none; /* Uklanja border sa pojedinačnih input polja */
+  border: none;
   outline: none;
-  background: transparent; /* Transparentna pozadina inputa */
-  color: #4f6f52; /* Dodavanje boje teksta da bi bio vidljiv */
-  border-radius: 30px;
-  caret-color: #4f6f52;
-}
-
-.search-input::placeholder {
-  color: #4f6f52;
-  font-family: "Roboto";
-}
-
-.icon {
-  position: absolute;
-  left: 10px;
-  pointer-events: none;
+  padding: 8px;
+  border-radius: 4px;
+  width: 200px;
 }
 
 .search-button {
-  padding: 10px 40px;
-  border: none;
-  background-color: #1a4d2e;
+  background-color: #4f6f52;
   color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
   cursor: pointer;
-  border-top-right-radius: 30px; /* Zaobljeni uglovi samo na vrhu desno */
-  border-bottom-right-radius: 30px; /* Zaobljeni uglovi samo na dnu desno */
-  border-top-left-radius: 30px; /* Uklanja zaobljenje na levom vrhu */
-  border-bottom-left-radius: 30px; /* Uklanja zaobljenje na levom dnu */
 }
 
-.search-button:hover {
-  background-color: #f5efe6;
-  color: #4f6f52;
-}
-
-/* Dodajemo stil za vertikalnu crtu između input polja */
-.input-wrapper::after {
-  content: "";
-  position: absolute;
-  right: -5px; /* Pomeranje desno od inputa */
-  width: 1px;
-  height: 60%; /* Visina crte */
-  background-color: white; /* Boja crte */
-}
-
-/* Uklanjanje crte za poslednje input polje */
-.input-wrapper:last-child::after {
-  display: none;
-}
+.icon {
+  margin-left: 10px;
+} */

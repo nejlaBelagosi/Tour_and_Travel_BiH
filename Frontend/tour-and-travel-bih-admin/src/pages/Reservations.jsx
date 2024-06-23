@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import {
   GridRowModes,
   DataGrid,
@@ -14,7 +15,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel, searchTerm, setSearchTerm, handleSearch } =
+    props;
 
   const handleClick = () => {
     const id = Math.random().toString(36).substring(2, 9); // Generate random ID
@@ -39,6 +41,30 @@ function EditToolbar(props) {
   return (
     <GridToolbarContainer>
       <h1 style={{ marginLeft: "20px" }}>Reservations</h1>
+      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <TextField
+          label="Search"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ mr: 2 }}
+        />
+        <Button
+          variant="contained"
+          onClick={handleSearch}
+          sx={{
+            backgroundColor: "#1A4D2E",
+            "&:hover": {
+              backgroundColor: "#E8DFCA",
+              color: "#4F6F52",
+            },
+          }}
+        >
+          Search
+        </Button>
+      </Box>
     </GridToolbarContainer>
   );
 }
@@ -46,6 +72,7 @@ function EditToolbar(props) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const checkReservationStatus = (endDate) => {
     const today = new Date();
@@ -104,6 +131,37 @@ export default function FullFeaturedCrudGrid() {
         console.error("Error fetching reservation data:", error)
       );
   }, []);
+
+  const fetchData = async (term) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5278/api/Reservation/SearchReservations/Search?searchTerm=${term}`
+      );
+      const data = await response.json();
+      const formattedData = data.map((reservation) => ({
+        id: reservation.reservationId,
+        destinationName: reservation.destinationName,
+        totalTravelers: reservation.totalTravelers,
+        dateOfReservation: reservation.dateOfReservation,
+        endDate: reservation.endDate,
+        totalPrice: reservation.totalPrice,
+        userName: reservation.username,
+        packageDescription: reservation.packageDescription,
+        reservationStatus: checkReservationStatus(reservation.endDate),
+      }));
+      updateReservationStatus(formattedData);
+    } catch (error) {
+      console.error("Error fetching reservation data:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchData("");
+  }, []);
+
+  const handleSearch = () => {
+    fetchData(searchTerm);
+  };
 
   // Delete Reservation
   const deleteReservation = async (id) => {
@@ -305,7 +363,13 @@ export default function FullFeaturedCrudGrid() {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: {
+            setRows,
+            setRowModesModel,
+            searchTerm,
+            setSearchTerm,
+            handleSearch,
+          },
         }}
         sx={{
           marginLeft: "20px",

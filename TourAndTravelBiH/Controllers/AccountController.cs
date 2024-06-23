@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -14,6 +15,12 @@ namespace TourAndTravelBiH.Controllers
         {
 
             _db = db;
+        }
+        [HttpGet("Accounts")]
+        public async Task<IActionResult> GetAccountsCount()
+        {
+            var count = await _db.Accounts.CountAsync();
+            return Ok(count);
         }
         // dohvacanje account-a
         [HttpGet]

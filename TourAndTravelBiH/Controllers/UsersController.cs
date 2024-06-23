@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
 using TourAndTravelBiH.Models;
 
 namespace TourAndTravelBiH.Controllers
@@ -14,7 +15,12 @@ namespace TourAndTravelBiH.Controllers
         {
             _db = db;
         }
-
+        [HttpGet("Users")]
+        public async Task<IActionResult> GetUsersCount()
+        {
+            var count = await _db.Users.CountAsync();
+            return Ok(count);
+        }
         [HttpGet]
         public IActionResult GetUsers()
         {

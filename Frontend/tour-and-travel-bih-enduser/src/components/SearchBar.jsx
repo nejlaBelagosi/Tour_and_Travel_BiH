@@ -1,14 +1,23 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Searchbar.css";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = () => {
   const [destination, setDestination] = useState("");
   const [date, setDate] = useState("");
+  const navigate = useNavigate();
 
   const handleSearch = () => {
-    onSearch(destination, date);
+    const queryParams = new URLSearchParams();
+    if (destination) {
+      queryParams.append("destinationName", destination);
+    }
+    if (date) {
+      queryParams.append("date", date);
+    }
+    navigate(`/search-results?${queryParams.toString()}`);
   };
 
   return (

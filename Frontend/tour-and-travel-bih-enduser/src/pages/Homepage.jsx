@@ -1,17 +1,18 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import "../styles/Homepage.css";
 import SearchBar from "../components/SearchBar";
 import ImgMediaCard from "../components/RecommendCards";
-import PopularCards from "../components/PopularCards";
-import { Button } from "@mui/material";
+import Cards from "../components/PopularRecommendedCards";
+import CardsHP from "../components/PopularCardsHP";
+import BestCards from "../components/BestForToday";
+import ReviewCards from "../components/ReviewCards";
+import { Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
 // components
-//import Reviews from '../components/ReviewCards';
 import Footer from "../components/Footer";
 import TourCards from "../components/TourPackagesCards";
 import TourReviews from "../components/TourReviews";
-//import TourPackages from '../components/TourPackagesCards';
 
 /* ikonice */
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
@@ -19,6 +20,15 @@ import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import TuneOutlinedIcon from "@mui/icons-material/TuneOutlined";
 
 const Homepage = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    if (loggedInUser) {
+      setUser(loggedInUser);
+    }
+  }, []);
+
   return (
     <div className="parent-container">
       <div className="welcome-container">
@@ -30,13 +40,13 @@ const Homepage = () => {
 
       {/* Today recommendations */}
       <div className="grid-container-1">
-        <ImgMediaCard />
+        {user ? <ImgMediaCard /> : <BestCards />}
         <div className="right-container">
           <h1 style={{ marginLeft: "20px", fontFamily: "Montserrat" }}>
             Best Of the Day
           </h1>
           <p className="text-paragraph">
-            Let's spend your money and relieve your stress by <br></br> going
+            Let's spend your money and relieve your stress by <br /> going
             around the view.
           </p>
           <div className="grid-container-3">
@@ -75,7 +85,7 @@ const Homepage = () => {
         <div className="left-container">
           <h3>About Us</h3>
           <h1>
-            Explore All Cornes Of <br></br>BiH with Us
+            Explore All Cornes Of <br /> BiH with Us
           </h1>
         </div>
         <div className="right-container-2">
@@ -118,13 +128,13 @@ const Homepage = () => {
           </h1>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime qui
-            fuga in esse <br></br> nihil optio quaerat sint a. Sunt perspiciatis
+            fuga in esse <br /> nihil optio quaerat sint a. Sunt perspiciatis
             iste incidunt error. Magnam repellat perferendis saepe rerum dolor
             laudantium.
           </p>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime qui
-            fuga in esse <br></br> nihil optio quaerat sint a. Sunt perspiciatis
+            fuga in esse <br /> nihil optio quaerat sint a. Sunt perspiciatis
             iste incidunt error. Magnam repellat perferendis saepe rerum dolor
             laudantium.
           </p>
@@ -152,26 +162,26 @@ const Homepage = () => {
           />
           <h2>Enjoy some flexibility</h2>
           <p>
-            Stays with flexible cancellation <br></br> make it easy to re-book
-            if your <br></br> plans change.
+            Stays with flexible cancellation <br /> make it easy to re-book if
+            your <br /> plans change.
           </p>
         </div>
         <div className="inner-container">
           <RouteOutlinedIcon style={{ fontSize: "50px", color: "#4F6F52" }} />
           <h2>
-            More than 100 active <br></br> trip
+            More than 100 active <br /> trip
           </h2>
           <p>
-            More than thousand guests who've <br></br> found gateways in over
-            100 <br></br> destinations.{" "}
+            More than thousand guests who've <br /> found gateways in over 100
+            <br /> destinations.
           </p>
         </div>
         <div className="right-container-3">
           <TuneOutlinedIcon style={{ fontSize: "50px", color: "#4F6F52" }} />
           <h2>100+ filters for tailored tours</h2>
           <p>
-            Pick your price range, the number <br></br> of friends you want to
-            go with, and other key <br></br> options that fit your needs.{" "}
+            Pick your price range, the number <br /> of friends you want to go
+            with, and other key <br /> options that fit your needs.
           </p>
         </div>
       </div>
@@ -180,7 +190,7 @@ const Homepage = () => {
       <div className="popular-container">
         <h3>WHERE TO GO</h3>
         <h1>Popular destinations.</h1>
-        <PopularCards />
+        {user ? <Cards /> : <CardsHP />}
         <div className="button">
           <Button
             style={{
@@ -201,7 +211,7 @@ const Homepage = () => {
       {/* Tour Package */}
       <div>
         <h1 className="additional-content">Our Packages</h1>
-        <TourCards limit={5} />)
+        <TourCards limit={5} singleRow />)
         <div className="button">
           <Button
             style={{
@@ -221,13 +231,13 @@ const Homepage = () => {
 
       <div className="review-container">
         <h1>What do they say?</h1>
-        <TourReviews />
+        <ReviewCards />
       </div>
 
       {/* quote */}
       <div className="quote">
         <h1>
-          Prepare yourself and let's explore the<br></br> beauty of Bosnia and
+          Prepare yourself and let's explore the <br /> beauty of Bosnia and
           Herzegovina
         </h1>
         <p>Lorem Ipsum is Lorem Ipsum and Lorem Ipsum is</p>

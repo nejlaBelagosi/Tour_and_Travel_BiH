@@ -13,21 +13,25 @@ import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import "../styles/Cards.css";
 
-const TourCards = ({ limit }) => {
+const TourCards = ({ limit, packages: searchResults, singleRow = false }) => {
   const [packages, setPackages] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5278/api/TourPackage/GetPackage")
-      .then((response) => response.json())
-      .then((data) => {
-        const uniquePackages = Array.from(
-          new Map(data.map((p) => [p.destinationName, p])).values()
-        );
-        setPackages(uniquePackages.slice(0, limit));
-      })
-      .catch((error) => console.error("Error fetching packages:", error));
-  }, [limit]);
+    if (searchResults && searchResults.length > 0) {
+      setPackages(searchResults);
+    } else {
+      fetch("http://localhost:5278/api/TourPackage/GetPackage")
+        .then((response) => response.json())
+        .then((data) => {
+          const uniquePackages = Array.from(
+            new Map(data.map((p) => [p.destinationName, p])).values()
+          );
+          setPackages(uniquePackages.slice(0, limit));
+        })
+        .catch((error) => console.error("Error fetching packages:", error));
+    }
+  }, [limit, searchResults]);
 
   const handleDetailsClick = (id) => {
     navigate(`/packageDetails/${id}`);
@@ -57,10 +61,24 @@ const TourCards = ({ limit }) => {
   };
 
   return (
-    <Grid className="cards-container">
+    <Grid
+      container
+      spacing={2}
+      className={singleRow ? "single-row" : ""}
+      sx={{
+        justifyContent: "center",
+        marginLeft: singleRow ? "0" : "0",
+      }}
+    >
       {packages.map((pkg) => (
-        <Grid item key={pkg.packageId} xs={12} sm={6} md={4}>
-          <Card sx={{ maxWidth: 345 }}>
+        <Grid
+          item
+          key={pkg.packageId}
+          xs={12}
+          sm={6}
+          md={singleRow ? "auto" : 6}
+        >
+          <Card sx={{ maxWidth: 345, margin: singleRow ? " " : "auto" }}>
             <CardMedia
               component="img"
               height="140"
@@ -72,9 +90,6 @@ const TourCards = ({ limit }) => {
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 {pkg.destinationName}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {pkg.destinationDetails}
               </Typography>
               <Typography variant="h6">${pkg.price}</Typography>
             </CardContent>

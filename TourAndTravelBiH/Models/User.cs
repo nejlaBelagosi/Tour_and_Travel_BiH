@@ -21,6 +21,7 @@ public partial class User
     public string? Email { get; set; }
 
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+    public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
 
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 

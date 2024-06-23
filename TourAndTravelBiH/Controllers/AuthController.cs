@@ -56,7 +56,7 @@ namespace TourAndTravelBiH.Controllers
             });
         }
 
-            [HttpPost("Adminlogin")]
+        [HttpPost("Adminlogin")]
         public IActionResult AdminLogin([FromBody] AuthLoginRequest request)
         {
             var logiraniKorisnik = _db.Accounts.Include(a => a.User)

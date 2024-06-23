@@ -229,7 +229,7 @@ CREATE TABLE REVIEW(
 )
 
 ALTER TABLE REVIEW
-ALTER COLUMN Rating FLOAT
+ALTER COLUMN Rating INT
 
 ALTER TABLE REVIEW
 ADD UserId INT NOT NULL REFERENCES [USER](UserId)
@@ -273,6 +273,21 @@ UPDATE AUTHENTICATION_TOKEN
 SET Username = acc.Username
 FROM AUTHENTICATION_TOKEN auth
 JOIN ACCOUNT acc ON auth.AccountId = acc.AccountId;
+
+--- SESSION ---
+CREATE TABLE [Session](
+    Id INT PRIMARY KEY,
+    StartTime DATETIME,
+    EndTime DATETIME,
+    PageViews INT,
+    Engagements INT
+
+)
+
+ALTER TABLE [Session]
+ADD UserId INT REFERENCES [USER](UserId)
+
+SELECT * FROM [Session]
 
 ---------INSERTS----------
 
@@ -362,7 +377,7 @@ SELECT * FROM TOUR_PACKAGE_DATE
 SELECT * FROM RESERVATION
 SELECT * FROM PAYMENT
 SELECT * FROM FAVORITE
-SELECT * FROM REVIEW
+SELECT * FROM REVIEW WHERE UserId =13
 SELECT * FROM AUTHENTICATION_TOKEN
 
 DBCC CHECKIDENT ('dbo.TOUR_PACKAGE', NORESEED);
@@ -373,3 +388,26 @@ DBCC CHECKIDENT ('dbo.TOUR_PACKAGE', RESEED, 0);
 DELETE FROM TOUR_PACKAGE;
 
 DELETE FROM TOUR_PACKAGE_DATE;
+
+
+-- Drop the existing table if it exists
+DROP TABLE IF EXISTS ReviewDataForTrainingNew;
+
+-- Create a new table with enhanced data
+SELECT 
+    r.UserId, 
+    res.PackageId, 
+    r.Rating,
+    res.DateOfReservation  -- Add the reservation date or any other relevant columns
+INTO 
+    ReviewDataForTrainingNew
+FROM 
+    REVIEW r
+JOIN 
+    RESERVATION res ON r.ReservationId = res.ReservationId;
+
+-- Select data from the new table to verify
+SELECT * FROM ReviewDataForTrainingNew;
+
+
+
