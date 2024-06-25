@@ -8,6 +8,8 @@ import {
   Grid,
   CardActions,
   IconButton,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -15,11 +17,13 @@ import "../styles/Cards.css";
 
 const TourCards = ({ limit, packages: searchResults, singleRow = false }) => {
   const [packages, setPackages] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
     if (searchResults && searchResults.length > 0) {
       setPackages(searchResults);
+      setLoading(false); // Stop loading if search results are provided
     } else {
       fetch("http://localhost:5278/api/TourPackage/GetPackage")
         .then((response) => response.json())
@@ -28,8 +32,12 @@ const TourCards = ({ limit, packages: searchResults, singleRow = false }) => {
             new Map(data.map((p) => [p.destinationName, p])).values()
           );
           setPackages(uniquePackages.slice(0, limit));
+          setLoading(false); // Stop loading after data is fetched
         })
-        .catch((error) => console.error("Error fetching packages:", error));
+        .catch((error) => {
+          console.error("Error fetching packages:", error);
+          setLoading(false); // Stop loading in case of error
+        });
     }
   }, [limit, searchResults]);
 
@@ -59,6 +67,21 @@ const TourCards = ({ limit, packages: searchResults, singleRow = false }) => {
       })
       .catch((error) => console.error("Error adding to favorites:", error));
   };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress sx={{ color: "#1A4D2E" }} />
+      </Box>
+    );
+  }
 
   return (
     <Grid

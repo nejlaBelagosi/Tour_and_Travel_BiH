@@ -39,6 +39,32 @@ namespace TourAndTravelBiH.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id:int}")]
+        public IActionResult GetAccountById(int id)
+        {
+            var account = _db.Accounts.Include(p => p.User)
+                                      .FirstOrDefault(a => a.AccountId == id);
+
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            var result = new
+            {
+                account.AccountId,
+                account.AccountTypeId,
+                account.AccountType,
+                userName = account.User.Name,
+                userSurname = account.User.Surname,
+                account.Username,
+                account.UserPassword
+            };
+
+            return Ok(result);
+        }
+
+
         //dodavanje racuna, ali modifikovati da se doda prilikom registracije
         [HttpPost]
         public IActionResult PostAccount([FromBody] Account account)
@@ -82,6 +108,32 @@ namespace TourAndTravelBiH.Controllers
             _db.SaveChanges();
             return Ok("Account edited");
         }
+        // uredjivanje sifre
+        [HttpPut("UpdatePassword/{id:int}")]
+        public IActionResult UpdatePassword(int id, [FromBody] PasswordUpdateDto dto)
+        {
+            var account = _db.Accounts.Include(a => a.User).FirstOrDefault(a => a.AccountId == id);
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            if (account.UserPassword != dto.CurrentPassword)
+            {
+                return BadRequest(new { message = "Current password is incorrect." });
+            }
+
+            if (!IsValidPassword(dto.NewPassword))
+            {
+                return BadRequest(new { message = "New password does not meet complexity requirements." });
+            }
+
+            account.UserPassword = dto.NewPassword;
+            _db.SaveChanges();
+            return Ok(account);
+        }
+
+
         //Brisanje accounta. Admin i user moze.
         [HttpDelete("{id:int}")]
         public IActionResult DeleteAccount( int id)
@@ -98,5 +150,19 @@ namespace TourAndTravelBiH.Controllers
             return Ok(accountData);
 
         }
+    private bool IsValidPassword(string password)
+    {
+        if (password.Length < 8) return false;
+        if (!password.Any(char.IsDigit)) return false;
+        if (!password.Any(ch => "!@#$%^&*(),.?\":{}|<>".Contains(ch))) return false;
+        return true;
+    }
+
+    }
+
+    public class PasswordUpdateDto
+    {
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
     }
 }

@@ -93,8 +93,6 @@ namespace TourAndTravelBiH.Controllers
         }
 
 
-
-
         private ITransformer LoadModel()
         {
             var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "PackageRecommenderModel.zip");

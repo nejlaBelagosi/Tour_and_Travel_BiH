@@ -16,6 +16,9 @@ import FavoriteCards from "./pages/FavoriteItems";
 import Reservations from "./pages/Reservations";
 import TourPackages from "./pages/TourPackages";
 import SearchResults from "./pages/SearchResultPage";
+import AboutUs from "./pages/AboutUs";
+import Profile from "./pages/Profile";
+import Account from "./pages/Account";
 // import ImgMediaCard from "./components/RecommendCards";
 // import CardsHP from "./components/PopularCardsHP";
 // import Cards from "./components/PopularRecommendedCards";
@@ -75,6 +78,9 @@ function App() {
         <Route path="/tourpackage" element={<TourPackages />} />
         <Route path="/home" element={<Homepage />} />
         <Route path="/search-results" element={<SearchResults />} />
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/account/:accountId" element={<Account />} />
       </Routes>
     </Router>
   );

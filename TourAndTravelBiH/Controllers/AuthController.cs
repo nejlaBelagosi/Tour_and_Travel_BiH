@@ -49,6 +49,7 @@ namespace TourAndTravelBiH.Controllers
                 user = new
                 {
                     logiraniKorisnik.User.UserId,
+                    logiraniKorisnik.AccountId,
                     logiraniKorisnik.User.Name,
                     logiraniKorisnik.User.Surname,
                     logiraniKorisnik.AccountTypeId

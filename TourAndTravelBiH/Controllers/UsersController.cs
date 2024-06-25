@@ -27,6 +27,17 @@ namespace TourAndTravelBiH.Controllers
             var users = _db.Users.ToList();
             return Ok(users);
         }
+        [HttpGet("{id:int}")]
+        public IActionResult GetUsersById(int id)
+        {
+            var user = _db.Users.FirstOrDefault(p => p.UserId == id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            return Ok(user);
+        }
+
 
         [HttpPost]
         public IActionResult PostUser([FromBody] User data)

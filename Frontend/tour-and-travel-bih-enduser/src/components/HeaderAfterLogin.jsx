@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from '../img/FAVICON.png';
-import ResponsiveAppBar from './Header';
+import React, { useEffect, useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../img/FAVICON.png";
 
-const pages = ['Tour Package', 'Reservations', 'Favorites', 'About us'];
-const settings = ['Profile', 'Account', 'Logout'];
+const pages = ["Tour Package", "Reservations", "Favorites", "About Us"];
+const settings = ["Profile", "Account", "Logout"];
 
 function HeaderAfterLogin() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -25,33 +24,37 @@ function HeaderAfterLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     setUser(storedUser);
   }, []);
 
   const handleLogout = async () => {
-    const tokenId = localStorage.getItem('tokenId');
+    const tokenId = localStorage.getItem("tokenId");
     try {
-      const response = await fetch(`http://localhost:5278/auth/logout/${tokenId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5278/auth/logout/${tokenId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        localStorage.removeItem('tokenId');
-        localStorage.removeItem('userId');
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenId");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("accountId");
         setUser(null);
         handleCloseUserMenu(); // Close the user menu
-        navigate('/'); // Redirect to home after logout
+        navigate("/"); // Redirect to home after logout
       } else {
-        console.error('Failed to logout');
+        console.error("Failed to logout");
       }
     } catch (error) {
-      console.error('Failed to logout', error);
+      console.error("Failed to logout", error);
     }
   };
 
@@ -72,16 +75,20 @@ function HeaderAfterLogin() {
   };
 
   const getInitials = (name, surname) => {
-    if (!name || !surname) return '';
+    if (!name || !surname) return "";
     return `${name[0]}${surname[0]}`;
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#1A4D2E' }}>
+    <AppBar position="static" sx={{ backgroundColor: "#1A4D2E" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
-            <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '10px' }} />
+          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ height: "50px", marginRight: "10px" }}
+            />
           </Box>
           <Typography
             variant="h6"
@@ -90,18 +97,18 @@ function HeaderAfterLogin() {
             to="/home"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
             TOUR AND TRAVEL BIH
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -115,23 +122,32 @@ function HeaderAfterLogin() {
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
               keepMounted
-              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
-                  <Link to={`/${page}`} style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link>
+                  <Link
+                    to={`/${page.replace(/\s+/g, "").toLowerCase()}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {page}
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
-            <img src={logo} alt="Logo" style={{ height: '60px', marginRight: '10px' }} />
+          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ height: "60px", marginRight: "10px" }}
+            />
           </Box>
           <Typography
             variant="h5"
@@ -140,26 +156,26 @@ function HeaderAfterLogin() {
             to="/home"
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
               fontSize: 13,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
             TOUR AND TRAVEL BIH
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: "white", display: "block" }}
                 component={Link}
-                to={`/${page}`}
+                to={`/${page.replace(/\s+/g, "").toLowerCase()}`}
               >
                 {page}
               </Button>
@@ -170,19 +186,17 @@ function HeaderAfterLogin() {
             {user && (
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar>
-                    {getInitials(user.name, user.surname)}
-                  </Avatar>
+                  <Avatar>{getInitials(user.name, user.surname)}</Avatar>
                 </IconButton>
               </Tooltip>
             )}
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
               keepMounted
-              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
@@ -192,8 +206,24 @@ function HeaderAfterLogin() {
                 </MenuItem>
               )}
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting}
+                  onClick={
+                    setting === "Logout" ? handleLogout : handleCloseUserMenu
+                  }
+                >
+                  <Link
+                    to={
+                      setting === "Account"
+                        ? `/account/${user?.accountId}` // Pass accountId
+                        : setting === "Profile"
+                        ? `/profile/${user?.userId}` // Pass userId
+                        : `/${setting.replace(/\s+/g, "").toLowerCase()}`
+                    }
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography textAlign="center">{setting}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>

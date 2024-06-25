@@ -27,10 +27,10 @@ namespace TourAndTravelBiH.Controllers
                     f.FavoriteItemId,
                     f.PackageId,
                     f.UserId,
-                    DestinationName = f.Package.Destination.DestinationName,
-                    DestinationLocation = f.Package.Destination.DestinationLocation,
-                    DestinationDetails = f.Package.Destination.DestinationDetails,
-                    DestinationImage = f.Package.Destination.DestinationImage
+                    destinationName = f.Package.Destination.DestinationName,
+                    destinationLocation = f.Package.Destination.DestinationLocation,
+                    destinationDetails = f.Package.Destination.DestinationDetails,
+                    destinationImage = f.Package.Destination.DestinationImage
                 }).ToList();
 
             return Ok(favorite);
