@@ -1,10 +1,10 @@
 import { React, useState, useEffect } from "react";
 import "../styles/Homepage.css";
 import SearchBar from "../components/SearchBar";
-import ImgMediaCard from "../components/RecommendCards";
-import Cards from "../components/PopularRecommendedCards";
-import CardsHP from "../components/PopularCardsHP";
-import BestCards from "../components/BestForToday";
+import RecommendCards from "../components/RecommendCards";
+// import Cards from "../components/PopularRecommendedCards";
+import PopularCards from "../components/PopularCardsHP";
+// import BestCards from "../components/BestForToday";
 import ReviewCards from "../components/ReviewCards";
 import { Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -40,7 +40,7 @@ const Homepage = () => {
 
       {/* Today recommendations */}
       <div className="grid-container-1">
-        {user ? <ImgMediaCard /> : <BestCards />}
+        {user ? <RecommendCards limit={2} /> : <PopularCards limit={2} />}
         <div className="right-container">
           <h1 style={{ marginLeft: "20px", fontFamily: "Montserrat" }}>
             Best Of the Day
@@ -190,7 +190,11 @@ const Homepage = () => {
       <div className="popular-container">
         <h3>WHERE TO GO</h3>
         <h1>Popular destinations.</h1>
-        {user ? <Cards /> : <CardsHP />}
+        {user ? (
+          <RecommendCards limit={5} singleRow />
+        ) : (
+          <PopularCards limit={5} singleRow />
+        )}
         <div className="button">
           <Button
             style={{

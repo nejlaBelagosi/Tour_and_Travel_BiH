@@ -19,7 +19,7 @@ import logo from "../img/FAVICON.png";
 
 import { Link } from "react-router-dom";
 
-const pages = ["Tour Package", "Favorites", "About us", "Log in"];
+const pages = ["Tour Package", "About us", "Log in"];
 const settings = ["Profile", "Account", "Logout"];
 
 function ResponsiveAppBar() {

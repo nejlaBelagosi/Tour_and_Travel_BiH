@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourAndTravelBiH.Models;
 using TourAndTravelBiH.Helper;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TourAndTravelBiH.Controllers
 {
@@ -104,6 +105,7 @@ namespace TourAndTravelBiH.Controllers
                 }
             });
         }
+
 
 
 

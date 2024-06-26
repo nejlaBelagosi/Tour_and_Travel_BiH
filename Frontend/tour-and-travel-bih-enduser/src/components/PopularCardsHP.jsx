@@ -1,50 +1,39 @@
 import React, { useEffect, useState } from "react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import IconButton from "@mui/material/IconButton";
-import { useNavigate } from "react-router-dom";
-
-// stilovi
+import { Grid, CircularProgress, Box } from "@mui/material";
+import PackageCard from "../components/Card";
 import "../styles/Cards.css";
 
-export default function CardsHP() {
+const PopularCards = ({ limit, singleRow = false }) => {
   const [destinations, setDestinations] = useState([]);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    fetch("http://localhost:5278/api/Destination/GetPopularDestinations") // link za dohvacanje destinacija
+    fetch("http://localhost:5278/api/TourPackage/GetPopularPackages")
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((destination) => ({
-          id: destination.destinationId,
-          location: destination.destinationLocation,
+          packageId: destination.packageId,
           name: destination.destinationName,
           image: destination.destinationImage,
-          details: destination.destinationDetails,
+          price: destination.price,
         }));
-        setDestinations(formattedData.slice(0, 5));
+        setDestinations(formattedData.slice(0, limit));
+        setLoading(false);
       })
-      .catch((error) =>
-        console.error("Error fetching destination data:", error)
-      );
-  }, []);
-  const handleDetailsClick = (id) => {
-    navigate(`/packageDetails/${id}`);
-  };
-  const handleAddToFavorites = (destination) => {
+      .catch((error) => {
+        console.error("Error fetching popular packages:", error);
+        setLoading(false);
+      });
+  }, [limit]);
+
+  const handleAddToFavorites = (pkg) => {
     fetch("http://localhost:5278/api/Favorite/PostFavorite", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        packageId: destination.packageId,
+        packageId: pkg.packageId,
         userId: localStorage.getItem("userId"),
       }),
     })
@@ -56,51 +45,80 @@ export default function CardsHP() {
       })
       .then((data) => {
         console.log("Added to favorites:", data);
+        setDestinations((prevDestinations) =>
+          prevDestinations.map((p) =>
+            p.packageId === pkg.packageId ? { ...p, isFavorite: true } : p
+          )
+        );
       })
       .catch((error) => console.error("Error adding to favorites:", error));
   };
 
+  // const handleRemoveFromFavorites = (pkg) => {
+  //   fetch(
+  //     `http://localhost:5278/api/Favorite/DeleteFavorite/${pkg.packageId}`,
+  //     {
+  //       method: "DELETE",
+  //     }
+  //   )
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Failed to remove from favorites");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log("Removed from favorites:", data);
+  //       setDestinations((prevDestinations) =>
+  //         prevDestinations.map((p) =>
+  //           p.packageId === pkg.packageId ? { ...p, isFavorite: false } : p
+  //         )
+  //       );
+  //     })
+  //     .catch((error) => console.error("Error removing from favorites:", error));
+  // };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress sx={{ color: "#1A4D2E" }} />
+      </Box>
+    );
+  }
+
   return (
-    <div className="cards-container">
+    <Grid
+      container
+      spacing={2}
+      className={singleRow ? "single-row" : ""}
+      sx={{
+        justifyContent: "center",
+        marginLeft: singleRow ? "0" : "0",
+      }}
+    >
       {destinations.map((destination) => (
-        <Card key={destination.id} sx={{ maxWidth: 345 }}>
-          <CardMedia
-            component="img"
-            alt={destination.name}
-            height="140"
-            image={`http://localhost:5278/api/Destination/GetImage/${destination.image}`}
-            sx={{ borderRadius: "16px 16px 0 0" }}
-            onError={(e) => (e.target.src = "default-image.jpg")} // Fallback image
+        <Grid
+          item
+          key={destination.packageId}
+          xs={12}
+          sm={6}
+          md={singleRow ? "auto" : 6}
+        >
+          <PackageCard
+            pkg={destination}
+            handleAddToFavorites={handleAddToFavorites}
           />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {destination.name}
-            </Typography>
-            {/* <Typography variant="body2" color="text.secondary">
-              {destination.details}
-            </Typography> */}
-          </CardContent>
-          <CardActions>
-            <Button style={{ color: "#4F6F52" }} size="small">
-              Share
-            </Button>
-            <Button
-              style={{ color: "#4F6F52" }}
-              size="small"
-              onClick={handleDetailsClick}
-            >
-              Learn More
-            </Button>
-            <IconButton
-              aria-label="add to favorites"
-              style={{ color: "#E8DFCA" }}
-              onClick={() => handleAddToFavorites(destination)}
-            >
-              <FavoriteIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
-}
+};
+
+export default PopularCards;

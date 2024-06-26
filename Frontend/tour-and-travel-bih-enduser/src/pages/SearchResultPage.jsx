@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-// import { Button } from "@mui/material/Button";
 import { Box } from "@mui/material";
-import { Link } from "react-router-dom";
 import TourCards from "../components/TourPackagesCards";
 import SearchBar from "../components/SearchBar";
 
@@ -37,7 +35,13 @@ const SearchResults = () => {
         return response.json();
       })
       .then((data) => {
-        setSearchResults(data);
+        const formattedData = data.map((destination) => ({
+          packageId: destination.packageId,
+          name: destination.destinationName,
+          image: destination.destinationImage,
+          price: destination.price,
+        }));
+        setSearchResults(formattedData);
       })
       .catch((error) => {
         console.error("Error fetching search results:", error);
@@ -64,9 +68,6 @@ const SearchResults = () => {
       ) : (
         <div>No packages found matching the criteria.</div>
       )}
-      {/* <Button component={Link} to="/" style={{ marginTop: "20px" }}>
-        Back to Home
-      </Button> */}
     </div>
   );
 };

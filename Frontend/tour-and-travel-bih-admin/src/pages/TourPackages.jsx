@@ -250,11 +250,16 @@ export default function TourPackages() {
   };
 
   const deletePackage = async (id) => {
+    const token = localStorage.getItem("TokenValue");
     const response = await fetch(
       `http://localhost:5278/api/TourPackage/DeletePackage/${id}`,
       {
         method: "DELETE",
         mode: "cors",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
     );
     if (response.ok) {

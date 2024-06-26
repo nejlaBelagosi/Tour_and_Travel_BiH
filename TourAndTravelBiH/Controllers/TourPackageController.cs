@@ -5,6 +5,8 @@ using TourAndTravelBiH.Helper;
 using TourAndTravelBiH.Models;
 using Microsoft.ML;
 using TourAndTravelBiH.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TourAndTravelBiH.Controllers
 {
@@ -37,12 +39,12 @@ namespace TourAndTravelBiH.Controllers
             var result = packages.Select(p => new
             {
                 p.PackageId,
-                p.PackageAvailability,
-                p.Accomodation,
-                p.PackageDescription,
                 p.Price,
                 p.AdditionalInformations,
                 p.TourHighlights,
+                p.PackageDescription,
+                p.PackageAvailability,
+                p.Accomodation,
                 destinationName = p.Destination != null ? p.Destination.DestinationName : null,
                 destinationImage = p.Destination.DestinationImage,
                 destinationDetails = p.Destination.DestinationDetails,
@@ -51,6 +53,33 @@ namespace TourAndTravelBiH.Controllers
             });
             return Ok(result);
         }
+
+        [HttpGet]
+        public IActionResult GetPopularPackages()
+        {
+            var packages = _db.TourPackages
+                .Include(p => p.Destination)
+                .Include(p => p.TourPackageDates)
+                .ToList();
+
+            var result = packages.Select(p => new
+            {
+                packageId = p.PackageId,
+                price = p.Price,
+                additionalInformations = p.AdditionalInformations,
+                destinationName = p.Destination != null ? p.Destination.DestinationName : null,
+                destinationImage = p.Destination != null ? p.Destination.DestinationImage : null,
+                destinationDetails = p.Destination != null ? p.Destination.DestinationDetails : null,
+
+            }).ToList();
+
+            var random = new Random();
+            var randomDestinations = result.OrderBy(d => random.Next()).Take(5).ToList();
+
+            return Ok(randomDestinations);
+        }
+
+
         [HttpGet("TourPackages")]
         public async Task<IActionResult> GetTourPackagesCount()
         {
@@ -135,7 +164,7 @@ namespace TourAndTravelBiH.Controllers
             // Filter recommendations based on the threshold
             var filteredRecommendations = recommendations
                 .Where(r => r.Score > 4.3)
-                .OrderByDescending(r => r.Score )
+                .OrderByDescending(r => r.Score)
                 .ToList();
 
 
@@ -182,7 +211,7 @@ namespace TourAndTravelBiH.Controllers
                     d.DateId,
                     d.StartDate,
                     d.EndDate,
-     
+
                 })
             };
 
@@ -236,13 +265,13 @@ namespace TourAndTravelBiH.Controllers
             }
 
             // Update package details
-            if (data.PackageDescription != null)
+            if (data.PackageAvailability != null && data.PackageAvailability)
             {
                 existingPackage.PackageAvailability = data.PackageAvailability;
             }
             if (data.PackageDescription != null && data.PackageDescription != "string")
             {
-               existingPackage.PackageDescription = data.PackageDescription; 
+                existingPackage.PackageDescription = data.PackageDescription;
             }
             if (data.Accomodation != null && data.Accomodation != "string")
             {
@@ -250,22 +279,22 @@ namespace TourAndTravelBiH.Controllers
             }
             if (data.Price != null && data.Price != default(decimal))
             {
-                 existingPackage.Price = data.Price;
+                existingPackage.Price = data.Price;
             }
 
             if (data.DestinationId != null && data.DestinationId != default(int))
             {
-               existingPackage.DestinationId = data.DestinationId; 
+                existingPackage.DestinationId = data.DestinationId;
             }
             if (data.AdditionalInformations != null && data.AdditionalInformations != "string")
             {
-              existingPackage.AdditionalInformations = data.AdditionalInformations;
+                existingPackage.AdditionalInformations = data.AdditionalInformations;
             }
             if (data.TourHighlights != null && data.TourHighlights != "string")
             {
-                   existingPackage.TourHighlights = data.TourHighlights;
+                existingPackage.TourHighlights = data.TourHighlights;
             }
-         
+
 
             // Remove dates that are not in the updated list
             var datesToRemove = existingPackage.TourPackageDates
@@ -298,13 +327,14 @@ namespace TourAndTravelBiH.Controllers
             return Ok(existingPackage);
         }
 
-
         // Delete a package and its dates
+
         [HttpDelete("{id:int}")]
         public IActionResult DeletePackage(int id)
         {
-            //if (_authService.AccountTypeId != 0)
-            //    throw new UnauthorizedAccessException();
+         
+            if (_authService.AccountTypeId != 0)
+                throw new UnauthorizedAccessException();
 
             var packageData = _db.TourPackages
                                  .Include(p => p.TourPackageDates)
