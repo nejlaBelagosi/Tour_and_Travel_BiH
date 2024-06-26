@@ -7,6 +7,7 @@ using ExcelDataReader;
 using System.Collections.Generic;
 using Microsoft.ML.Trainers;
 using TourAndTravelBiH.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TourAndTravelBiH.Services
 {
@@ -123,7 +124,7 @@ namespace TourAndTravelBiH.Services
             Console.WriteLine("=============== Making a prediction ===============");
             var predictionEngine = mlContext.Model.CreatePredictionEngine<PackageRatingData.PackageRating, PackageRatingData.PackageRatingPrediction>(model);
 
-            var testInput = new PackageRatingData.PackageRating { userId = 32, packageId = 10};
+            var testInput = new PackageRatingData.PackageRating { userId = 13, packageId = 10};
 
             var packageRatingPrediction = predictionEngine.Predict(testInput);
             if (Math.Round(packageRatingPrediction.Score, 1) > 3.5)
@@ -169,6 +170,53 @@ namespace TourAndTravelBiH.Services
             Console.WriteLine($"Mean Score: {mean}");
             Console.WriteLine($"Standard Deviation: {stdDev}");
         }
+        private void GenerateAndPrintRecommendations(int userId)
+        {
+            var predictionEngine = _mlContext.Model.CreatePredictionEngine<PackageRatingData.PackageRating, PackageRatingData.PackageRatingPrediction>(_model);
+
+            var recommendations = new List<PackageRatingData.PackageRatingPrediction>();
+            var packageIds = _db.TourPackages.Select(p => p.PackageId).ToList();
+
+            Console.WriteLine($"Predictions for User ID: {userId}");
+
+            foreach (var packageId in packageIds)
+            {
+                var testInput = new PackageRatingData.PackageRating { userId = userId, packageId = packageId, Rating = 0 };
+                var prediction = predictionEngine.Predict(testInput);
+                prediction.packageId = packageId; // Ensure the package ID is included in the response
+                recommendations.Add(prediction);
+
+                // Print the prediction
+                Console.WriteLine($"Package ID: {packageId}, Predicted Rating: {prediction.Score}");
+            }
+
+            var scores = recommendations.Select(r => r.Score).ToList();
+            var mean = scores.Average();
+            var stdDev = Math.Sqrt(scores.Average(v => Math.Pow(v - mean, 2)));
+            var threshold = mean + stdDev;
+
+            var filteredRecommendations = recommendations
+                .Where(r => r.Score > threshold)
+                .OrderByDescending(r => r.Score)
+                .ToList();
+
+            var result = filteredRecommendations.Select(r => new
+            {
+                PackageId = r.packageId,
+                score = r.Score,
+                packageDescription = _db.TourPackages.FirstOrDefault(p => p.PackageId == r.packageId)?.PackageDescription,
+                price = _db.TourPackages.FirstOrDefault(p => p.PackageId == r.packageId)?.Price,
+                destinationName = _db.TourPackages.Include(p => p.Destination).FirstOrDefault(p => p.PackageId == r.packageId)?.Destination.DestinationName,
+                destinationImage = _db.TourPackages.Include(p => p.Destination).FirstOrDefault(p => p.PackageId == r.packageId)?.Destination.DestinationImage
+            }).Cast<dynamic>().ToList(); // Cast to dynamic
+
+            Console.WriteLine("\nFiltered Recommendations:");
+            foreach (var recommendation in result)
+            {
+                Console.WriteLine($"Package ID: {recommendation.PackageId}, Predicted Rating: {recommendation.Score}");
+            }
+        }
+
 
     }
 

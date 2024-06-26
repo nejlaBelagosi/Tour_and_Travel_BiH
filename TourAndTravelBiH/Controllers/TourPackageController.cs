@@ -6,7 +6,7 @@ using TourAndTravelBiH.Models;
 using Microsoft.ML;
 using TourAndTravelBiH.Services;
 using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
+
 
 namespace TourAndTravelBiH.Controllers
 {

@@ -3,15 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\models\\mlmodelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:models\\mlmodelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\packageratingdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:packageratingdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\tourpackagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\tourpackagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\BLGS HP\\AppData\\Local\\Temp\\.vsdbgsrc\\b1706ce9da68fdede8e4df96dd0ce75435d72df9be3ec40b4d259434054a4533\\TourPackageController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D837707C-F32C-46AA-975F-C60FEA5934B7}|TourAndTravelBiH.csproj|c:\\users\\blgs hp\\documents\\github\\tour_and_travel_bih\\tourandtravelbih\\models\\authenticationtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -33,33 +38,46 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TourPackageController.cs",
-              "DocumentMoniker": "C:\\Users\\BLGS HP\\AppData\\Local\\Temp\\.vsdbgsrc\\b1706ce9da68fdede8e4df96dd0ce75435d72df9be3ec40b4d259434054a4533\\TourPackageController.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\b1706ce9da68fdede8e4df96dd0ce75435d72df9be3ec40b4d259434054a4533\\TourPackageController.cs",
-              "ToolTip": "C:\\Users\\BLGS HP\\AppData\\Local\\Temp\\.vsdbgsrc\\b1706ce9da68fdede8e4df96dd0ce75435d72df9be3ec40b4d259434054a4533\\TourPackageController.cs [Read Only]",
-              "RelativeToolTip": "..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\b1706ce9da68fdede8e4df96dd0ce75435d72df9be3ec40b4d259434054a4533\\TourPackageController.cs [Read Only]",
-              "ViewState": "AQIAAP4AAAAAAAAAAAAcwA0BAAAfAAAA",
+              "DocumentIndex": 1,
+              "Title": "PackageRatingData.cs",
+              "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\PackageRatingData.cs",
+              "RelativeDocumentMoniker": "PackageRatingData.cs",
+              "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\PackageRatingData.cs",
+              "RelativeToolTip": "PackageRatingData.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAmwA8AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-26T00:09:38.746Z",
-              "EditorCaption": " [Read Only]"
+              "WhenOpened": "2024-06-26T08:12:33.232Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "MLModelService.cs",
+              "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Models\\MLModelService.cs",
+              "RelativeDocumentMoniker": "Models\\MLModelService.cs",
+              "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Models\\MLModelService.cs",
+              "RelativeToolTip": "Models\\MLModelService.cs",
+              "ViewState": "AQIAALEAAAAAAAAAAAAswLcAAABvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-26T08:12:09.744Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "TourPackageController.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\TourPackageController.cs",
               "RelativeDocumentMoniker": "Controllers\\TourPackageController.cs",
               "ToolTip": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\TourPackageController.cs",
               "RelativeToolTip": "Controllers\\TourPackageController.cs",
-              "ViewState": "AQIAAEQBAAAAAAAAAAAIwFABAAAQAAAA",
+              "ViewState": "AQIAALAAAAAAAAAAAAAAwJIAAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-26T00:01:19.603Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "AuthenticationToken.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Models\\AuthenticationToken.cs",
               "RelativeDocumentMoniker": "Models\\AuthenticationToken.cs",
@@ -67,12 +85,11 @@
               "RelativeToolTip": "Models\\AuthenticationToken.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-26T00:00:21.845Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-26T00:00:21.845Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -80,12 +97,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAABYAAABHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-25T23:53:49.672Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-25T23:53:49.672Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\BLGS HP\\Documents\\GitHub\\Tour_and_Travel_BiH\\TourAndTravelBiH\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -93,8 +109,7 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AQIAAHkAAAAAAAAAAAAAwIsAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-25T18:39:01.157Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-25T18:39:01.157Z"
             }
           ]
         }
